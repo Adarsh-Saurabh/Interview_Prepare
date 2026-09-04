@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01: Online Test Mastery · Lumilens Interview Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <!-- PrismJS for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #06b6d4;
+  
+  --accent-primary: #0284c7; /* Laser Photon Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --tag-bg: #ecfdf5;
+  --tag-border: #10b981;
+  --tag-text: #065f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(16, 185, 129, 0.12);
+  --tag-border: #10b981;
+  --tag-text: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-text h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 40px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge-lumilens {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #0891b2;
+}
+
+[data-theme="dark"] .badge-lumilens {
+  color: #22d3ee;
+}
+
+.content-body {
+  font-size: 15px;
+}
+
+.content-body h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.content-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.content-body pre code {
+  padding: 16px;
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #1a1f2c;
+  color: #f1f5f9;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">L</div>
+        <div class="brand-text">
+          <h2>Lumilens Prep</h2>
+          <span>29 LPA · NIT Rourkela</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="01_Online_Test.html" class="nav-link active">
+            <span>01: Online Test Mastery</span>
+            <span class="nav-badge">Coding/MCQs</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Python Automation Arch</span>
+            <span class="nav-badge">Pytest/HIL</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="03_Networking_L1_L2.html" class="nav-link">
+            <span>03: L1/L2 Optics & Networking</span>
+            <span class="nav-badge">Protocols</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="05_Hardware_Integration_SCPI.html" class="nav-link">
+            <span>05: SCPI, VISA & Yield</span>
+            <span class="nav-badge">Hardware</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Managerial & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Quick Cheat Sheet</span>
+            <span class="nav-badge">Emergency</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Study Roadmap & Index</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="../index.html" style="font-size: 12.5px; color: var(--accent-primary); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-color);">← All Companies</a>
+          <div class="badge-lumilens">
+            <span>⚡</span>
+            <span>Silicon Photonics AI Interconnects</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Candidate: <strong>Adarsh Saurabh</strong> (M.Tech)
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1 id="01-online-test-mastery-coding-networking-mcqs-shell-scripting">01: Online Test Mastery — Coding, Networking MCQs &amp; Shell Scripting</h1>
+<blockquote>
+<p><strong>Target:</strong> Lumilens Online Assessment (Round 1 Screening)<br />
+<strong>Format:</strong> 60–90 Minutes | 2 Coding Problems + 15–20 Networking MCQs + 5–10 Linux Shell/Regex Questions<br />
+<strong>Platform Typical:</strong> HackerRank / Mettl / CodeSignal / Custom</p>
+</blockquote>
+<hr />
+<h2 id="1-assessment-blueprint-what-lumilens-tests">1. Assessment Blueprint &amp; What Lumilens Tests</h2>
+<p>Lumilens does not ask generic LeetCode graph-coloring or dynamic programming riddles. Because they build high-throughput photonic interconnects, their assessment is heavily weighted toward <strong>systems programming, bitwise manipulation, stateful stream processing, and protocol understanding</strong>:</p>
+<ol>
+<li><strong>Python Stream &amp; Packet Processing (40%):</strong> Can you parse bytes, unpack binary headers using <code>struct</code>, detect missing sequence IDs, and calculate error rates without loading massive datasets into memory?</li>
+<li><strong>Layer 1 &amp; Layer 2 Networking MCQs (35%):</strong> Do you understand Ethernet frames, MAC tables, MTU limits, CRC-32, Bit Error Rate (BER), and optical power attenuation (dBm)?</li>
+<li><strong>Linux, Shell &amp; Regex (25%):</strong> Can you parse switch log files, extract error counters with <code>grep</code>/<code>awk</code>, and debug socket connections from the terminal?</li>
+</ol>
+<hr />
+<h2 id="2-core-coding-problems-with-full-solutions">2. Core Coding Problems with Full Solutions</h2>
+<h3 id="problem-1-ethernet-frame-header-parser-crc-32-validator">Problem 1: Ethernet Frame Header Parser &amp; CRC-32 Validator</h3>
+<p><strong>Problem Statement:</strong><br />
+You are given a raw byte stream captured from an optical transceiver interface. Implement a function <code>parse_ethernet_frame(raw_bytes: bytes) -&gt; dict</code> that parses the frame into its constituent fields:
+- Preamble (7 bytes: <code>0xAA</code> repeated) + SFD (1 byte: <code>0xAB</code>)
+- Destination MAC (6 bytes, formatted as <code>xx:xx:xx:xx:xx:xx</code>)
+- Source MAC (6 bytes, formatted as <code>xx:xx:xx:xx:xx:xx</code>)
+- EtherType (2 bytes, big-endian hex, e.g., <code>0x0800</code> for IPv4)
+- Payload (variable length, minimum 46 bytes, maximum 1500 bytes for standard MTU)
+- Frame Check Sequence (FCS / CRC-32, 4 bytes)
+Verify if the received FCS matches the computed CRC-32 of the frame (excluding Preamble, SFD, and FCS itself).</p>
+<pre><code class="language-python">import struct
+import zlib
+
+def format_mac(mac_bytes: bytes) -&gt; str:
+    return &quot;:&quot;.join(f&quot;{b:02x}&quot; for b in mac_bytes)
+
+def parse_ethernet_frame(raw_bytes: bytes) -&gt; dict:
+    &quot;&quot;&quot;
+    Parses raw Ethernet frame including preamble and FCS.
+    Returns parsed dictionary with validation status.
+    &quot;&quot;&quot;
+    # Minimum valid Ethernet frame: 7 (Preamble) + 1 (SFD) + 14 (Header) + 46 (Min Payload) + 4 (FCS) = 72 bytes
+    if len(raw_bytes) &lt; 72:
+        raise ValueError(f&quot;Frame too short: {len(raw_bytes)} bytes (min 72 with preamble)&quot;)
+
+    # 1. Validate Preamble (7 bytes of 0xAA) and SFD (0xAB)
+    preamble = raw_bytes[:7]
+    sfd = raw_bytes[7]
+    if preamble != b'\xaa' * 7 or sfd != 0xab:
+        return {&quot;status&quot;: &quot;INVALID_PREAMBLE_OR_SFD&quot;, &quot;valid&quot;: False}
+
+    # Frame body starts at byte 8
+    frame_body = raw_bytes[8:]
+
+    # 2. Extract Destination MAC, Source MAC, EtherType (14 bytes total)
+    header_format = &quot;!6s6sH&quot; # Network byte order (big-endian), 6 bytes, 6 bytes, unsigned short (2 bytes)
+    dest_mac_raw, src_mac_raw, ether_type = struct.unpack(header_format, frame_body[:14])
+
+    # 3. Payload and FCS
+    # The last 4 bytes of the frame body are FCS (CRC-32)
+    payload = frame_body[14:-4]
+    received_fcs = struct.unpack(&quot;!I&quot;, frame_body[-4:])[0]
+
+    # 4. CRC-32 verification (calculated over Dest MAC + Src MAC + EtherType + Payload)
+    calculated_crc = zlib.crc32(frame_body[:-4]) &amp; 0xFFFFFFFF
+    is_valid = (calculated_crc == received_fcs)
+
+    return {
+        &quot;status&quot;: &quot;OK&quot; if is_valid else &quot;CRC_ERROR&quot;,
+        &quot;valid&quot;: is_valid,
+        &quot;destination_mac&quot;: format_mac(dest_mac_raw),
+        &quot;source_mac&quot;: format_mac(src_mac_raw),
+        &quot;ethertype&quot;: f&quot;0x{ether_type:04x}&quot;,
+        &quot;payload_length&quot;: len(payload),
+        &quot;received_fcs&quot;: hex(received_fcs),
+        &quot;calculated_crc&quot;: hex(calculated_crc)
+    }
+
+# Test Verification
+if __name__ == &quot;__main__&quot;:
+    # Construct a synthetic valid packet
+    preamble_sfd = b'\xaa' * 7 + b'\xab'
+    dst_mac = b'\x00\x1a\x2b\x3c\x4d\x5e'
+    src_mac = b'\x00\x11\x22\x33\x44\x55'
+    ethertype = struct.pack(&quot;!H&quot;, 0x0800) # IPv4
+    payload = b'LUMILENS_PHOTONIC_INTERCONNECT_TEST_PAYLOAD_PADDING_0123456789' # &gt;= 46 bytes
+
+    protected_data = dst_mac + src_mac + ethertype + payload
+    fcs = struct.pack(&quot;!I&quot;, zlib.crc32(protected_data) &amp; 0xFFFFFFFF)
+
+    full_frame = preamble_sfd + protected_data + fcs
+    result = parse_ethernet_frame(full_frame)
+    print(&quot;Parsing Result:&quot;, result)
+    assert result[&quot;valid&quot;] is True
+    assert result[&quot;destination_mac&quot;] == &quot;00:1a:2b:3c:4d:5e&quot;
+</code></pre>
+<hr />
+<h3 id="problem-2-sliding-window-packet-loss-burst-drop-detector">Problem 2: Sliding Window Packet Loss &amp; Burst Drop Detector</h3>
+<p><strong>Problem Statement:</strong><br />
+In high-throughput optical testing, packet sequence numbers are injected by traffic generators (e.g., IXIA) at 100M packets/sec. Due to optical switch buffer contention or laser mode hops, packet drops can happen either randomly or in concentrated bursts.<br />
+Implement a class <code>PacketDropAnalyzer</code> that processes incoming integer sequence IDs in an online/streaming fashion:
+1. Detects dropped packets (missing sequence IDs).
+2. Calculates overall packet drop rate: $\text{Drop Rate} = \frac{\text{Lost Packets}}{\text{Total Expected Packets}}$.
+3. Detects "Burst Drops": any single drop event where $\ge K$ consecutive sequence numbers are missing.
+4. Memory requirement: $O(1)$ auxiliary memory (cannot store the entire stream).</p>
+<pre><code class="language-python">class PacketDropAnalyzer:
+    def __init__(self, burst_threshold: int = 5):
+        self.burst_threshold = burst_threshold
+        self.expected_seq = None
+        self.total_received = 0
+        self.total_lost = 0
+        self.burst_events = [] # list of (start_seq, count)
+        self.out_of_order_count = 0
+
+    def process_packet(self, seq_id: int):
+        &quot;&quot;&quot;Processes a single packet sequence number on the fly.&quot;&quot;&quot;
+        self.total_received += 1
+
+        # Initial packet
+        if self.expected_seq is None:
+            self.expected_seq = seq_id + 1
+            return
+
+        # Normal sequential arrival
+        if seq_id == self.expected_seq:
+            self.expected_seq = seq_id + 1
+            return
+
+        # Packet drop detected (gap in sequence)
+        if seq_id &gt; self.expected_seq:
+            lost_count = seq_id - self.expected_seq
+            self.total_lost += lost_count
+
+            if lost_count &gt;= self.burst_threshold:
+                self.burst_events.append((self.expected_seq, lost_count))
+
+            self.expected_seq = seq_id + 1
+            return
+
+        # Late / Out-of-order packet (seq_id &lt; self.expected_seq)
+        if seq_id &lt; self.expected_seq:
+            self.out_of_order_count += 1
+            # In real hardware, this indicates multi-path reordering or queue race
+
+    def get_summary(self) -&gt; dict:
+        total_expected = self.total_received + self.total_lost
+        drop_rate = (self.total_lost / total_expected) if total_expected &gt; 0 else 0.0
+        return {
+            &quot;total_received&quot;: self.total_received,
+            &quot;total_lost&quot;: self.total_lost,
+            &quot;total_expected&quot;: total_expected,
+            &quot;drop_rate_pct&quot;: drop_rate * 100.0,
+            &quot;burst_drop_count&quot;: len(self.burst_events),
+            &quot;burst_details&quot;: self.burst_events,
+            &quot;out_of_order&quot;: self.out_of_order_count
+        }
+
+# Verification
+if __name__ == &quot;__main__&quot;:
+    analyzer = PacketDropAnalyzer(burst_threshold=3)
+    # Stream: 1, 2, 3, [4,5 missing], 6, 7, [8,9,10,11 missing -&gt; burst], 12
+    stream = [1, 2, 3, 6, 7, 12]
+    for s in stream:
+        analyzer.process_packet(s)
+
+    summary = analyzer.get_summary()
+    print(&quot;Analyzer Summary:&quot;, summary)
+    assert summary[&quot;total_lost&quot;] == 6 # (4,5) = 2, (8,9,10,11) = 4 -&gt; total 6
+    assert summary[&quot;burst_drop_count&quot;] == 1 # only gap of 4 exceeds threshold 3
+</code></pre>
+<hr />
+<h3 id="problem-3-layer-2-switch-mac-learning-table-with-aging-flood-control">Problem 3: Layer 2 Switch MAC Learning Table with Aging &amp; Flood Control</h3>
+<p><strong>Problem Statement:</strong><br />
+Implement an L2 Switch MAC Learning Engine. When a packet arrives on a switch port:
+1. <strong>Learn:</strong> Associate the Source MAC address with the ingress port and record the arrival timestamp.
+2. <strong>Forward:</strong> Look up the Destination MAC address.
+   - If found and not expired: Forward unicast to that specific port.
+   - If unknown (or expired): <strong>Flood</strong> (forward to all other ports except the ingress port).
+   - If broadcast (<code>FF:FF:FF:FF:FF:FF</code>): <strong>Flood</strong> to all other ports.
+3. <strong>Aging:</strong> Entries older than <code>aging_time_seconds</code> must expire and be evicted.
+4. <strong>Capacity / CAM Table Overflow:</strong> If table reaches <code>max_capacity</code>, evict the Least Recently Used (LRU) entry.</p>
+<pre><code class="language-python">import time
+from collections import OrderedDict
+
+class L2SwitchMACTable:
+    def __init__(self, ports: list[int], aging_time_sec: float = 300.0, max_capacity: int = 1024):
+        self.ports = set(ports)
+        self.aging_time = aging_time_sec
+        self.max_capacity = max_capacity
+        # Store as OrderedDict: mac -&gt; (port, timestamp)
+        # Using OrderedDict allows O(1) lookup and O(1) LRU eviction
+        self.table = OrderedDict()
+
+    def _purge_expired(self, current_time: float):
+        &quot;&quot;&quot;Purge entries that have exceeded the aging timer.&quot;&quot;&quot;
+        expired_macs = [mac for mac, (_, ts) in self.table.items() if (current_time - ts) &gt; self.aging_time]
+        for mac in expired_macs:
+            del self.table[mac]
+
+    def process_frame(self, ingress_port: int, src_mac: str, dst_mac: str, current_time: float = None) -&gt; list[int]:
+        if ingress_port not in self.ports:
+            raise ValueError(f&quot;Invalid ingress port {ingress_port}&quot;)
+
+        if current_time is None:
+            current_time = time.time()
+
+        src_mac = src_mac.lower()
+        dst_mac = dst_mac.lower()
+
+        self._purge_expired(current_time)
+
+        # 1. LEARN: update or insert source MAC
+        if src_mac in self.table:
+            del self.table[src_mac] # remove to reinsert at end (mark most recently used)
+        elif len(self.table) &gt;= self.max_capacity:
+            # Evict LRU (first item in OrderedDict)
+            self.table.popitem(last=False)
+
+        self.table[src_mac] = (ingress_port, current_time)
+
+        # 2. FORWARD: determine egress ports
+        # Broadcast or Unknown Unicast -&gt; Flood all ports except ingress
+        if dst_mac == &quot;ff:ff:ff:ff:ff:ff&quot; or dst_mac not in self.table:
+            return [p for p in sorted(self.ports) if p != ingress_port]
+
+        # Known unicast
+        egress_port, _ = self.table[dst_mac]
+        if egress_port == ingress_port:
+            # Destination is on same port as source -&gt; Drop (hairpinning prevention)
+            return []
+
+        return [egress_port]
+
+# Verification
+if __name__ == &quot;__main__&quot;:
+    sw = L2SwitchMACTable(ports=[1, 2, 3, 4], aging_time_sec=10.0, max_capacity=2)
+    # Frame 1: Port 1, Host A -&gt; Host B (Unknown B -&gt; Flood 2, 3, 4)
+    out1 = sw.process_frame(ingress_port=1, src_mac=&quot;00:00:00:00:00:0A&quot;, dst_mac=&quot;00:00:00:00:00:0B&quot;, current_time=0.0)
+    assert out1 == [2, 3, 4]
+
+    # Frame 2: Port 2, Host B -&gt; Host A (Known A on port 1 -&gt; Unicast to 1)
+    out2 = sw.process_frame(ingress_port=2, src_mac=&quot;00:00:00:00:00:0B&quot;, dst_mac=&quot;00:00:00:00:00:0A&quot;, current_time=1.0)
+    assert out2 == [1]
+</code></pre>
+<hr />
+<h3 id="problem-4-bit-error-rate-ber-prbs-7-sequence-validator">Problem 4: Bit Error Rate (BER) &amp; PRBS-7 Sequence Validator</h3>
+<p><strong>Problem Statement:</strong><br />
+In physical layer optical testing, transceivers transmit standardized <strong>Pseudo-Random Binary Sequences (PRBS)</strong> like PRBS-7, PRBS-15, or PRBS-31 to stress the optical eye diagram.<br />
+PRBS-7 polynomial: $X^7 + X^6 + 1$ (Length = $2^7 - 1 = 127$ bits).<br />
+Write a Python function <code>calculate_ber(received_bits: list[int], seed: int = 0x7F) -&gt; dict</code> that:
+1. Generates the reference PRBS-7 sequence.
+2. Synchronizes with the incoming bit stream (finds phase alignment).
+3. Computes bit errors and returns the Bit Error Rate: $\text{BER} = \frac{\text{Bit Errors}}{\text{Total Validated Bits}}$.</p>
+<pre><code class="language-python">def generate_prbs7(length: int, seed: int = 0x7F) -&gt; list[int]:
+    &quot;&quot;&quot;Generates PRBS-7 sequence using polynomial X^7 + X^6 + 1.&quot;&quot;&quot;
+    state = seed &amp; 0x7F
+    if state == 0:
+        state = 0x7F # All zeros is an invalid state
+
+    sequence = []
+    for _ in range(length):
+        # bit 7 and bit 6 (0-indexed: bit 6 and bit 5)
+        b6 = (state &gt;&gt; 6) &amp; 1
+        b5 = (state &gt;&gt; 5) &amp; 1
+        feedback = b6 ^ b5
+
+        output_bit = b6
+        sequence.append(output_bit)
+
+        state = ((state &lt;&lt; 1) &amp; 0x7F) | feedback
+    return sequence
+
+def calculate_ber_prbs7(received_bits: list[int]) -&gt; dict:
+    &quot;&quot;&quot;Aligns received stream with PRBS-7 and computes BER.&quot;&quot;&quot;
+    PRBS_PERIOD = 127
+    if len(received_bits) &lt; PRBS_PERIOD * 2:
+        raise ValueError(&quot;Need at least 2 full periods (254 bits) to synchronize&quot;)
+
+    reference = generate_prbs7(PRBS_PERIOD)
+
+    # Find best alignment phase by checking minimum Hamming distance over one period
+    best_phase = 0
+    min_errors = float('inf')
+
+    for phase in range(PRBS_PERIOD):
+        errors = 0
+        for i in range(PRBS_PERIOD):
+            ref_bit = reference[(i + phase) % PRBS_PERIOD]
+            if received_bits[i] != ref_bit:
+                errors += 1
+        if errors &lt; min_errors:
+            min_errors = errors
+            best_phase = phase
+            if errors == 0:
+                break # Perfect alignment found
+
+    # Now compute total errors across the entire received buffer using the best phase
+    total_errors = 0
+    total_bits = len(received_bits)
+    for i in range(total_bits):
+        ref_bit = reference[(i + best_phase) % PRBS_PERIOD]
+        if received_bits[i] != ref_bit:
+            total_errors += 1
+
+    ber = total_errors / total_bits
+    return {
+        &quot;total_bits&quot;: total_bits,
+        &quot;bit_errors&quot;: total_errors,
+        &quot;ber&quot;: ber,
+        &quot;phase_offset&quot;: best_phase,
+        &quot;status&quot;: &quot;PASS&quot; if ber &lt; 1e-12 else &quot;MARGINAL&quot; if ber &lt; 1e-4 else &quot;FAIL&quot;
+    }
+
+# Verification
+if __name__ == &quot;__main__&quot;:
+    clean_seq = generate_prbs7(1000)
+    # Inject 2 synthetic bit errors
+    corrupted_seq = clean_seq.copy()
+    corrupted_seq[150] ^= 1
+    corrupted_seq[800] ^= 1
+
+    ber_res = calculate_ber_prbs7(corrupted_seq)
+    print(&quot;BER Test:&quot;, ber_res)
+    assert ber_res[&quot;bit_errors&quot;] == 2
+    assert abs(ber_res[&quot;ber&quot;] - 0.002) &lt; 1e-6
+</code></pre>
+<hr />
+<h2 id="3-high-yield-networking-mcqs-technical-rapid-fire">3. High-Yield Networking MCQs &amp; Technical Rapid-Fire</h2>
+<h3 id="q1-what-is-the-exact-difference-between-osi-layer-1-and-layer-2-in-optical-networking">Q1: What is the exact difference between OSI Layer 1 and Layer 2 in optical networking?</h3>
+<ul>
+<li><strong>Answer:</strong>  </li>
+<li><strong>Layer 1 (Physical):</strong> Governs the physical transmission of raw bits over light. Key parameters: optical wavelengths (1310 nm vs 1550 nm), Tx/Rx optical power (dBm), extinction ratio, chromatic dispersion, jitter, and Bit Error Rate (BER). Layer 1 does <strong>not</strong> understand addresses, frames, or packets.</li>
+<li><strong>Layer 2 (Data Link):</strong> Groups raw bits into <strong>Ethernet Frames</strong>. Governs MAC addressing (source &amp; destination), framing delimiters (preamble/SFD), error detection via FCS (CRC-32), flow control (802.3x pause, Priority Flow Control 802.1Qbb), and VLAN tagging (802.1Q).</li>
+</ul>
+<h3 id="q2-what-is-the-formula-for-converting-optical-power-from-milliwatts-mw-to-dbm">Q2: What is the formula for converting Optical Power from milliwatts (mW) to dBm?</h3>
+<ul>
+<li><strong>Formula:</strong><br />
+  $$\text{Power (dBm)} = 10 \cdot \log_{10}\left(\frac{P_{\text{mW}}}{1\text{ mW}}\right)$$</li>
+<li><strong>Quick Reference Table:</strong></li>
+<li>$1\text{ mW} = 0\text{ dBm}$</li>
+<li>$2\text{ mW} \approx +3\text{ dBm}$</li>
+<li>$10\text{ mW} = +10\text{ dBm}$</li>
+<li>$0.1\text{ mW} = -10\text{ dBm}$</li>
+<li>$0.001\text{ mW} (1\text{ }\mu\text{W}) = -30\text{ dBm}$</li>
+<li><strong>Interview Rule of Thumb:</strong> Every $+3\text{ dB}$ doubles power; every $-3\text{ dB}$ halves power. Every $+10\text{ dB}$ multiplies power by 10.</li>
+</ul>
+<h3 id="q3-what-is-mtu-vs-mru-and-what-happens-if-an-optical-transceiver-receives-a-9000-byte-frame-on-a-standard-port">Q3: What is MTU vs MRU, and what happens if an optical transceiver receives a 9000-byte frame on a standard port?</h3>
+<ul>
+<li><strong>Answer:</strong></li>
+<li><strong>MTU (Maximum Transmission Unit):</strong> Maximum size of the Layer 3 payload that Layer 2 can transmit without fragmentation (default Ethernet = 1500 bytes).</li>
+<li><strong>MRU (Maximum Receive Unit):</strong> Maximum frame size the receiver can accept.</li>
+<li><strong>Jumbo Frames (9000 bytes):</strong> Used in AI data centers to maximize throughput and minimize CPU overhead.</li>
+<li>If a switch port configured for 1500-byte MTU receives a 9000-byte frame: It will drop the frame as an <strong>Oversized / Giant Frame</strong> and increment the switch's <code>rx_oversize_errors</code> counter. Layer 2 Ethernet does <strong>not</strong> fragment frames; fragmentation is handled only by Layer 3 (IP).</li>
+</ul>
+<h3 id="q4-what-is-an-optical-eye-diagram-and-what-do-eye-height-and-eye-width-represent">Q4: What is an Optical Eye Diagram, and what do Eye Height and Eye Width represent?</h3>
+<ul>
+<li><strong>Answer:</strong></li>
+<li>An eye diagram is formed by overlaying millions of repetitive binary transitions on a high-speed optical sampling oscilloscope.</li>
+<li><strong>Eye Height:</strong> Proportional to vertical noise margin. If the eye height collapses, signal-to-noise ratio (SNR) is degraded, leading to amplitude bit errors.</li>
+<li><strong>Eye Width:</strong> Proportional to horizontal jitter tolerance. Narrow eye width indicates timing jitter and clock drift.</li>
+<li><strong>Open Eye:</strong> High signal integrity, low BER ($&lt; 10^{-12}$).</li>
+<li><strong>Closed Eye:</strong> Receiver cannot distinguish between logical '0' and logical '1'.</li>
+</ul>
+<h3 id="q5-what-is-crc-32-fcs-and-what-happens-when-an-ethernet-frame-fails-crc-check">Q5: What is CRC-32 (FCS), and what happens when an Ethernet frame fails CRC check?</h3>
+<ul>
+<li><strong>Answer:</strong></li>
+<li>The FCS (Frame Check Sequence) is a 32-bit cyclic redundancy check calculated over the destination MAC, source MAC, EtherType, and payload.</li>
+<li>When an Ethernet switch receives a frame with an invalid CRC:<ol>
+<li>The switch <strong>immediately drops</strong> the frame.</li>
+<li>Increments the <code>rx_crc_errors</code> or <code>rx_fcs_errors</code> hardware counter.</li>
+<li><strong>Crucial:</strong> Layer 2 Ethernet does <strong>not</strong> send a NACK or request retransmission. Retransmission is strictly the responsibility of Layer 4 (TCP) or RoCEv2 transport.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h2 id="4-linux-shell-log-parsing-for-automation">4. Linux Shell &amp; Log Parsing for Automation</h2>
+<h3 id="essential-1-liners-for-optical-test-debugging">Essential 1-Liners for Optical Test Debugging</h3>
+<pre><code class="language-bash"># 1. Filter lines with CRC errors from switch syslog and count occurrences by interface
+grep -i &quot;crc error&quot; /var/log/switch.log | awk '{print $4}' | sort | uniq -c | sort -nr
+
+# 2. Extract optical transceiver Rx power values using regex and flag values below -10 dBm
+grep -oP 'Port \d+: Rx Power = [-\d.]+ dBm' optical_telemetry.log | awk '$6 &lt; -10.0 {print &quot;CRITICAL LOW POWER: &quot;, $0}'
+
+# 3. Monitor live dropped packets on an interface in real time
+watch -n 1 'ethtool -S eth0 | grep -E &quot;drop|error|discard&quot;'
+
+# 4. Check whether port 5025 (SCPI TCP instrument port) is listening and reachable
+nc -zv 192.168.1.105 5025
+
+# 5. Capture first 50 Ethernet frames on interface eth1 and save to pcap
+tcpdump -i eth1 -c 50 -w test_capture.pcap
+</code></pre>
+      </article>
+
+      <div class="footer-nav">
+        <a href="00_START_HERE.html" class="footer-btn">← 00: Company & Role Deep Dive</a>
+        <a href="02_Technical_Rounds.html" class="footer-btn" style="margin-left: auto;">02: Python Automation Architecture →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('lumilens-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('lumilens-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('reading-progress').style.width = scrolled + '%';
+    });
+
+    // Copy code button injection
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00: Company & Role Deep Dive · Lumilens Interview Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <!-- PrismJS for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #06b6d4;
+  
+  --accent-primary: #0284c7; /* Laser Photon Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --tag-bg: #ecfdf5;
+  --tag-border: #10b981;
+  --tag-text: #065f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(16, 185, 129, 0.12);
+  --tag-border: #10b981;
+  --tag-text: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-text h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 40px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge-lumilens {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #0891b2;
+}
+
+[data-theme="dark"] .badge-lumilens {
+  color: #22d3ee;
+}
+
+.content-body {
+  font-size: 15px;
+}
+
+.content-body h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.content-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.content-body pre code {
+  padding: 16px;
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #1a1f2c;
+  color: #f1f5f9;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">L</div>
+        <div class="brand-text">
+          <h2>Lumilens Prep</h2>
+          <span>29 LPA · NIT Rourkela</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="00_START_HERE.html" class="nav-link active">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Online Test Mastery</span>
+            <span class="nav-badge">Coding/MCQs</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Python Automation Arch</span>
+            <span class="nav-badge">Pytest/HIL</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="03_Networking_L1_L2.html" class="nav-link">
+            <span>03: L1/L2 Optics & Networking</span>
+            <span class="nav-badge">Protocols</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="05_Hardware_Integration_SCPI.html" class="nav-link">
+            <span>05: SCPI, VISA & Yield</span>
+            <span class="nav-badge">Hardware</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Managerial & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Quick Cheat Sheet</span>
+            <span class="nav-badge">Emergency</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Study Roadmap & Index</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="../index.html" style="font-size: 12.5px; color: var(--accent-primary); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-color);">← All Companies</a>
+          <div class="badge-lumilens">
+            <span>⚡</span>
+            <span>Silicon Photonics AI Interconnects</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Candidate: <strong>Adarsh Saurabh</strong> (M.Tech)
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1 id="00-start-here-lumilens-master-guide-strategic-playbook">00: START HERE — Lumilens Master Guide &amp; Strategic Playbook</h1>
+<blockquote>
+<p><strong>Role:</strong> Software Test Automation Engineer (Early Talent / Optical Product Test)<br />
+<strong>Company:</strong> Lumilens Inc. (Emerged from stealth Aug 2026 | $900M+ funding | $5.5B valuation)<br />
+<strong>Hiring Context:</strong> On-Campus Drive @ NIT Rourkela (Batch 2027)<br />
+<strong>Compensation (CTC):</strong> M.Tech: <strong>29 LPA</strong> | B.Tech: <strong>27 LPA</strong> | Ph.D.: <strong>33 LPA</strong><br />
+<strong>Candidate Profile:</strong> Adarsh Saurabh (M.Tech Signal &amp; Image Processing, NIT Rourkela | B.Tech CSE)</p>
+</blockquote>
+<hr />
+<h2 id="1-executive-summary-what-lumilens-actually-is">1. Executive Summary: What Lumilens Actually Is</h2>
+<p>Lumilens is not a conventional SaaS or cloud networking company. It is a <strong>deep-tech AI infrastructure and silicon photonics powerhouse</strong>.</p>
+<h3 id="the-core-problem-lumilens-solves-the-copper-wall">The Core Problem Lumilens Solves: "The Copper Wall"</h3>
+<p>Modern generative AI clusters (thousands to hundreds of thousands of GPUs like NVIDIA H100, B200, and custom ASICs) are limited by <strong>interconnect bandwidth, latency, power, and physical reach</strong>:
+- <strong>The Physical Limit of Copper:</strong> At modern lane speeds (100 Gbps and 200 Gbps per lane, PCIe Gen 6/7, 800G/1.6T Ethernet), traditional electrical copper cables (Direct Attach Copper / DAC) experience extreme attenuation. High-frequency electrical signals can only travel <strong>1 to 2 meters</strong> before signal degradation (insertion loss and inter-symbol interference) makes transmission impossible without bulky, power-hungry retimers.
+- <strong>The Scale Problem:</strong> A hyperscale AI training cluster cannot fit inside a single 2-meter rack. Tens of thousands of GPUs spread across hundreds of server racks.
+- <strong>Power &amp; Thermal Crisis:</strong> Up to 20%–30% of total data center power is wasted simply pushing electrons across copper wires and cooling the resulting heat.
+- <strong>The Optical Solution:</strong> Light has virtually zero frequency-dependent attenuation over data center distances, generates zero heat along the fiber, and allows massive wavelength division multiplexing (WDM).
+- <strong>Lumilens Technology:</strong> Lumilens designs <strong>Silicon Photonics (SiPh)</strong> engines, optical transceivers, Near-Package Optics (NPO), and Co-Packaged Optics (CPO) to connect GPU-to-GPU and switch-to-switch with optical interconnects.</p>
+<pre><code>[ Traditional Server Rack ]                 [ Lumilens Next-Gen Optical Fabric ]
+  GPU --[Copper DAC &lt; 2m]--&gt; Switch           GPU --[Co-Packaged Optical Engine]--&gt; Fiber
+  * Extreme heat &amp; power                     * 50%-80% lower power consumption
+  * Massive cable thickness                  * 10x-100x distance reach (&gt; 100m)
+  * Distance bottleneck blocks scale         * Massive multi-terabit bandwidth density
+</code></pre>
+<h3 id="key-business-technical-signals">Key Business &amp; Technical Signals</h3>
+<ul>
+<li><strong>Founding &amp; Leadership:</strong> Founded in 2024 by networking and systems veterans (CEO Ankur Singla, previously founder of Contrail Systems [acquired by Juniper] and Volterra [acquired by F5]).</li>
+<li><strong>Funding &amp; Backing:</strong> Over <strong>$900 Million</strong> raised from top-tier institutional and strategic investors; valued at <strong>$5.5 Billion</strong>.</li>
+<li><strong>Execution State:</strong> Emerged from stealth in August 2026 after landing multi-billion-dollar commercial supply agreements with tier-1 AI hyperscalers.</li>
+</ul>
+<hr />
+<h2 id="2-job-profile-software-test-automation-engineer-optical-product-test">2. Job Profile: Software Test Automation Engineer (Optical Product Test)</h2>
+<p>This role bridges <strong>software automation</strong>, <strong>Layer 1/Layer 2 networking protocols</strong>, and <strong>optical/physical hardware instruments</strong>.</p>
+<h3 id="core-responsibilities-extracted-from-official-jd">Core Responsibilities Extracted from Official JD</h3>
+<ol>
+<li><strong>Python-Based Test Frameworks:</strong> Architect, implement, and maintain automated regression, functional, and stress test suites in Python.</li>
+<li><strong>Protocol Validation (L1 / L2):</strong> Validate Ethernet framing, MAC learning, MTU, packet drop rates, Bit Error Rate (BER), and throughput over optical links and network switches.</li>
+<li><strong>Hardware-in-the-Loop (HIL) &amp; Traffic Generation:</strong> Program and control high-speed traffic generators (e.g., <strong>IXIA</strong>, Spirent) to simulate multi-terabit network traffic and stress DUTs (Devices Under Test).</li>
+<li><strong>Lab Instrument Automation:</strong> Automate optical power meters, optical spectrum analyzers, variable optical attenuators (VOA), and oscilloscopes using <strong>SCPI (Standard Commands for Programmable Instruments)</strong> over <strong>NI-VISA</strong>, RS-232, and TCP/IP sockets.</li>
+<li><strong>Manufacturing Test &amp; Yield Optimization:</strong> Develop production-line test scripts for high-volume manufacturing (HVM) of silicon photonics transceivers, log telemetry into SQL/NoSQL databases, and manage change control.</li>
+<li><strong>CI/CD Integration:</strong> Integrate hardware test benches into continuous integration pipelines via Jenkins, ArgoCD, and shell automation.</li>
+</ol>
+<hr />
+<h2 id="3-the-selection-process-round-breakdown">3. The Selection Process &amp; Round Breakdown</h2>
+<pre><code class="language-mermaid">flowchart TD
+    A[Step 1: Resume Shortlist] --&gt; B[Step 2: Online Technical Assessment]
+    B --&gt; C[Step 3: Technical Round 1 - Python &amp; Core Networking]
+    C --&gt; D[Step 4: Technical Round 2 - Test Frameworks &amp; Hardware Integration]
+    D --&gt; E[Step 5: Technical Round 3 - Deep Project Grilling &amp; Optical Systems]
+    E --&gt; F[Step 6: Managerial / Leadership &amp; HR Fit]
+    F --&gt; G[Offer: 29 LPA M.Tech / 27 LPA B.Tech]
+</code></pre>
+<h3 id="stage-1-resume-shortlist-cleared">Stage 1: Resume Shortlist (Cleared)</h3>
+<ul>
+<li>Candidate matches dual criteria: B.Tech CSE (strong software/algorithms foundation) + M.Tech Signal and Image Processing at NIT Rourkela (mathematics, signal properties, noise, filtering).</li>
+</ul>
+<h3 id="stage-2-online-technical-assessment-6090-minutes">Stage 2: Online Technical Assessment (60–90 Minutes)</h3>
+<ul>
+<li><strong>Section A: Data Structures &amp; Python Coding (2–3 Problems):</strong></li>
+<li>Parsing and stateful stream processing (e.g., parsing raw packet dumps, bit manipulation, sliding window rate limits).</li>
+<li>Graph/routing or hash map optimization (similar to A* pathfinding or MAC address lookup).</li>
+<li><strong>Section B: Networking MCQs &amp; Short Technical Questions (15–20 Questions):</strong></li>
+<li>OSI Layer 1 vs Layer 2: Ethernet frame structure, preamble, SFD, FCS/CRC-32, MAC addressing, MTU, VLAN 802.1Q.</li>
+<li>Signal integrity &amp; optics basics: Bit Error Rate (BER), dBm to mW conversion, PRBS patterns, eye diagrams.</li>
+<li><strong>Section C: Linux, Shell &amp; Scripting (5–10 Questions):</strong></li>
+<li>Regex for log parsing, bash automation, socket states (<code>netstat</code>, <code>ss</code>, <code>tcpdump</code>).</li>
+</ul>
+<h3 id="stage-3-technical-round-1-python-dsa-networking-protocols-4560-mins">Stage 3: Technical Round 1 — Python, DSA &amp; Networking Protocols (45–60 Mins)</h3>
+<ul>
+<li>Live coding of a test automation helper (e.g., a packet loss analyzer or custom parser).</li>
+<li>In-depth grilling on Python internals: generators, decorators, memory management, pytest fixture scopes.</li>
+<li>Deep dive into Layer 1 and Layer 2:</li>
+<li>What happens when a frame is corrupted at the physical layer?</li>
+<li>How does a switch learn MAC addresses? What happens when the MAC table overflows?</li>
+<li>What is the difference between Bit Error Rate (BER) and Packet Error Rate (PER)?</li>
+</ul>
+<h3 id="stage-4-technical-round-2-test-automation-architecture-instrument-control-4560-mins">Stage 4: Technical Round 2 — Test Automation Architecture &amp; Instrument Control (45–60 Mins)</h3>
+<ul>
+<li>"Design a test automation framework from scratch to validate an 800G optical transceiver."</li>
+<li>Hardware-software communication protocols: How does SCPI work? How do you send commands over NI-VISA / TCP/IP?</li>
+<li>Flaky tests &amp; hardware synchronization: How do you handle an instrument that takes 500ms to stabilize after changing optical laser power? (Avoid <code>time.sleep()</code>, use polling with exponential backoff).</li>
+<li>Traffic generation: How would you configure an IXIA chassis to detect dropped packets under burst traffic?</li>
+</ul>
+<h3 id="stage-5-technical-round-3-candidate-projects-hardware-grilling-4560-mins">Stage 5: Technical Round 3 — Candidate Projects &amp; Hardware Grilling (45–60 Mins)</h3>
+<ul>
+<li><strong>PathMapper (IBYD Technology):</strong> A* algorithm, Manhattan heuristic, 10,000 nodes scaling. How does this relate to packet routing in an optical CLOS network fabric?</li>
+<li><strong>Uplan Document Verification Pipeline:</strong> Multi-agent pipeline, rule-based verification, regression tracking. How do you apply deterministic verification to hardware telemetry?</li>
+<li><strong>K-HUKI Keyframe Benchmarking:</strong> 96.45% benchmark accuracy, performance benchmarking. How do you benchmark BER and signal-to-noise ratio (SNR) in high-speed links?</li>
+</ul>
+<h3 id="stage-6-managerial-cultural-fit-3045-mins">Stage 6: Managerial &amp; Cultural Fit (30–45 Mins)</h3>
+<ul>
+<li>High-growth startup culture: working with hardware delays, ambiguity, cross-functional collaboration with physical optics engineers and software teams.</li>
+<li>"Why Lumilens? Why test automation instead of standard software development or pure ML?"</li>
+</ul>
+<hr />
+<h2 id="4-candidate-competitive-advantage-the-t-shaped-engineer">4. Candidate Competitive Advantage: The "T-Shaped Engineer"</h2>
+<p>Why Adarsh has an unfair advantage if positioned correctly:
+1. <strong>The Software Flaw of Pure Hardware Engineers:</strong> EE/Optics candidates often write monolithic, brittle scripts with hardcoded <code>time.sleep()</code>, no OOP principles, and zero CI/CD understanding.
+2. <strong>The Hardware Flaw of Pure CS Engineers:</strong> CS candidates have no intuition for analog signals, optical loss, laser drift, physical reflection, or instrument bus latency.
+3. <strong>Adarsh's Winning Story:</strong>
+   - <strong>Undergrad in CSE:</strong> Strong Python, clean code, modular architecture, algorithmic optimization, data structures.
+   - <strong>Postgrad in Signal Processing (NIT Rourkela):</strong> Deep understanding of signals, noise, frequency domains, filtering, BER, and statistical validation.
+   - <strong>Core Thesis to Interviewer:</strong> <em>"I combine the clean software engineering practices of a Computer Scientist with the signal integrity and hardware intuition of an M.Tech in Signal Processing. That makes me uniquely equipped to build robust, scalable test automation for high-speed photonic interconnects."</em></p>
+<hr />
+<h2 id="5-navigation-of-preparation-modules">5. Navigation of Preparation Modules</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Module File</th>
+<th style="text-align: left;">Topic &amp; Focus Area</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>01_Online_Test.html</code></strong></td>
+<td style="text-align: left;">Practice coding questions, bit manipulation, networking MCQs, and regex parsing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>02_Technical_Rounds.html</code></strong></td>
+<td style="text-align: left;">Pytest production design, fixtures, mocking, socket testing, and CI/CD integration.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>03_Networking_L1_L2.html</code></strong></td>
+<td style="text-align: left;">L1/L2 deep dive, optical transceiver parameters (Tx/Rx power, eye diagram, BER), and IXIA traffic generation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>04_Candidate_Resume_Grilling.html</code></strong></td>
+<td style="text-align: left;">Line-by-line defense of Adarsh's resume, project adaptations, and trap questions.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>05_Hardware_Integration_SCPI.html</code></strong></td>
+<td style="text-align: left;">SCPI command syntax, PyVISA, instrument control, high-volume manufacturing (HVM) testing, and C# basics.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>06_Managerial_and_HR.html</code></strong></td>
+<td style="text-align: left;">Startup culture, STAR stories, cross-functional conflict resolution, and executive presence.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>07_Quick_Reference.html</code></strong></td>
+<td style="text-align: left;">Ultra-condensed cheat sheet, one-liners, formulas, and emergency revision card.</td>
+</tr>
+</tbody>
+</table>
+      </article>
+
+      <div class="footer-nav">
+        
+        <a href="01_Online_Test.html" class="footer-btn" style="margin-left: auto;">01: Online Test Mastery →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('lumilens-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('lumilens-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('reading-progress').style.width = scrolled + '%';
+    });
+
+    // Copy code button injection
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

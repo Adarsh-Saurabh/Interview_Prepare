@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06: Managerial & Behavioral · Lumilens Interview Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <!-- PrismJS for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #06b6d4;
+  
+  --accent-primary: #0284c7; /* Laser Photon Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --tag-bg: #ecfdf5;
+  --tag-border: #10b981;
+  --tag-text: #065f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(16, 185, 129, 0.12);
+  --tag-border: #10b981;
+  --tag-text: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-text h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 40px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge-lumilens {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #0891b2;
+}
+
+[data-theme="dark"] .badge-lumilens {
+  color: #22d3ee;
+}
+
+.content-body {
+  font-size: 15px;
+}
+
+.content-body h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.content-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.content-body pre code {
+  padding: 16px;
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #1a1f2c;
+  color: #f1f5f9;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">L</div>
+        <div class="brand-text">
+          <h2>Lumilens Prep</h2>
+          <span>29 LPA · NIT Rourkela</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Online Test Mastery</span>
+            <span class="nav-badge">Coding/MCQs</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Python Automation Arch</span>
+            <span class="nav-badge">Pytest/HIL</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="03_Networking_L1_L2.html" class="nav-link">
+            <span>03: L1/L2 Optics & Networking</span>
+            <span class="nav-badge">Protocols</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="05_Hardware_Integration_SCPI.html" class="nav-link">
+            <span>05: SCPI, VISA & Yield</span>
+            <span class="nav-badge">Hardware</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link active">
+            <span>06: Managerial & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Quick Cheat Sheet</span>
+            <span class="nav-badge">Emergency</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Study Roadmap & Index</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="../index.html" style="font-size: 12.5px; color: var(--accent-primary); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-color);">← All Companies</a>
+          <div class="badge-lumilens">
+            <span>⚡</span>
+            <span>Silicon Photonics AI Interconnects</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Candidate: <strong>Adarsh Saurabh</strong> (M.Tech)
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1 id="06-managerial-hr-behavioral-interview-masterclass">06: Managerial, HR &amp; Behavioral Interview Masterclass</h1>
+<blockquote>
+<p><strong>Target:</strong> Round 4 — Director of Test Engineering &amp; HR Leadership Fit<br />
+<strong>Company Context:</strong> Lumilens ($900M+ funding | $5.5B valuation | Hyper-growth deep-tech startup)<br />
+<strong>Candidate:</strong> Adarsh Saurabh (M.Tech Signal Processing, NIT Rourkela | B.Tech CSE)</p>
+</blockquote>
+<hr />
+<h2 id="1-the-lumilens-startup-mindset-what-leadership-evaluates">1. The Lumilens Startup Mindset &amp; What Leadership Evaluates</h2>
+<p>Lumilens is not a relaxed IT consultancy or a slow-moving legacy enterprise. It is an aggressively funded silicon photonics startup founded by serial entrepreneurs (CEO Ankur Singla: Contrail Systems $\to$ Juniper, Volterra $\to$ F5) with multi-billion-dollar hyperscale customer contracts to fulfill.</p>
+<h3 id="what-the-director-of-test-engineering-is-looking-for">What the Director of Test Engineering is Looking For</h3>
+<ol>
+<li><strong>Extreme Ownership:</strong> When a test station fails on the manufacturing line at 8:00 PM, do you blame the hardware team and log off, or do you grab an oscilloscope, isolate the issue, and stay until the line is unblocked?</li>
+<li><strong>Comfort with High Ambiguity:</strong> Silicon photonics is bleeding-edge technology. There is no existing StackOverflow answer for a novel micro-ring modulator thermal drift. You must read IEEE papers, trace raw physics, and invent the test methodology.</li>
+<li><strong>Cross-Disciplinary Humility &amp; Collaboration:</strong> You will sit between Ph.D. optical physicists, ASIC digital designers, and factory assembly operators. You must speak all three languages without arrogance.</li>
+<li><strong>Resilience Under High Stakes:</strong> An unhandled error in a manufacturing test script can pass a defective 800G optical engine to a hyperscale customer, resulting in millions of dollars in field returns and reputational damage.</li>
+</ol>
+<hr />
+<h2 id="2-core-behavioral-questions-high-scoring-star-responses">2. Core Behavioral Questions &amp; High-Scoring STAR Responses</h2>
+<hr />
+<h3 id="question-1-why-do-you-want-to-join-lumilens-instead-of-a-traditional-big-tech-software-company-like-google-amazon-or-microsoft">Question 1: "Why do you want to join Lumilens instead of a traditional big-tech software company like Google, Amazon, or Microsoft?"</h3>
+<h4 id="the-winning-response-strategic-high-signal">The Winning Response (Strategic &amp; High Signal)</h4>
+<ul>
+<li><strong>Situation:</strong> "Traditional big-tech software companies are largely mature. As a new graduate engineer at Amazon or Google, you typically maintain existing microservices or build incremental features on established software stacks."</li>
+<li><strong>Task:</strong> "I wanted my career's first chapter to place me directly at the physical frontier of the generative AI revolution, where every line of code directly impacts whether the hardware scales or fails."</li>
+<li><strong>Action:</strong> "Lumilens represents the single most critical transition in compute history: breaking the copper wall. When GPU clusters cannot grow past 2 meters without light, optical interconnects become the heartbeat of AI supercomputing. The opportunity to work under veteran leadership like Ankur Singla, right after emerging from stealth with \$900M+ funding, offers ground-floor engineering ownership."</li>
+<li><strong>Result:</strong> "At Lumilens, my test automation code doesn't just shuffle JSON in the cloud—it directly validates physical optical engines that power next-generation AI data centers. That direct connection between software and high-speed physics is where I want to build my career."</li>
+</ul>
+<hr />
+<h3 id="question-2-tell-me-about-a-time-you-faced-an-ambiguous-poorly-defined-problem-and-had-to-deliver-results">Question 2: "Tell me about a time you faced an ambiguous, poorly defined problem and had to deliver results."</h3>
+<h4 id="the-winning-response-using-warehouse-pathmapper-project">The Winning Response (Using Warehouse PathMapper Project)</h4>
+<ul>
+<li><strong>Situation:</strong> "During my undergrad, I took on a freelance engineering project for IBYD Technology called Warehouse PathMapper. The client had an operational warehouse layout of 10,000 locations and needed an automated routing engine. However, the client provided no formal algorithmic specification—only raw grid coordinates and a vague goal of 'making it fast on an office laptop.'"</li>
+<li><strong>Task:</strong> "I had to define the mathematical problem formulation from scratch, select the optimal algorithm, implement it in Python, and validate its scalability under extreme corner cases."</li>
+<li><strong>Action:</strong></li>
+<li>Rather than treating it as an unstructured 100-million-cell grid, I formulated the layout as a sparse topological graph of aisle waypoints.</li>
+<li>I implemented an $A^*$ algorithm using a Manhattan distance heuristic, ensuring admissibility and consistency to avoid re-expanding nodes.</li>
+<li>When initial tests choked on 10,000 nodes due to heap allocations, I profiled memory bottlenecks and implemented hierarchical waypoint routing.</li>
+<li>I wrote an automated synthetic stress-testing harness that generated 1,000 random obstacle patterns to verify path optimality and collision prevention.</li>
+<li><strong>Result:</strong> "The final engine computed collision-free routes across 10,000+ locations in under 0.5 seconds on an ordinary i5 CPU, exceeding the client's expectations and delivering a 100% stable production tool."</li>
+</ul>
+<hr />
+<h3 id="question-3-tell-me-about-a-time-you-had-a-technical-disagreement-with-a-teammate-or-mentor-how-did-you-resolve-it">Question 3: "Tell me about a time you had a technical disagreement with a teammate or mentor. How did you resolve it?"</h3>
+<h4 id="the-winning-response-using-autobot-robotics-ziroh-labs-experience">The Winning Response (Using Autobot Robotics / Ziroh Labs Experience)</h4>
+<ul>
+<li><strong>Situation:</strong> "During my machine learning internship at Autobot Robotics, we were integrating functional validation models with robotic hardware. A teammate insisted on using a complex deep learning model for sensor state prediction, arguing it achieved 98% offline training accuracy."</li>
+<li><strong>Task:</strong> "When we deployed the model to the embedded hardware, the inference latency exceeded 200 milliseconds, which violated the robot's real-time 50-millisecond control loop and caused actuator jitter."</li>
+<li><strong>Action:</strong></li>
+<li>I avoided personal opinions and focused strictly on empirical measurements. I set up an automated benchmarking test that recorded end-to-end latency, CPU utilization, and missed control deadlines.</li>
+<li>I proposed an alternative lightweight heuristic model combined with a small linear regression filter that ran in 8 milliseconds on the hardware.</li>
+<li>In our team review, I presented side-by-side telemetry: showing that while the deep model was slightly more accurate in offline simulation, the lightweight model delivered 100% on-time deadlines with zero actuator jitter in physical hardware.</li>
+<li><strong>Result:</strong> "My teammate immediately agreed with the physical data. We adopted the lightweight pipeline, which enabled stable hardware validation and taught me that in hardware-adjacent systems, <strong>latency and deterministic execution always trump offline theoretical complexity</strong>."</li>
+</ul>
+<hr />
+<h3 id="question-4-a-critical-manufacturing-test-script-starts-intermittently-failing-in-production-the-factory-manager-is-furious-because-the-line-is-stopped-what-do-you-do">Question 4: "A critical manufacturing test script starts intermittently failing in production. The factory manager is furious because the line is stopped. What do you do?"</h3>
+<h4 id="the-winning-response-crisis-management-systematic-triage">The Winning Response (Crisis Management &amp; Systematic Triage)</h4>
+<ul>
+<li><strong>Immediate Step (Containment &amp; Safety):</strong></li>
+<li><em>"Do not panic, and do not make hasty, uncommitted changes to production code.</em></li>
+<li><em>Check if the station has a known-good 'Golden Unit' (calibrated golden transceiver). Run the golden unit immediately. If the golden unit also fails: the issue is the test station hardware or environment (dirty optical connector, broken patch cord, drifted laser, or software regression). If the golden unit passes: the production units are genuinely defective."</em></li>
+<li><strong>Root Cause Isolation:</strong></li>
+<li><em>"Inspect the physical layer first: clean and inspect fiber ferrule end-faces with a fiber scope (60% of optical bench flakiness is dust contamination).</em></li>
+<li><em>Check instrument communication: query <code>:SYST:ERR?</code> on all power meters and attenuators to see if SCPI FIFO buffers overflowed.</em></li>
+<li><em>Review recent commits: check Git tags to verify whether an unapproved software change was deployed to the station.</em></li>
+<li><em>Examine environmental telemetry: check temperature and laser bias current on the failed units to see if ambient facility temperature drifted outside calibration limits."</em></li>
+<li><strong>Resolution &amp; Post-Mortem:</strong></li>
+<li><em>"Once isolated, deploy the verified fix under strict change control.</em></li>
+<li><em>Re-run station Gage R&amp;R (repeatability and reproducibility) to confirm measurement confidence.</em></li>
+<li><em>Write a blameless post-mortem document with an automated preventative action (e.g., adding automated instrument health checks and fiber cleanliness self-tests before every manufacturing shift)."</em></li>
+</ul>
+<hr />
+<h2 id="3-high-impact-questions-for-adarsh-to-ask-the-interviewers">3. High-Impact Questions for Adarsh to Ask the Interviewers</h2>
+<p>At the end of each round, when the interviewer asks <em>"Do you have any questions for us?"</em>, asking standard generic questions ("What is the culture like?") wastes an opportunity. Asking deep, role-specific questions signals high technical maturity.</p>
+<h3 id="for-technical-leads-staff-engineers-rounds-13">For Technical Leads &amp; Staff Engineers (Rounds 1–3)</h3>
+<ol>
+<li><em>"As Lumilens scales from 800G to 1.6T co-packaged optical engines, what is the biggest bottleneck you face in test automation: is it high-speed SerDes physical contact repeatability, or is it managing the massive volume of real-time telemetry streaming off the test stations?"</em></li>
+<li><em>"How does the test engineering team handle the balance between high-speed line-rate testing in manufacturing versus deep characterization (like 2D optical eye contours and TDECQ) in the design lab?"</em></li>
+<li><em>"Given that laser sources in SiPh often have thermal settling times, what architectural patterns has Lumilens developed in your Python test frameworks to minimize cycle time without introducing flaky race conditions?"</em></li>
+</ol>
+<h3 id="for-the-director-vp-of-engineering-round-4">For the Director / VP of Engineering (Round 4)</h3>
+<ol>
+<li><em>"With Lumilens recently emerging from stealth with \$900M+ in funding and multi-billion-dollar hyperscale agreements, how is the test automation infrastructure evolving to support manufacturing across global foundry and assembly partners?"</em></li>
+<li><em>"What distinguishes an early-career engineer who simply maintains existing test scripts from one who becomes an indispensable technical leader in Lumilens' test organization within their first two years?"</em></li>
+</ol>
+      </article>
+
+      <div class="footer-nav">
+        <a href="05_Hardware_Integration_SCPI.html" class="footer-btn">← 05: SCPI, VISA & Yield</a>
+        <a href="07_Quick_Reference.html" class="footer-btn" style="margin-left: auto;">07: Quick Cheat Sheet →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('lumilens-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('lumilens-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('reading-progress').style.width = scrolled + '%';
+    });
+
+    // Copy code button injection
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

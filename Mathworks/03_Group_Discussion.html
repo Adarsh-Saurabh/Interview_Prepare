@@ -1,0 +1,2438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Discussion & Activity · MathWorks EDG Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #0284c7;
+  
+  --accent-primary: #0284c7; /* MathWorks Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --official-bg: #ecfdf5;
+  --official-border: #10b981;
+  --official-text: #065f46;
+  
+  --pattern-bg: #eef2ff;
+  --pattern-border: #6366f1;
+  --pattern-text: #3730a3;
+  
+  --myread-bg: #fffbeb;
+  --myread-border: #f59e0b;
+  --myread-text: #92400e;
+  
+  --danger-bg: #fff1f2;
+  --danger-border: #f43f5e;
+  --danger-text: #9f1239;
+  
+  --warning-bg: #fff7ed;
+  --warning-border: #ea580c;
+  --warning-text: #9a3412;
+
+  --quote-bg: #f8fafc;
+  --quote-border: #0284c7;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --official-bg: rgba(16, 185, 129, 0.12);
+  --official-border: #10b981;
+  --official-text: #34d399;
+  
+  --pattern-bg: rgba(99, 102, 241, 0.12);
+  --pattern-border: #818cf8;
+  --pattern-text: #a5b4fc;
+  
+  --myread-bg: rgba(245, 158, 11, 0.12);
+  --myread-border: #fbbf24;
+  --myread-text: #fcd34d;
+  
+  --danger-bg: rgba(244, 63, 94, 0.12);
+  --danger-border: #fb7185;
+  --danger-text: #fda4af;
+  
+  --warning-bg: rgba(234, 88, 12, 0.12);
+  --warning-border: #fb923c;
+  --warning-text: #fdba74;
+
+  --quote-bg: #131d2e;
+  --quote-border: #38bdf8;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+/* Top Reading Progress Bar */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 290px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform 0.25s ease;
+}
+
+.sidebar-header {
+  padding: 1.25rem 1.25rem 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.brand-badge {
+  font-size: 0.7rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.candidate-card {
+  margin: 0.85rem 1.25rem;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.75rem;
+}
+
+.candidate-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.candidate-details {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  margin-top: 2px;
+}
+
+.sidebar-nav {
+  padding: 0.5rem 0.75rem;
+  flex: 1;
+}
+
+.nav-section-title {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  padding: 0.5rem 0.65rem 0.35rem 0.65rem;
+  margin-top: 0.4rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+  transition: all 0.15s ease;
+}
+
+.nav-item:hover {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-item-icon {
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+}
+
+.nav-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-tag-legend {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+}
+
+.legend-title {
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-dot.official { background-color: #10b981; }
+.legend-dot.pattern { background-color: #6366f1; }
+.legend-dot.myread { background-color: #f59e0b; }
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Top Navigation Bar */
+.top-bar {
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  color: var(--accent-primary);
+}
+
+.breadcrumbs-separator {
+  color: var(--text-muted);
+}
+
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn-icon {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+}
+
+.btn-icon:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+/* Content Container with right TOC */
+.content-layout {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 2rem 4rem 2rem;
+  flex: 1;
+}
+
+.article-container {
+  width: 100%;
+  max-width: 840px;
+}
+
+/* Right TOC Sidebar */
+.toc-sidebar {
+  width: 230px;
+  margin-left: 2.5rem;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  font-size: 0.78rem;
+}
+
+.toc-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  font-size: 0.7rem;
+}
+
+.toc-list {
+  list-style: none;
+  border-left: 2px solid var(--border-color);
+}
+
+.toc-item {
+  margin-bottom: 0.35rem;
+}
+
+.toc-item.h3 {
+  padding-left: 0.85rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.2rem 0.5rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+  border-left: 2px solid transparent;
+  margin-left: -2px;
+}
+
+.toc-link:hover {
+  color: var(--text-primary);
+}
+
+.toc-link.active {
+  color: var(--accent-primary);
+  border-left-color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* Article Header */
+.article-header {
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.article-stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.article-title {
+  font-size: 2.15rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Markdown Content Styling */
+.markdown-body {
+  font-size: 1.02rem;
+  color: var(--text-primary);
+}
+
+.markdown-body h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 2.25rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.markdown-body h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.015em;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.markdown-body h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.75rem;
+  margin-bottom: 0.65rem;
+  color: var(--text-primary);
+}
+
+.markdown-body h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body p {
+  margin-bottom: 1.15rem;
+}
+
+.markdown-body strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.markdown-body em {
+  font-style: italic;
+}
+
+.markdown-body ul, .markdown-body ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-body li {
+  margin-bottom: 0.45rem;
+}
+
+.markdown-body hr {
+  border: 0;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2.25rem 0;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  vertical-align: 1px;
+  line-height: 1.4;
+  margin: 0 2px;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.badge-official {
+  background-color: var(--official-bg);
+  border: 1px solid var(--official-border);
+  color: var(--official-text);
+}
+.badge-official .badge-dot { background-color: var(--official-border); }
+
+.badge-pattern {
+  background-color: var(--pattern-bg);
+  border: 1px solid var(--pattern-border);
+  color: var(--pattern-text);
+}
+.badge-pattern .badge-dot { background-color: var(--pattern-border); }
+
+.badge-myread {
+  background-color: var(--myread-bg);
+  border: 1px solid var(--myread-border);
+  color: var(--myread-text);
+}
+.badge-myread .badge-dot { background-color: var(--myread-border); }
+
+/* Blockquotes & Callouts */
+.markdown-body blockquote {
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.15rem;
+  background-color: var(--quote-bg);
+  border-left: 4px solid var(--quote-border);
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.markdown-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.callout-box {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  font-size: 0.95rem;
+}
+
+.callout-box.callout-danger {
+  background-color: var(--danger-bg);
+  border-left: 4px solid var(--danger-border);
+  color: var(--danger-text);
+}
+
+.callout-box.callout-warning {
+  background-color: var(--warning-bg);
+  border-left: 4px solid var(--warning-border);
+  color: var(--warning-text);
+}
+
+/* Tables */
+.table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.markdown-body th {
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.markdown-body td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.markdown-body tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-body tbody tr:hover {
+  background-color: var(--bg-primary);
+}
+
+/* Code & Syntax Highlighting */
+.markdown-body code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background-color: var(--bg-inline-code);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+.code-block-wrapper {
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-surface);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 1rem;
+  background-color: var(--bg-code-header);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.copy-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.code-block-wrapper pre {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.code-block-wrapper pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Pygments Syntax Styling */
+pre { line-height: 125%; }
+td.linenos .normal { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f0f0f0; }
+.codehilite .c { color: #60A0B0; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #F00 } /* Error */
+.codehilite .k { color: #007020; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666 } /* Operator */
+.codehilite .ch { color: #60A0B0; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #60A0B0; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #007020 } /* Comment.Preproc */
+.codehilite .cpf { color: #60A0B0; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #60A0B0; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #60A0B0; background-color: #FFF0F0 } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #F00 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #00A000 } /* Generic.Inserted */
+.codehilite .go { color: #888 } /* Generic.Output */
+.codehilite .gp { color: #C65D09; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #04D } /* Generic.Traceback */
+.codehilite .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #007020 } /* Keyword.Pseudo */
+.codehilite .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #902000 } /* Keyword.Type */
+.codehilite .m { color: #40A070 } /* Literal.Number */
+.codehilite .s { color: #4070A0 } /* Literal.String */
+.codehilite .na { color: #4070A0 } /* Name.Attribute */
+.codehilite .nb { color: #007020 } /* Name.Builtin */
+.codehilite .nc { color: #0E84B5; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #60ADD5 } /* Name.Constant */
+.codehilite .nd { color: #555; font-weight: bold } /* Name.Decorator */
+.codehilite .ni { color: #D55537; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #007020 } /* Name.Exception */
+.codehilite .nf { color: #06287E } /* Name.Function */
+.codehilite .nl { color: #002070; font-weight: bold } /* Name.Label */
+.codehilite .nn { color: #0E84B5; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #BB60D5 } /* Name.Variable */
+.codehilite .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #BBB } /* Text.Whitespace */
+.codehilite .mb { color: #40A070 } /* Literal.Number.Bin */
+.codehilite .mf { color: #40A070 } /* Literal.Number.Float */
+.codehilite .mh { color: #40A070 } /* Literal.Number.Hex */
+.codehilite .mi { color: #40A070 } /* Literal.Number.Integer */
+.codehilite .mo { color: #40A070 } /* Literal.Number.Oct */
+.codehilite .sa { color: #4070A0 } /* Literal.String.Affix */
+.codehilite .sb { color: #4070A0 } /* Literal.String.Backtick */
+.codehilite .sc { color: #4070A0 } /* Literal.String.Char */
+.codehilite .dl { color: #4070A0 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #4070A0; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #4070A0 } /* Literal.String.Double */
+.codehilite .se { color: #4070A0; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #4070A0 } /* Literal.String.Heredoc */
+.codehilite .si { color: #70A0D0; font-style: italic } /* Literal.String.Interpol */
+.codehilite .sx { color: #C65D09 } /* Literal.String.Other */
+.codehilite .sr { color: #235388 } /* Literal.String.Regex */
+.codehilite .s1 { color: #4070A0 } /* Literal.String.Single */
+.codehilite .ss { color: #517918 } /* Literal.String.Symbol */
+.codehilite .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #06287E } /* Name.Function.Magic */
+.codehilite .vc { color: #BB60D5 } /* Name.Variable.Class */
+.codehilite .vg { color: #BB60D5 } /* Name.Variable.Global */
+.codehilite .vi { color: #BB60D5 } /* Name.Variable.Instance */
+.codehilite .vm { color: #BB60D5 } /* Name.Variable.Magic */
+.codehilite .il { color: #40A070 } /* Literal.Number.Integer.Long */
+
+[data-theme="dark"] .codehilite {
+  background: #111827 !important;
+}
+[data-theme="dark"] .codehilite pre {
+  background: #111827 !important;
+  color: #f8fafc !important;
+}
+
+/* Links */
+.markdown-body a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.markdown-body a:hover {
+  color: var(--accent-primary-hover);
+}
+
+/* Interactive Checklist Items */
+.interactive-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin: 0.45rem 0;
+  list-style: none;
+}
+
+.interactive-check-item input[type="checkbox"] {
+  margin-top: 0.35rem;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--accent-primary);
+}
+
+.interactive-check-item.checked {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* Bottom Pagination */
+.page-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.pagination-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+  text-decoration: none;
+  flex: 1;
+  max-width: 48%;
+  transition: all 0.15s ease;
+}
+
+.pagination-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.pagination-card.next {
+  text-align: right;
+  margin-left: auto;
+}
+
+.pagination-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.pagination-title {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* Dashboard Hub Grid (for index.html) */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.hub-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.35rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.hub-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.hub-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.hub-card-icon {
+  font-size: 1.5rem;
+}
+
+.hub-card-stage {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: var(--accent-light);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.hub-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  color: var(--text-primary);
+}
+
+.hub-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.hub-card-footer {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.hub-card-arrow {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* Quick Access Box */
+.quick-access-box {
+  margin: 2.5rem 0 1.5rem 0;
+  padding: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.quick-access-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quick-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.quick-link-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.quick-link-pill:hover {
+  border-color: var(--accent-primary);
+  background: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+/* Modal Search */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  width: 92%;
+  max-width: 640px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.modal-search-header {
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-search-input {
+  width: 100%;
+  padding: 1.1rem 1.25rem 1.1rem 2.85rem;
+  font-size: 1.05rem;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  outline: none;
+  font-family: var(--font-sans);
+}
+
+.modal-search-icon {
+  position: absolute;
+  left: 1.1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.modal-results {
+  overflow-y: auto;
+  padding: 0.75rem;
+  flex: 1;
+}
+
+.search-result-item {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  display: block;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: background 0.15s ease;
+  margin-bottom: 4px;
+}
+
+.search-result-item:hover, .search-result-item.selected {
+  background: var(--bg-primary);
+}
+
+.search-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-result-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.search-result-stage {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: var(--accent-light);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.search-result-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.modal-footer {
+  padding: 0.65rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Print Styles */
+@media print {
+  .sidebar, .top-bar, .toc-sidebar, #reading-progress, .page-pagination, .copy-btn, .quick-access-box {
+    display: none !important;
+  }
+  .app-container, .main-wrapper, .content-layout {
+    display: block !important;
+    padding: 0 !important;
+  }
+  .article-container {
+    max-width: 100% !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1100px) {
+  .toc-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .mobile-menu-btn {
+    display: block;
+  }
+  .article-title {
+    font-size: 1.75rem;
+  }
+  .content-layout {
+    padding: 1.5rem 1rem;
+  }
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+  .quick-links-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-brand">
+          <div class="brand-icon">MW</div>
+          <div class="brand-info">
+            <span class="brand-title">MathWorks EDG</span>
+            <span class="brand-badge">CS Track · Prep</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="candidate-card">
+        <div class="candidate-name">Adarsh Saurabh</div>
+        <div class="candidate-details">M.Tech SP & IP · NIT Rourkela</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Navigation Hub</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-item-icon">🏠</span>
+          <span class="nav-item-text">Master Dashboard</span>
+        </a>
+
+        <div class="nav-section-title">Preparation Modules</div>
+        
+        <a href="00_START_HERE.html" class="nav-item">
+          <span class="nav-item-icon">🚀</span>
+          <span class="nav-item-text">Start Here & Master Plan</span>
+        </a>
+        
+        <a href="01_Online_Test.html" class="nav-item">
+          <span class="nav-item-icon">💻</span>
+          <span class="nav-item-text">The 90-Min Online Test</span>
+        </a>
+        
+        <a href="02_Technical_Rounds.html" class="nav-item">
+          <span class="nav-item-icon">⚙️</span>
+          <span class="nav-item-text">Technical Interview Rounds</span>
+        </a>
+        
+        <a href="03_Group_Discussion.html" class="nav-item active">
+          <span class="nav-item-icon">👥</span>
+          <span class="nav-item-text">Group Discussion & Activity</span>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html" class="nav-item">
+          <span class="nav-item-icon">👔</span>
+          <span class="nav-item-text">Managerial & HR Rounds</span>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html" class="nav-item">
+          <span class="nav-item-icon">🎯</span>
+          <span class="nav-item-text">Projects Under Interrogation</span>
+        </a>
+        
+        <a href="06_Quick_Reference.html" class="nav-item">
+          <span class="nav-item-icon">⚡</span>
+          <span class="nav-item-text">Quick Reference & Day-Of Sheet</span>
+        </a>
+        
+        <a href="README.html" class="nav-item">
+          <span class="nav-item-icon">📖</span>
+          <span class="nav-item-text">Repository Overview</span>
+        </a>
+        
+      </nav>
+
+      <div class="nav-tag-legend">
+        <div class="legend-title">Confidence Keys</div>
+        <div class="legend-items">
+          <div class="legend-item"><span class="legend-dot official"></span> Official Document</div>
+          <div class="legend-item"><span class="legend-dot pattern"></span> Interview Pattern</div>
+          <div class="legend-item"><span class="legend-dot myread"></span> Candidate Analysis</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Top Navigation -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn" title="Toggle menu">☰</button>
+          <div class="breadcrumbs">
+            <a href="index.html">Prep Portal</a>
+            <span class="breadcrumbs-separator">/</span>
+            <span>Group Discussion & Activity</span>
+          </div>
+        </div>
+        
+        <div class="top-bar-actions">
+          <button class="btn-icon search-trigger" title="Search documentation (Ctrl+K or /)">🔍</button>
+          <button class="btn-icon" id="theme-toggle" title="Toggle dark/light theme (T)">🌙</button>
+          <button class="btn-icon" onclick="window.print()" title="Print / Save as PDF">🖨️</button>
+        </div>
+      </header>
+
+      <!-- Content Layout -->
+      <main class="content-layout">
+        <article class="article-container">
+          <header class="article-header">
+            <div class="article-stage-badge">Stage 3 · GD / Case</div>
+            <h1 class="article-title">👥 Group Discussion & Activity</h1>
+            <div class="article-meta">
+              <div class="meta-item">⏱️ 8 min read</div>
+              <div class="meta-item">📝 1,404 words</div>
+              <div class="meta-item">🎯 CS Track Focused</div>
+            </div>
+          </header>
+
+          <div class="markdown-body">
+            <h1>Stage 3 — Group Discussion / Group Activity</h1>
+<h2 id="-confidence-warning--read-before-prepping-this">⚠️ Confidence warning — read before prepping this</h2>
+<p><strong><span><span class="badge badge-pattern"><span class="badge-dot"></span> PATTERN — lowest confidence in this folder</span></span></strong> I could not verify whether your MathWorks drive includes a GD round. The official EDG document in your folder covers the online test only; it says nothing about a GD, and web research was blocked in this session.</p>
+<p>What I can tell you honestly: group discussion rounds are common in Indian campus drives at large engineering employers, and MathWorks India recruits heavily on campus, so it's plausible. But MathWorks is also a company whose interviewing style leans toward long individual technical conversations, which makes a classic elimination-style GD less characteristic of them.</p>
+<p><strong>Action: ask your NITR placement coordinator whether there's a GD, and in what format.</strong> One email settles it. Until then, spend no more than 60–90 minutes here — it's Day 6 material, not Day 1 material.</p>
+<p>Prepare for <strong>both</strong> plausible formats below. The good news is the skills overlap almost completely, and both reward the same behaviour.</p>
+<hr/>
+<h2 id="format-a--traditional-topic-based-gd">Format A — Traditional topic-based GD</h2>
+<p>8–12 candidates, a topic announced on the spot, 10–20 minutes, one or two observers scoring silently. Sometimes 2–3 minutes of preparation time, sometimes none. Usually a shortlist-and-eliminate round.</p>
+<h2 id="format-b--group-problem-solving--case-activity">Format B — Group problem-solving / case activity</h2>
+<p>More characteristic of engineering-product companies. The group gets a problem, a design brief, or a puzzle and has to reach a joint answer. Examples of the shape: "your team has three weeks and a feature that needs six — decide what to cut," "design an approach to test a calculator app," "here's a constraint puzzle, solve it as a group." Evaluated on collaboration and structured reasoning rather than rhetoric.</p>
+<p><strong><span><span class="badge badge-myread"><span class="badge-dot"></span> MY READ</span></span></strong> If MathWorks runs a group round, I'd expect Format B or a hybrid. It fits a company hiring for a rotational program where you'll constantly join new teams. Prepare for A, but don't be thrown if B shows up.</p>
+<hr/>
+<h2 id="what-theyre-scoring">What they're scoring</h2>
+<p><strong><span><span class="badge badge-pattern"><span class="badge-dot"></span> PATTERN</span></span></strong> In either format, observers are marking roughly: clarity of communication · quality and relevance of content · whether you <em>listen</em> and build on others · behaviour under disagreement · whether you helped the group make progress · body language and confidence without aggression.</p>
+<p>The counterintuitive part, and the thing to internalise: <strong>at a company like MathWorks, being the loudest is a liability.</strong> Their culture prizes collaboration and long-tenure teamwork. The candidate who speaks four times with substance, credits someone else's point, brings in a silent member, and summarises at the end will beat the candidate who spoke for four minutes straight and talked over two people.</p>
+<p>You have real evidence you're the former — you led a team of 5 at Ziroh Labs and mentored a junior intern at Autobot. Behave like that person.</p>
+<hr/>
+<h2 id="tactics-that-work">Tactics that work</h2>
+<p><strong>Entering.</strong> Speak in the first 45–60 seconds if you have a clear opening — the first speaker frames the discussion and gets remembered. If the topic needs thought, let two people go and then enter with structure: <em>"We've heard two views on X. It might help to separate this into economic and ethical questions and take them in turn."</em> Framing the discussion scores higher than adding one more opinion to it.</p>
+<p><strong>Never speak more than 4–6 times, 30–45 seconds each.</strong> Quality over volume. If you've made your three best points, your remaining job is to help the group, not to keep talking.</p>
+<p><strong>Structure every contribution.</strong> Claim → reason → example or data → implication. Twenty-five seconds. Vague generalities are the most common failure mode in Indian GDs, so specificity is cheap differentiation: name a real company, a real number, a real case.</p>
+<p><strong>Build, don't bulldoze.</strong> <em>"Building on what Priya said about infrastructure cost — the counterpoint is..."</em> Explicitly crediting someone is scored as collaboration and costs you nothing.</p>
+<p><strong>Disagree properly.</strong> <em>"I see it differently, and here's why"</em> — never <em>"no, that's wrong."</em> Attack the argument, never the person. How you handle disagreement is often the single most heavily weighted observation.</p>
+<p><strong>Rescue the group.</strong> If it's descending into noise: <em>"We seem to be going in circles on definitions — can we agree what we mean by X and then move to the second question?"</em> Observers notice this immediately and it's the highest-scoring single move available.</p>
+<p><strong>Bring in the silent.</strong> <em>"Rahul, you've been thinking — what's your view?"</em> Marks you as someone who'll be good in a team. Genuinely one of the best-value moves.</p>
+<p><strong>Summarise at the end.</strong> If nobody has, offer 30 seconds: two or three points of consensus, the main unresolved tension, and a conclusion. Volunteering the summary is a leadership signal without needing to dominate.</p>
+<p><strong>In Format B specifically:</strong> propose a process before proposing an answer (<em>"should we list constraints first, then generate options?"</em>), track time (<em>"we have five minutes — should we converge?"</em>), and make sure the group actually produces the deliverable asked for. Groups routinely fail by running out of time with no answer; being the person who prevented that is the whole game.</p>
+<hr/>
+<h2 id="fatal-mistakes">Fatal mistakes</h2>
+<p>Dominating or interrupting · sitting silent (guaranteed elimination) · getting personal or visibly irritated · repeating a point already made · speaking with no content just to be counted · abandoning your position the moment it's challenged (looks like you had no reasoning) · rigidly refusing to update when given a good argument (looks like you can't be worked with) · using aggressive body language · ignoring the actual question and giving a prepared speech.</p>
+<p><strong>The needle to thread on flexibility:</strong> hold your position under weak challenge, update visibly under strong challenge, and <em>say</em> you're updating — <em>"that's a better point than mine on the cost side, I'll revise what I said."</em> That is exactly the behaviour of a good engineer in a design review, and it reads as maturity rather than weakness.</p>
+<hr/>
+<h2 id="topic-bank">Topic bank</h2>
+<p><strong><span><span class="badge badge-pattern"><span class="badge-dot"></span> PATTERN</span></span></strong> Likely categories for a tech-employer GD, with the angle you'd actually argue. Prepare 2–3 concrete facts for each — specificity is what separates you.</p>
+<p><strong>Technology and society</strong>
+Will AI replace software engineers? · Should AI-generated content be labelled by law? · Is social media regulation necessary or censorship? · Data privacy versus personalisation · Should self-driving cars be allowed on Indian roads? · Is automation a net job creator or destroyer?</p>
+<p><strong>Engineering and industry</strong>
+EVs versus hydrogen for India's transport future · Is Indian engineering education industry-ready? · Should India prioritise semiconductor manufacturing? · Open source versus proprietary software in critical infrastructure · Is the "move fast and break things" culture compatible with safety-critical systems? <em>(★ This one is tailor-made for MathWorks — argue the safety-critical side, and bring up certification and verification.)</em></p>
+<p><strong>Workplace</strong>
+Remote versus in-office for engineering teams · Should employees be evaluated on hours or output · Is job-hopping good for a career · Generalist versus specialist early in a career <em>(★ good one — argue generalist-first, which is literally the EDG rotational thesis)</em></p>
+<p><strong>Abstract / classic</strong>
+Is failure a better teacher than success · Does technology increase or reduce inequality · Should engineers study ethics · Is competition better than collaboration</p>
+<p><strong>Your unfair advantages on these:</strong> you have real material for the AI topics (you built a multi-agent LLM system and know its failure modes first-hand — that's far more credible than opinions), for safety-critical software (once you've read file 02 on why MathWorks' domain demands verification), and for engineering-education topics (you've been through a Tier-3 university and an NIT, and can compare them concretely).</p>
+<p><strong>On AI topics specifically, use your Uplan experience as the argument:</strong> <em>"I built a multi-agent LLM pipeline this year, and the thing it taught me is that these systems are excellent at extraction and terrible at guarantees — which is why I kept all the arithmetic in deterministic code outside the model. That's the shape of the answer to 'will AI replace engineers': it replaces the extraction, not the accountability."</em> That's a contribution nobody else in the room can make.</p>
+<hr/>
+<h2 id="30-minute-practice-drill-day-6">30-minute practice drill (Day 6)</h2>
+<p>Pick three topics from above. For each: 2 minutes preparing a structure, then <strong>speak aloud for 3 minutes</strong>, recorded on your phone. Then listen back once.</p>
+<p>You're checking for: filler words, whether you had a structure or rambled, whether you used a concrete example, and pace. Speaking aloud is a different skill from thinking, and three recorded reps will improve you more than an hour of reading about GDs.</p>
+          </div>
+
+          
+        <div class="page-pagination">
+          
+        <a href="02_Technical_Rounds.html" class="pagination-card prev">
+          <span class="pagination-label">← Previous</span>
+          <span class="pagination-title">⚙️ Technical Interview Rounds</span>
+        </a>
+        
+          
+        <a href="04_Managerial_and_HR.html" class="pagination-card next">
+          <span class="pagination-label">Next →</span>
+          <span class="pagination-title">👔 Managerial & HR Rounds</span>
+        </a>
+        
+        </div>
+        
+        </article>
+
+        
+        <div class="toc-sidebar">
+          <div class="toc-title">On This Page</div>
+          <ul class="toc-list">
+            
+            <li class="toc-item h2">
+              <a href="#-confidence-warning--read-before-prepping-this" class="toc-link">⚠️ Confidence warning — read before prepping this</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#format-a--traditional-topic-based-gd" class="toc-link">Format A — Traditional topic-based GD</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#format-b--group-problem-solving--case-activity" class="toc-link">Format B — Group problem-solving / case activity</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#what-theyre-scoring" class="toc-link">What they're scoring</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#tactics-that-work" class="toc-link">Tactics that work</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#fatal-mistakes" class="toc-link">Fatal mistakes</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#topic-bank" class="toc-link">Topic bank</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#30-minute-practice-drill-day-6" class="toc-link">30-minute practice drill (Day 6)</a>
+            </li>
+            
+          </ul>
+        </div>
+        
+      </main>
+    </div>
+  </div>
+
+  
+  <!-- Search Modal -->
+  <div class="modal-backdrop" id="search-modal">
+    <div class="modal-content">
+      <div class="modal-search-header">
+        <span class="modal-search-icon">🔍</span>
+        <input type="text" class="modal-search-input" id="modal-search-input" placeholder="Search topics, C++ kit, testing checklists, projects, HR questions..." autocomplete="off">
+      </div>
+      <div class="modal-results" id="modal-results">
+        
+        <a href="00_START_HERE.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">🚀 Start Here & Master Plan</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">Process map, strengths/gaps analysis, and 6-day triage plan</div>
+        </a>
+        
+        <a href="00_START_HERE.html#how-to-read-these-files" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">How to read these files</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#-read-this-first-the-one-thing-that-can-sink-you" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">🔴 Read this first: the one thing that can sink you</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#the-funnel" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The funnel</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#what-mathworks-is-actually-screening-for" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">What MathWorks is actually screening for</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#your-position-honestly" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Your position, honestly</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#the-6-day-plan" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The 6-day plan</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-1--language-triage-the-emergency" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 1 — Language triage (the emergency)</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-2--second-language--aptitude" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 2 — Second language + aptitude</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-3--full-timed-mock" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 3 — Full timed mock</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-4--the-mathworks-flavoured-technical-drills" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 4 — The MathWorks-flavoured technical drills</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-5--project-defence-do-not-skip" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 5 — Project defence (do not skip)</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-6--gd-managerial-hr-and-calm" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 6 — GD, managerial, HR, and calm</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#files-in-this-folder" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Files in this folder</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#two-things-to-do-today-outside-this-folder" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Two things to do today, outside this folder</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">💻 The 90-Min Online Test</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">Two-language rule, C++ survival kit, Python traps & time triage</div>
+        </a>
+        
+        <a href="01_Online_Test.html#what-is-officially-confirmed" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">What is officially confirmed</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#what-is-not-confirmed" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">What is not confirmed</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#-the-python-problem" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">🔴 The Python problem</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#c-survival-kit--memorise-these-they-cover-90-of-test-needs" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">C++ survival kit — memorise these, they cover ~90% of test needs</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Sub-section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#picking-your-second-language" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Picking your second language</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Sub-section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#your-language-split--decide-now-write-it-down" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Your language split — decide now, write it down</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Sub-section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#time-strategy-for-90-minutes" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Time strategy for 90 minutes</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#aptitude--the-20-minute-section" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Aptitude — the 20-minute section</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#night-before-and-day-of-checklist" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Night-before and day-of checklist</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">⚙️ Technical Interview Rounds</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">Testing mindset, API design, C++ depth, numerics & DSA bank</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#the-mathworks-technical-interview-is-not-a-leetcode-interview" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The MathWorks technical interview is not a LeetCode interview</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-1--testing-drill-this-hardest" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 1 — Testing (drill this hardest)</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#the-universal-edge-case-checklist" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The universal edge-case checklist</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#worked-example-how-would-you-test-a-function-that-reverses-a-string" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Worked example: "How would you test a function that reverses a string?"</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#practise-these" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Practise these</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#vocabulary-to-have-ready" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Vocabulary to have ready</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-2--api-and-interface-design" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 2 — API and interface design</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#the-framework--apply-to-any-design-question" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The framework — apply to any design question</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#likely-prompts" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Likely prompts</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#principles-to-name-explicitly" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Principles to name explicitly</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-3--cc-depth" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 3 — C/C++ depth</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-4--numerics-and-floating-point" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 4 — Numerics and floating point</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-5--debugging-and-code-reading" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 5 — Debugging and code reading</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-6--dsa-question-bank" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 6 — DSA question bank</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-7--puzzles-and-estimation" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 7 — Puzzles and estimation</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#questions-to-ask-your-technical-interviewer" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Questions to ask your technical interviewer</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#round-day-behaviours-that-get-you-marked-up" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Round-day behaviours that get you marked up</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">👥 Group Discussion & Activity</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">GD formats, high-scoring tactics, topic bank & fatal traps</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#-confidence-warning--read-before-prepping-this" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">⚠️ Confidence warning — read before prepping this</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#format-a--traditional-topic-based-gd" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Format A — Traditional topic-based GD</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#format-b--group-problem-solving--case-activity" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Format B — Group problem-solving / case activity</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#what-theyre-scoring" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">What they're scoring</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#tactics-that-work" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Tactics that work</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#fatal-mistakes" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Fatal mistakes</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#topic-bank" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Topic bank</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#30-minute-practice-drill-day-6" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">30-minute practice drill (Day 6)</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">👔 Managerial & HR Rounds</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">Why MathWorks, Why CS Track, behavioural bank & verbatim scripts</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#the-two-questions-you-must-not-improvise" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The two questions you must not improvise</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#1-your-mtech-is-in-signal-and-image-processing--why-did-you-choose-the-computer-science-track" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">1. "Your M.Tech is in Signal and Image Processing — why did you choose the Computer Science track?"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#2-youre-an-mtech-student--are-you-planning-a-phd-or-will-you-sit-for-other-companies" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">2. "You're an M.Tech student — are you planning a PhD, or will you sit for other companies?"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#why-mathworks--the-answer-that-separates-you" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Why MathWorks?" — the answer that separates you</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#behavioural-question-bank--with-your-material-mapped" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Behavioural question bank — with your material mapped</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-yourself-2-minutes-prepare-verbatim" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about yourself" (2 minutes, prepare verbatim)</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-led-a-team" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you led a team"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-taught-or-mentored-someone" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you taught or mentored someone"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-failed-or-made-a-mistake" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you failed or made a mistake"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-disagreed-with-a-teammate" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you disagreed with a teammate"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-had-to-learn-something-quickly" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you had to learn something quickly"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#a-time-you-worked-under-pressure--tight-deadline" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"A time you worked under pressure / tight deadline"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#a-time-you-received-difficult-feedback" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"A time you received difficult feedback"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#others-to-have-a-line-ready-for" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Others to have a line ready for</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#technical-questions-in-the-managerial-round" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Technical questions in the managerial round</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#hr-round" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">HR round</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#questions-to-ask-them" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Questions to ask them</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#delivery-notes" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Delivery notes</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">🎯 Projects Under Interrogation</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">Defending metrics, PathMapper, K-HUKI, Uplan & edge questions</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#priority-order--which-project-to-lead-with" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Priority order — which project to lead with</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#project-1--warehouse-pathmapper-your-flagship" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Project 1 — Warehouse PathMapper (your flagship)</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#the-questions-coming-at-you" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The questions coming at you</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Sub-section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#project-2--k-huki-keyframe-identifier" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Project 2 — K-HUKI keyframe identifier</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#the-questions-coming-at-you" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The questions coming at you</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Sub-section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#project-3--uplan-handle-with-care" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Project 3 — Uplan (handle with care)</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#three-claims-that-need-rework-before-you-say-them-out-loud" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Three claims that need rework before you say them out loud</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Sub-section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#experience-section-probes" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Experience section probes</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#the-numbers-audit--do-this-on-day-5" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The numbers audit — do this on Day 5</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#two-framing-sentences-to-have-ready" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Two framing sentences to have ready</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">⚡ Quick Reference & Day-Of Sheet</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">One-page summary, 20-second checks, C++ gotchas & numerics</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#the-three-facts-that-matter-most" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The three facts that matter most</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#your-language-split--write-it-here-before-the-test" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Your language split — write it here before the test</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#test-day-triage" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Test-day triage</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#before-every-submit--20-second-check" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Before every submit — 20-second check</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#python-brain-traps-in-c" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Python-brain traps in C++</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#interview-the-mathworks-mindset-in-one-line" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Interview: the MathWorks mindset in one line</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#the-four-moves-that-score-in-every-technical-round" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The four moves that score in every technical round</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#edge-case-checklist-recite-for-any-function" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Edge-case checklist (recite for any function)</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#numerics-one-liners-high-value-low-competition" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Numerics one-liners (high value, low competition)</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#c-must-knows" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">C++ must-knows</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#your-two-scripted-answers--rehearse-out-loud" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Your two scripted answers — rehearse out loud</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#project-defence--the-flashpoints" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Project defence — the flashpoints</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#gd-five-moves" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">GD: five moves</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#questions-to-ask-them-pick-two" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Questions to ask them (pick two)</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#logistics-checklist" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Logistics checklist</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="README.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">📖 Repository Overview</span>
+            <span class="search-result-stage">Overview · Guide</span>
+          </div>
+          <div class="search-result-sub">Folder structure and file index</div>
+        </a>
+        
+        <div id="no-search-results" style="display:none; padding: 2rem; text-align: center; color: var(--text-muted);">
+          No matching topics found. Try searching for "C++", "Test", "PathMapper", "STAR", or "Aptitude".
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span>Press <kbd style="background:var(--bg-primary); padding:2px 5px; border-radius:3px; border:1px solid var(--border-color);">ESC</kbd> to close</span>
+        <span>MathWorks EDG CS Track</span>
+      </div>
+    </div>
+  </div>
+    
+
+  <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Theme Toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  const storedTheme = localStorage.getItem('mw-prep-theme') || 
+                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  
+  document.documentElement.setAttribute('data-theme', storedTheme);
+  updateThemeIcon(storedTheme);
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('mw-prep-theme', next);
+      updateThemeIcon(next);
+    });
+  }
+
+  function updateThemeIcon(theme) {
+    if (!themeToggle) return;
+    themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+    themeToggle.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+  }
+
+  // Mobile menu toggle
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  if (mobileBtn && sidebar) {
+    mobileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !mobileBtn.contains(e.target)) {
+        sidebar.classList.remove('open');
+      }
+    });
+  }
+
+  // Reading progress bar
+  const progressBar = document.getElementById('reading-progress');
+  if (progressBar) {
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / (height || 1)) * 100;
+      progressBar.style.width = scrolled + '%';
+    });
+  }
+
+  // Code Copy Buttons
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrapper = btn.closest('.code-block-wrapper');
+      const pre = wrapper ? wrapper.querySelector('pre') : null;
+      if (pre) {
+        navigator.clipboard.writeText(pre.innerText).then(() => {
+          const original = btn.innerHTML;
+          btn.innerHTML = '✓ Copied!';
+          setTimeout(() => { btn.innerHTML = original; }, 2000);
+        });
+      }
+    });
+  });
+
+  // ScrollSpy for In-Page TOC
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const headings = Array.from(document.querySelectorAll('.markdown-body h2, .markdown-body h3'));
+
+  if (tocLinks.length > 0 && headings.length > 0) {
+    window.addEventListener('scroll', () => {
+      let currentId = '';
+      const scrollPos = window.scrollY + 130;
+
+      headings.forEach(heading => {
+        if (heading.offsetTop <= scrollPos) {
+          currentId = heading.id;
+        }
+      });
+
+      tocLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        link.classList.toggle('active', href === '#' + currentId);
+      });
+    });
+  }
+
+  // Search Modal
+  const searchModal = document.getElementById('search-modal');
+  const modalInput = document.getElementById('modal-search-input');
+  const searchTriggers = document.querySelectorAll('.search-trigger');
+
+  function openSearch() {
+    if (searchModal) {
+      searchModal.style.display = 'flex';
+      if (modalInput) {
+        modalInput.focus();
+        modalInput.select();
+      }
+    }
+  }
+
+  function closeSearch() {
+    if (searchModal) {
+      searchModal.style.display = 'none';
+    }
+  }
+
+  searchTriggers.forEach(t => t.addEventListener('click', openSearch));
+  
+  if (searchModal) {
+    searchModal.addEventListener('click', (e) => {
+      if (e.target === searchModal) closeSearch();
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === '/' && document.activeElement !== modalInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 't' && document.activeElement !== modalInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      if (themeToggle) themeToggle.click();
+    }
+    if (e.key === 'Escape') {
+      closeSearch();
+    }
+  });
+
+  if (modalInput) {
+    modalInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const items = document.querySelectorAll('.search-result-item');
+      let visibleCount = 0;
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const matches = q === '' || text.includes(q);
+        item.style.display = matches ? 'block' : 'none';
+        if (matches) visibleCount++;
+      });
+      const noRes = document.getElementById('no-search-results');
+      if (noRes) {
+        noRes.style.display = (visibleCount === 0 && q !== '') ? 'block' : 'none';
+      }
+    });
+  }
+});
+
+  </script>
+</body>
+</html>

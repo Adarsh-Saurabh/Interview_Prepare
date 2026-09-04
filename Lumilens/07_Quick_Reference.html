@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07: Quick Cheat Sheet · Lumilens Interview Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <!-- PrismJS for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #06b6d4;
+  
+  --accent-primary: #0284c7; /* Laser Photon Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --tag-bg: #ecfdf5;
+  --tag-border: #10b981;
+  --tag-text: #065f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(16, 185, 129, 0.12);
+  --tag-border: #10b981;
+  --tag-text: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-text h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 40px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge-lumilens {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #0891b2;
+}
+
+[data-theme="dark"] .badge-lumilens {
+  color: #22d3ee;
+}
+
+.content-body {
+  font-size: 15px;
+}
+
+.content-body h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.content-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.content-body pre code {
+  padding: 16px;
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #1a1f2c;
+  color: #f1f5f9;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">L</div>
+        <div class="brand-text">
+          <h2>Lumilens Prep</h2>
+          <span>29 LPA · NIT Rourkela</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Online Test Mastery</span>
+            <span class="nav-badge">Coding/MCQs</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Python Automation Arch</span>
+            <span class="nav-badge">Pytest/HIL</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="03_Networking_L1_L2.html" class="nav-link">
+            <span>03: L1/L2 Optics & Networking</span>
+            <span class="nav-badge">Protocols</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="05_Hardware_Integration_SCPI.html" class="nav-link">
+            <span>05: SCPI, VISA & Yield</span>
+            <span class="nav-badge">Hardware</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Managerial & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link active">
+            <span>07: Quick Cheat Sheet</span>
+            <span class="nav-badge">Emergency</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Study Roadmap & Index</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="../index.html" style="font-size: 12.5px; color: var(--accent-primary); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-color);">← All Companies</a>
+          <div class="badge-lumilens">
+            <span>⚡</span>
+            <span>Silicon Photonics AI Interconnects</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Candidate: <strong>Adarsh Saurabh</strong> (M.Tech)
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1 id="07-caveman-ponytail-cheat-sheet-emergency-revision-card">07: Caveman &amp; Ponytail Cheat Sheet — Emergency Revision Card</h1>
+<blockquote>
+<p><strong>Style:</strong> Ultra-dense, zero fluff, maximum technical substance.<br />
+<strong>Target:</strong> 60-minute quick-review before walking into Lumilens interviews.</p>
+</blockquote>
+<hr />
+<h2 id="1-lumilens-core-facts-10-seconds">1. Lumilens Core Facts (10 Seconds)</h2>
+<ul>
+<li><strong>What:</strong> Silicon Photonics (SiPh) &amp; Co-Packaged Optics (CPO) interconnects for AI supercomputing.</li>
+<li><strong>Why:</strong> Copper Direct Attach Copper (DAC) dies past 1.5m at 112G/224G PAM4. AI clusters need light.</li>
+<li><strong>Funding / Status:</strong> $900M+ funding, $5.5B valuation, CEO Ankur Singla (Contrail $\to$ Juniper, Volterra $\to$ F5), emerged from stealth Aug 2026.</li>
+<li><strong>Role:</strong> Software Test Automation Engineer (Early Talent). CTC: 29 LPA (M.Tech) / 27 LPA (B.Tech).</li>
+</ul>
+<hr />
+<h2 id="2-essential-mathematical-formulas-thresholds">2. Essential Mathematical Formulas &amp; Thresholds</h2>
+<pre><code>+------------------------------------------------------------------------------------------------+
+| OPTICAL FORMULAS &amp; NUMERICAL RULES                                                             |
++------------------------------------------------------------------------------------------------+
+| Optical Power (dBm):    P(dBm) = 10 * log10(P_mW / 1mW)                                        |
+| Optical Power (mW):     P(mW)  = 10^(P_dBm / 10)                                               |
+| Quick dBm Table:        -30 dBm = 1 uW | -10 dBm = 100 uW | -3 dBm = 0.5 mW                    |
+|                         0 dBm = 1 mW   | +3 dBm = 2 mW   | +10 dBm = 10 mW                     |
+| Golden Rules of Thumb:  +3 dB = 2x power | -3 dB = 1/2 power | +10 dB = 10x power              |
+| Insertion Loss (IL):    IL(dB) = P_in(dBm) - P_out(dBm)  (always positive dB)                  |
+| Extinction Ratio (ER):  ER(dB) = 10 * log10(P_1 / P_0)   (target: 3.5 to 6.0 dB)               |
+| Optical Mod Amplitude:  OMA    = P_1 - P_0 (linear mW)                                         |
+| Bit Error Rate (BER):   BER    = N_errors / N_total_bits                                       |
+| Total Jitter (TJ):      TJ     = DJ + 14.069 * RJ (at BER = 1e-12)                            |
+| Process Capability:     Cp     = (USL - LSL) / (6 * sigma)                                     |
+|                         Cpk    = min( (USL - mu)/(3*sigma), (mu - LSL)/(3*sigma) )             |
+|                         Target: Cpk &gt;= 1.33 (4-sigma), Cpk &gt;= 1.67 (5-sigma)                   |
++------------------------------------------------------------------------------------------------+
+</code></pre>
+<pre><code>+------------------------------------------------------------------------------------------------+
+| HIGH-SPEED NETWORKING CRITICAL THRESHOLDS                                                      |
++------------------------------------------------------------------------------------------------+
+| KP4 FEC Threshold:      Pre-FEC BER &lt;= 2.4e-4. (If &gt; 2.4e-4, link fails catastrophically).    |
+| Post-FEC BER Target:    Post-FEC BER &lt; 1e-15. (Zero frame drops at Layer 2).                   |
+| Standard MTU:           1500 bytes payload (64 bytes min frame, 1518 bytes max frame).         |
+| Jumbo Frame MTU:        9000 bytes payload (~9018 to 9022 bytes total frame).                  |
+| Min Ethernet Frame:     64 bytes (Preamble/SFD excluded; 14B header + 46B payload + 4B FCS).   |
++------------------------------------------------------------------------------------------------+
+</code></pre>
+<hr />
+<h2 id="3-layer-1-vs-layer-2-triage-matrix">3. Layer 1 vs Layer 2 Triage Matrix</h2>
+<pre><code>+-------------------+---------------------------------------+------------------------------------+
+| Parameter         | Layer 1 (Physical / Optics)           | Layer 2 (Data Link / Ethernet)     |
++-------------------+---------------------------------------+------------------------------------+
+| Data Unit         | Raw Bits / Photons / Symbols          | Ethernet Frames                    |
+| Hardware Entity   | Laser, Waveguide, Photodiode, SerDes  | Switch ASIC, MAC, Packet Parser    |
+| Addressing        | None (Wavelengths / Lanes)            | 48-bit MAC Addresses (EUI-48)      |
+| Core Metrics      | Tx Power, Rx Sensitivity, ER, BER     | Packet Loss %, Throughput, MTU     |
+| Error Detection   | Pre-FEC Codewords, Eye Height/Width   | FCS / CRC-32 Checksum              |
+| Flow Control      | None (continuous bit stream)          | 802.3x PAUSE, 802.1Qbb PFC         |
++-------------------+---------------------------------------+------------------------------------+
+</code></pre>
+<hr />
+<h2 id="4-scpi-commands-cheat-sheet-write-these-from-memory">4. SCPI Commands Cheat Sheet (Write These from Memory)</h2>
+<pre><code class="language-scpi">*IDN?             # Query Manufacturer, Model, Serial, Firmware
+*RST              # Reset instrument to factory default
+*CLS              # Clear Status: wipes error queue and event registers
+*OPC?             # Returns '1' when previous operation finishes. (CRUCIAL SYNC)
+*STB?             # Query 8-bit Status Byte (Bit 4 = MAV / Message Available)
+:SYST:ERR?        # Pop oldest error from queue (Expect: '+0,&quot;No error&quot;')
+:SENS1:POW:WAV 1310NM   # Set optical power meter wavelength calibration
+:MEAS1:POW?             # Read optical power (returns e.g. &quot;-3.42 DBM&quot;)
+:INP:ATT 10.0DB         # Set Variable Optical Attenuator to 10 dB
+:OUTP:STAT 1/0          # Turn laser output / optical shutter ON or OFF
+:ROUT:CLOS (@1!4)       # Close optical switch path: route input 1 to output 4
+</code></pre>
+<hr />
+<h2 id="5-lazy-senior-dev-rules-ponytail-philosophy">5. Lazy Senior Dev Rules (Ponytail Philosophy)</h2>
+<ol>
+<li><strong>No <code>time.sleep()</code> in Hardware Scripts:</strong>  </li>
+<li>Bad: <code>time.sleep(10)</code>  </li>
+<li>Good: <code>while time.time() &lt; deadline: if ready(): break; time.sleep(0.05)</code></li>
+<li><strong>Guaranteed Hardware Teardown:</strong>  </li>
+<li>Always put laser shutdown and VOA max attenuation ($30\text{ dB}$) in pytest <code>yield</code> teardown or <code>try...finally</code>. Avoid burning APD receivers.</li>
+<li><strong>Buffer Hygiene:</strong>  </li>
+<li>Always send <code>*CLS</code> on connect and in teardown. Stale unread bytes poison subsequent tests.</li>
+<li><strong>Length-Prefixed Binary Sockets:</strong>  </li>
+<li>Never rely on <code>\n</code>-delimited JSON over raw TCP. Use <code>struct.pack("!I", len(data))</code> header to eliminate fragmentation truncation.</li>
+<li><strong>Pre-FEC vs Post-FEC Triage:</strong>  </li>
+<li>Zero packet drops at L2 does <strong>not</strong> mean L1 is healthy. Pre-FEC BER can be $2.3 \times 10^{-4}$ (drifting near the edge of link collapse). Always assert Pre-FEC BER.</li>
+</ol>
+<hr />
+<h2 id="6-10-rapid-fire-interview-questions-punchy-answers">6. 10 Rapid-Fire Interview Questions &amp; Punchy Answers</h2>
+<ol>
+<li>
+<p><strong>Q: Why does copper fail at 224G beyond 1.5m?</strong><br />
+<strong>A:</strong> Skin effect and dielectric loss attenuate high frequencies exponentially. Eye completely closes.</p>
+</li>
+<li>
+<p><strong>Q: Convert +10 dBm and -3 dBm to milliwatts.</strong><br />
+<strong>A:</strong> $+10\text{ dBm} = 10\text{ mW}$. $-3\text{ dBm} \approx 0.5\text{ mW}$.</p>
+</li>
+<li>
+<p><strong>Q: What is Extinction Ratio and why not make it infinite?</strong><br />
+<strong>A:</strong> Ratio $P_1 / P_0$. Infinite ER requires fully switching off laser, causing chirp, turn-on delay, and jitter.</p>
+</li>
+<li>
+<p><strong>Q: What is the KP4 FEC limit?</strong><br />
+<strong>A:</strong> Raw Pre-FEC $\text{BER} \le 2.4 \times 10^{-4}$. Above this, FEC cannot correct errors; frame loss occurs.</p>
+</li>
+<li>
+<p><strong>Q: What happens if CRC-32 fails on Ethernet frame?</strong><br />
+<strong>A:</strong> Hardware MAC drops frame silently, increments <code>rx_crc_errors</code> counter. Ethernet sends no NACK.</p>
+</li>
+<li>
+<p><strong>Q: Why use Jumbo Frames in AI clusters?</strong><br />
+<strong>A:</strong> Slashes packet count by factor of 6. Reduces CPU interrupts and cuts header overhead from $2.5\%$ to $&lt;0.4\%$.</p>
+</li>
+<li>
+<p><strong>Q: What is 802.1Qbb (PFC)?</strong><br />
+<strong>A:</strong> Priority Flow Control. Pauses only the congested priority queue (e.g., RoCEv2) while other 7 priorities flow unblocked.</p>
+</li>
+<li>
+<p><strong>Q: PyVISA script times out on long optical sweep. Fix?</strong><br />
+<strong>A:</strong> Increase <code>inst.timeout = 30000</code>, send <code>:INIT; *OPC</code>, and poll Status Byte (<code>*STB?</code> bit 5) instead of synchronous query.</p>
+</li>
+<li>
+<p><strong>Q: Why use PRBS31 instead of PRBS7?</strong><br />
+<strong>A:</strong> PRBS31 ($2 \times 10^9$ bits) has long runs of identical bits, stressing low-frequency baseline wander and thermal drift.</p>
+</li>
+<li>
+<p><strong>Q: First thing to check when optical power drops 4 dB?</strong><br />
+<strong>A:</strong> Clean fiber connector end-faces with fiber scope. Inspect for dust/contamination before debugging software.</p>
+</li>
+</ol>
+<hr />
+<h2 id="7-the-30-second-candidate-pitch-memorize-this">7. The 30-Second Candidate Pitch (Memorize This)</h2>
+<blockquote>
+<p><em>"I combine the clean software engineering discipline of a Computer Scientist with the signal integrity and hardware intuition of an M.Tech in Signal Processing from NIT Rourkela.</em><br />
+<em>Modern AI infrastructure is gated by the physical copper wall. My goal is to build scalable, concurrent, zero-flakiness test automation frameworks in Python that validate Lumilens' silicon photonics from early lab characterization to high-volume manufacturing."</em></p>
+</blockquote>
+      </article>
+
+      <div class="footer-nav">
+        <a href="06_Managerial_and_HR.html" class="footer-btn">← 06: Managerial & Behavioral</a>
+        <a href="README.html" class="footer-btn" style="margin-left: auto;">Study Roadmap & Master Index →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('lumilens-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('lumilens-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('reading-progress').style.width = scrolled + '%';
+    });
+
+    // Copy code button injection
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

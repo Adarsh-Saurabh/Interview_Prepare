@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Preparation Portal · Adarsh Saurabh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-header: #ffffff;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-cyan: #06b6d4;
+  --accent-blue: #0284c7;
+  --accent-emerald: #10b981;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-header: #0d1322;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-cyan: #22d3ee;
+  --accent-blue: #38bdf8;
+  --accent-emerald: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.logo-badge {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4, #10b981);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 1.15rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.logo-text h1 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.logo-text p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  transition: all 0.15s ease;
+}
+
+.btn-github:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Main Container */
+main {
+  flex-grow: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem 1.5rem;
+  width: 100%;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(2, 132, 199, 0.1);
+  border: 1px solid var(--accent-blue);
+  color: var(--accent-blue);
+  margin-bottom: 1rem;
+}
+
+.hero h2 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.75rem;
+}
+
+.hero p {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 680px;
+  margin: 0 auto 1.75rem auto;
+}
+
+/* Stats Bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+/* Search Bar */
+.search-container {
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 20px 14px 44px;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.search-input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+/* Companies Grid */
+.section-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 1.75rem;
+}
+
+@media (max-width: 600px) {
+  .companies-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.company-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.company-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-focus);
+}
+
+.company-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.company-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.company-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 1.35rem;
+}
+
+.logo-lumilens {
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+}
+
+.logo-mathworks {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+}
+
+.company-meta h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.company-meta span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.ctc-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid #10b981;
+  color: #059669;
+}
+
+[data-theme="dark"] .ctc-badge {
+  color: #34d399;
+}
+
+.role-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+}
+
+.company-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.tech-tag {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--border-color);
+  color: var(--text-secondary);
+}
+
+/* Module Quick Links inside Card */
+.modules-preview {
+  margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.25rem;
+}
+
+.modules-preview-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.module-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.pill-link {
+  font-size: 0.75rem;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.pill-link:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-open-portal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-open-portal:hover {
+  opacity: 0.93;
+  transform: translateY(-1px);
+}
+
+.btn-mathworks {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+}
+
+/* Footer */
+footer {
+  background-color: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: auto;
+}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo-group">
+        <div class="logo-badge">⚡</div>
+        <div class="logo-text">
+          <h1>Interview Preparation Portal</h1>
+          <p>Adarsh Saurabh · NIT Rourkela Placement Hub</p>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <a href="https://github.com/Adarsh-Saurabh/Interview_Prepare" target="_blank" class="btn-github">
+          <span>GitHub Repo</span>
+          <span>↗</span>
+        </a>
+        <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Dark/Light Mode">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-tag">On-Campus Placement Prep 2026–2027</div>
+      <h2>Company Preparation Launchpad</h2>
+      <p>Self-contained, interactive portals featuring deep company intelligence, online test coding solutions, test automation frameworks, and resume defense strategies.</p>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Active Companies</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">19</div>
+        <div class="stat-label">HTML Modules</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">29 LPA</div>
+        <div class="stat-label">Max Target CTC</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Mobile & Offline Ready</div>
+      </div>
+    </section>
+
+    <!-- Search Input -->
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" class="search-input" placeholder="Search modules, concepts, or tech (e.g. Pytest, SCPI, MATLAB, L1/L2, BER, A*)...">
+    </div>
+
+    <!-- Companies Section -->
+    <div class="section-heading">
+      <span>🏢</span>
+      <span>Target Company Portals</span>
+    </div>
+
+    <div class="companies-grid" id="companies-grid">
+      
+      <!-- Company 1: Lumilens -->
+      <article class="company-card" data-search="lumilens software test automation engineer 29 lpa silicon photonics siph cpo optical interconnects pytest scpi visa ixia l1 l2 ethernet pam4 fec ber nit rourkela">
+        <div class="company-card-header">
+          <div class="company-brand">
+            <div class="company-logo logo-lumilens">L</div>
+            <div class="company-meta">
+              <h3>Lumilens</h3>
+              <span>San Jose, CA · Emerged from stealth Aug 2026</span>
+            </div>
+          </div>
+          <span class="ctc-badge">29 LPA (M.Tech)</span>
+        </div>
+
+        <div class="role-title">Software Test Automation Engineer (Optical Product Test)</div>
+        <p class="company-desc">
+          Building the next-gen photonic interconnect platform for AI supercomputers ($900M+ funding, $5.5B valuation, CEO Ankur Singla). Solves the AI copper bottleneck by moving data with light at 50–80% lower power.
+        </p>
+
+        <div class="tags-list">
+          <span class="tech-tag">Silicon Photonics</span>
+          <span class="tech-tag">L1 / L2 Networking</span>
+          <span class="tech-tag">Pytest HIL</span>
+          <span class="tech-tag">SCPI / VISA</span>
+          <span class="tech-tag">IXIA Traffic</span>
+          <span class="tech-tag">C# .NET WPF</span>
+        </div>
+
+        <div class="modules-preview">
+          <div class="modules-preview-title">Quick Module Navigation</div>
+          <div class="module-pills">
+            <a href="Lumilens/00_START_HERE.html" class="pill-link">00: Company Deep Dive</a>
+            <a href="Lumilens/01_Online_Test.html" class="pill-link">01: Online Test</a>
+            <a href="Lumilens/02_Technical_Rounds.html" class="pill-link">02: Pytest Arch</a>
+            <a href="Lumilens/03_Networking_L1_L2.html" class="pill-link">03: L1/L2 Optics</a>
+            <a href="Lumilens/04_Candidate_Resume_Grilling.html" class="pill-link">04: Resume Defense</a>
+            <a href="Lumilens/05_Hardware_Integration_SCPI.html" class="pill-link">05: SCPI & HVM</a>
+            <a href="Lumilens/06_Managerial_and_HR.html" class="pill-link">06: HR & Behavioral</a>
+            <a href="Lumilens/07_Quick_Reference.html" class="pill-link">07: Cheat Sheet</a>
+          </div>
+
+          <a href="Lumilens/index.html" class="btn-open-portal">
+            <span>Explore Lumilens Portal</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- Company 2: MathWorks -->
+      <article class="company-card" data-search="mathworks engineering development group edg matlab simulink c++ oop algorithms group discussion technical round nit rourkela">
+        <div class="company-card-header">
+          <div class="company-brand">
+            <div class="company-logo logo-mathworks">M</div>
+            <div class="company-meta">
+              <h3>MathWorks</h3>
+              <span>Natick, MA · Global Leader in Mathematical Computing</span>
+            </div>
+          </div>
+          <span class="ctc-badge">On-Campus Drive</span>
+        </div>
+
+        <div class="role-title">Engineering Development Group (EDG)</div>
+        <p class="company-desc">
+          World-class rotational leadership program for engineers. Focuses on MATLAB/Simulink product development, systems programming, and high-performance algorithms for global engineering teams.
+        </p>
+
+        <div class="tags-list">
+          <span class="tech-tag">MATLAB</span>
+          <span class="tech-tag">Simulink</span>
+          <span class="tech-tag">C++ / OOP</span>
+          <span class="tech-tag">Group Discussion</span>
+          <span class="tech-tag">Rotational Program</span>
+        </div>
+
+        <div class="modules-preview">
+          <div class="modules-preview-title">Quick Module Navigation</div>
+          <div class="module-pills">
+            <a href="Mathworks/00_START_HERE.html" class="pill-link">00: Start Here</a>
+            <a href="Mathworks/01_Online_Test.html" class="pill-link">01: Online Test</a>
+            <a href="Mathworks/02_Technical_Rounds.html" class="pill-link">02: Tech Rounds</a>
+            <a href="Mathworks/03_Group_Discussion.html" class="pill-link">03: Group Discussion</a>
+            <a href="Mathworks/04_Managerial_and_HR.html" class="pill-link">04: Managerial/HR</a>
+            <a href="Mathworks/05_Your_Projects_Grilling.html" class="pill-link">05: Project Grilling</a>
+            <a href="Mathworks/06_Quick_Reference.html" class="pill-link">06: Quick Ref</a>
+          </div>
+
+          <a href="Mathworks/index.html" class="btn-open-portal btn-mathworks">
+            <span>Explore MathWorks Portal</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>Adarsh Saurabh · M.Tech Signal and Image Processing · National Institute of Technology, Rourkela</p>
+    <p style="margin-top: 4px; font-size: 0.72rem;">Hosted via GitHub Pages · Source available on <a href="https://github.com/Adarsh-Saurabh/Interview_Prepare" target="_blank" style="color:var(--accent-blue);">GitHub</a></p>
+  </footer>
+
+  <!-- Script for Theme Toggle & Live Search -->
+  <script>
+    // Theme Toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('portal-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('portal-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Client-side Live Search
+    const searchInput = document.getElementById('search-input');
+    const cards = document.querySelectorAll('.company-card');
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      cards.forEach(card => {
+        const searchData = card.getAttribute('data-search') || '';
+        const cardText = card.innerText.toLowerCase();
+        if (searchData.includes(query) || cardText.includes(query)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

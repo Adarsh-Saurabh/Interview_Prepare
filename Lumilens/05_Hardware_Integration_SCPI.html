@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05: SCPI, VISA & Yield · Lumilens Interview Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <!-- PrismJS for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #06b6d4;
+  
+  --accent-primary: #0284c7; /* Laser Photon Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --tag-bg: #ecfdf5;
+  --tag-border: #10b981;
+  --tag-text: #065f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(16, 185, 129, 0.12);
+  --tag-border: #10b981;
+  --tag-text: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-text h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 40px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge-lumilens {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #0891b2;
+}
+
+[data-theme="dark"] .badge-lumilens {
+  color: #22d3ee;
+}
+
+.content-body {
+  font-size: 15px;
+}
+
+.content-body h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.content-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.content-body pre code {
+  padding: 16px;
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #1a1f2c;
+  color: #f1f5f9;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">L</div>
+        <div class="brand-text">
+          <h2>Lumilens Prep</h2>
+          <span>29 LPA · NIT Rourkela</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Online Test Mastery</span>
+            <span class="nav-badge">Coding/MCQs</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Python Automation Arch</span>
+            <span class="nav-badge">Pytest/HIL</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="03_Networking_L1_L2.html" class="nav-link">
+            <span>03: L1/L2 Optics & Networking</span>
+            <span class="nav-badge">Protocols</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="05_Hardware_Integration_SCPI.html" class="nav-link active">
+            <span>05: SCPI, VISA & Yield</span>
+            <span class="nav-badge">Hardware</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Managerial & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Quick Cheat Sheet</span>
+            <span class="nav-badge">Emergency</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Study Roadmap & Index</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="../index.html" style="font-size: 12.5px; color: var(--accent-primary); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-color);">← All Companies</a>
+          <div class="badge-lumilens">
+            <span>⚡</span>
+            <span>Silicon Photonics AI Interconnects</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Candidate: <strong>Adarsh Saurabh</strong> (M.Tech)
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1 id="05-hardware-integration-scpi-protocols-manufacturing-automation">05: Hardware Integration, SCPI Protocols &amp; Manufacturing Automation</h1>
+<blockquote>
+<p><strong>Focus:</strong> NI-VISA, SCPI Command Syntax, Lab Instrument Control, High-Volume Manufacturing (HVM), Yield Optimization, and C# .NET/WPF Basics<br />
+<strong>Direct JD Mapping:</strong> High-Volume Manufacturing test software, change control, SCPI, RS-232, TCP/IP, and instrument automation.</p>
+</blockquote>
+<hr />
+<h2 id="1-instrument-communication-architecture">1. Instrument Communication Architecture</h2>
+<p>In an optical engineering lab or manufacturing test station, test software communicates with heterogeneous instruments across multiple physical buses through a standardized abstraction layer:</p>
+<pre><code>+-----------------------------------------------------------------------------------+
+|               Test Automation Software (Python / C# .NET WPF)                     |
++-----------------------------------------------------------------------------------+
+                                         |
+                       [ NI-VISA / PyVISA Driver Layer ]
+                                         |
+       +--------------------+---------------------+--------------------+
+       |                    |                     |                    |
+[ VXI-11 / LXI (TCP/IP) ] [ USB (USBTMC) ]    [ Serial (RS-232) ]  [ GPIB (IEEE 488) ]
+   Port 5025 / Raw Socket    Vendor IDs           COM Ports            Bus Addresses
+       |                    |                     |                    |
+[ Optical Power Meter ]  [ Optical Switch ]   [ Switch Console ]   [ Oscilloscope ]
+</code></pre>
+<hr />
+<h2 id="2-scpi-protocol-mastery-standard-commands-for-programmable-instruments">2. SCPI Protocol Mastery (Standard Commands for Programmable Instruments)</h2>
+<p>SCPI commands are ASCII text strings organized in a hierarchical tree structure defined by IEEE 488.2.</p>
+<h3 id="essential-mandatory-ieee-4882-common-commands">Essential Mandatory IEEE 488.2 Common Commands</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Function / Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>*IDN?</code></td>
+<td style="text-align: left;">Identification Query</td>
+<td style="text-align: left;">Returns manufacturer, model, serial number, and firmware version (e.g., <code>Keysight Technologies,N7744A,MY54120102,1.24</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>*RST</code></td>
+<td style="text-align: left;">Reset</td>
+<td style="text-align: left;">Restores instrument to known factory default state. Must be called at the start of a test session.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>*CLS</code></td>
+<td style="text-align: left;">Clear Status</td>
+<td style="text-align: left;">Clears all status registers, the Standard Event Status register, and the instrument error queue.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>*OPC?</code></td>
+<td style="text-align: left;">Operation Complete Query</td>
+<td style="text-align: left;">Waits until all pending operations (sweeps, motor movements, calibrations) finish, then returns ASCII <code>'1'</code>. <strong>Crucial for preventing race conditions!</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>*WAI</code></td>
+<td style="text-align: left;">Wait-to-Continue</td>
+<td style="text-align: left;">Halts processing of subsequent commands until all current operations complete.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>*STB?</code></td>
+<td style="text-align: left;">Status Byte Query</td>
+<td style="text-align: left;">Returns 8-bit status byte. Bit 4 = MAV (Message Available), Bit 5 = ESB (Event Status Bit), Bit 6 = MSS (Master Summary Status).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>:SYST:ERR?</code></td>
+<td style="text-align: left;">System Error Query</td>
+<td style="text-align: left;">Pops the oldest error from the instrument's FIFO error queue. Returns <code>+0,"No error"</code> if clean.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="optical-instrument-scpi-command-reference-table">Optical Instrument SCPI Command Reference Table</h3>
+<pre><code class="language-scpi"># --- OPTICAL POWER METER (OPM) ---
+:SENS1:POW:WAV 1310NM        # Set sensor wavelength calibration to 1310 nm
+:SENS1:POW:UNIT DBM          # Set output measurement unit to dBm (or W for Watts)
+:SENS1:POW:RANG:AUTO 1       # Enable auto-ranging
+:SENS1:POW:ATIM 100MS        # Set averaging time to 100 milliseconds
+:MEAS1:POW?                  # Trigger measurement and return current optical power
+
+# --- VARIABLE OPTICAL ATTENUATOR (VOA) ---
+:INP:WAV 1310NM              # Set working wavelength
+:OUTP:STAT 1                 # Enable optical shutter / output
+:INP:ATT 12.5DB              # Set attenuation to 12.5 dB
+:INP:ATT?                    # Query current attenuation level
+
+# --- OPTICAL MATRIX SWITCH ---
+:ROUT:CLOS (@1!4)            # Connect input channel 1 to output channel 4
+:ROUT:CLOS? (@1!4)           # Query whether route (1 to 4) is closed (connected)
+:ROUT:OPEN:ALL               # Disconnect all optical routes (safety state)
+
+# --- OPTICAL SAMPLING OSCILLOSCOPE ---
+:TRIG:SOUR EXT               # Set trigger source to external clock recovery
+:MEAS:EYE:HEIG? CHAN1        # Query measured vertical eye height
+:MEAS:EYE:WIDT? CHAN1        # Query measured horizontal eye width
+:MEAS:JITT:TOT? CHAN1        # Query Total Jitter (TJ)
+</code></pre>
+<hr />
+<h2 id="3-ni-visa-resource-strings-rs-232-serial-mechanics">3. NI-VISA Resource Strings &amp; RS-232 Serial Mechanics</h2>
+<h3 id="resource-string-formats">Resource String Formats</h3>
+<ul>
+<li><strong>TCP/IP (VXI-11 / LXI):</strong> <code>TCPIP0::192.168.1.105::inst0::INSTR</code></li>
+<li><strong>TCP/IP (Raw Socket):</strong> <code>TCPIP0::192.168.1.105::5025::SOCKET</code></li>
+<li><strong>USB (USBTMC):</strong> <code>USB0::0x0957::0x1807::MY51234567::0::INSTR</code></li>
+<li><strong>Serial (RS-232):</strong> <code>ASRL1::INSTR</code> (COM1 on Windows, <code>/dev/ttyS0</code> on Linux)</li>
+<li><strong>GPIB:</strong> <code>GPIB0::14::INSTR</code></li>
+</ul>
+<h3 id="rs-232-serial-port-configuration-parameters">RS-232 Serial Port Configuration Parameters</h3>
+<p>When automating serial switch consoles or legacy optical attenuators:
+- <strong>Baud Rate:</strong> Transmission speed in symbols/sec (e.g., <code>9600</code>, <code>115200</code>).
+- <strong>Data Bits:</strong> Typically 8 bits.
+- <strong>Parity:</strong> Error detection bit (<code>None</code>, <code>Even</code>, <code>Odd</code>).
+- <strong>Stop Bits:</strong> Framing bit (<code>1</code> or <code>2</code>).
+- <strong>Flow Control:</strong>
+  - <strong>Hardware (RTS/CTS):</strong> Request to Send / Clear to Send voltage pins. Prevents buffer overflow.
+  - <strong>Software (XON/XOFF):</strong> ASCII control characters <code>0x11</code> (resume) and <code>0x13</code> (pause).</p>
+<hr />
+<h2 id="4-high-volume-manufacturing-hvm-test-yield-optimization">4. High-Volume Manufacturing (HVM) Test &amp; Yield Optimization</h2>
+<p>In high-volume manufacturing of silicon photonics optical transceivers, test automation is directly responsible for <strong>factory throughput, yield, and unit production cost</strong>.</p>
+<h3 id="1-cycle-time-vs-test-coverage-trade-off">1. Cycle Time vs Test Coverage Trade-off</h3>
+<ul>
+<li>If a test station takes <strong>10 minutes</strong> to test one optical transceiver, a factory producing 100,000 units/month needs hundreds of expensive test benches ($200k+ per bench).</li>
+<li><strong>Optimization Strategy:</strong></li>
+<li>Use fast multi-channel power meters with parallel optical sweeps.</li>
+<li>Test coarse sanity checks first (continuity, laser threshold current $I_{\text{th}}$, DDM health) before running expensive multi-billion-bit BER tests.</li>
+<li>Abort failed units immediately (<em>Fail Fast</em>) to free up test stations.</li>
+</ul>
+<h3 id="2-statistical-process-control-spc-c_p-and-c_pk">2. Statistical Process Control (SPC): $C_p$ and $C_{pk}$</h3>
+<p>Manufacturing test data is logged into databases to compute process capability indices:</p>
+<p>$$C_p = \frac{\text{USL} - \text{LSL}}{6\sigma}$$</p>
+<p>$$C_{pk} = \min\left(\frac{\text{USL} - \mu}{3\sigma}, \frac{\mu - \text{LSL}}{3\sigma}\right)$$</p>
+<ul>
+<li>$\text{USL}$ / $\text{LSL}$: Upper / Lower Specification Limits (e.g., Optical Tx Power must be between $+1.0\text{ dBm}$ and $+3.0\text{ dBm}$).</li>
+<li>$\mu$: Process mean.</li>
+<li>$\sigma$: Standard deviation.</li>
+<li><strong>Benchmark:</strong> A world-class manufacturing line requires <strong>$C_{pk} \ge 1.33$</strong> (4-sigma quality) or <strong>$C_{pk} \ge 1.67$</strong> (5-sigma quality). If $C_{pk} &lt; 1.0$, the process is drifting out of spec and producing defective transceivers.</li>
+</ul>
+<h3 id="3-change-control-management">3. Change Control Management</h3>
+<ul>
+<li>In high-volume manufacturing, a test engineer cannot simply push unverified code to the production line.</li>
+<li><strong>Change Control Protocol:</strong></li>
+<li>Test scripts are version-tagged in Git (<code>v2.4.1-rc1</code>).</li>
+<li>Golden units (calibrated standard transceivers with certified metrics) are run through the station 10 times to prove repeatability.</li>
+<li>Change Request (CR) document is approved by Design, Manufacturing, and Quality leads.</li>
+<li>Software is signed and deployed to stations with rollback capability.</li>
+</ul>
+<hr />
+<h2 id="5-c-net-windows-presentation-foundation-wpf-basics">5. C# .NET &amp; Windows Presentation Foundation (WPF) Basics</h2>
+<p>The Lumilens JD notes: <em>"Exposure to C# for UI validation or tool development is a plus. Technical Skills: C# .NET (Framework or Core), OOP concepts, Windows Form or WPF."</em></p>
+<h3 id="why-c-wpf-on-the-manufacturing-floor">Why C# / WPF on the Manufacturing Floor?</h3>
+<p>Factory floor operators do not run terminal commands or pytest scripts. They use a touchscreen Windows PC connected to barcode scanners.<br />
+The C# WPF UI provides:
+1. Operator barcode scanning of DUT serial number.
+2. Large visual status indicators (Giant Green "PASS" or Red "FAIL").
+3. Real-time live plotting of optical eye diagrams and power levels.
+4. User access control (Operator vs Technician vs Calibration Engineer).</p>
+<h3 id="minimal-production-c-visa-instrument-driver">Minimal Production C# VISA Instrument Driver</h3>
+<pre><code class="language-csharp">using System;
+using Ivi.Visa; // IVI Foundation / National Instruments VISA .NET API
+
+namespace Lumilens.LabAutomation
+{
+    public interface IOpticalInstrument : IDisposable
+    {
+        void Connect();
+        void Reset();
+        string Query(string command);
+    }
+
+    public class OpticalPowerMeter : IOpticalInstrument
+    {
+        private readonly string _resourceAddress;
+        private IVisaSession _session;
+        private IMessageBasedSession _msgSession;
+
+        public OpticalPowerMeter(string resourceAddress)
+        {
+            _resourceAddress = resourceAddress;
+        }
+
+        public void Connect()
+        {
+            _session = GlobalResourceManager.Open(_resourceAddress);
+            _msgSession = _session as IMessageBasedSession;
+            if (_msgSession == null)
+            {
+                throw new InvalidOperationException(&quot;Resource does not support message-based communication.&quot;);
+            }
+            _msgSession.TimeoutMilliseconds = 3000;
+            _msgSession.TerminationCharacter = '\n';
+            _msgSession.TerminationCharacterEnabled = true;
+
+            // Clear status registers on connect
+            _msgSession.RawIO.Write(&quot;*CLS\n&quot;);
+        }
+
+        public void Reset()
+        {
+            _msgSession.RawIO.Write(&quot;*RST\n&quot;);
+            _msgSession.RawIO.Write(&quot;*CLS\n&quot;);
+        }
+
+        public string Query(string command)
+        {
+            _msgSession.RawIO.Write(command.Trim() + &quot;\n&quot;);
+            return _msgSession.RawIO.ReadString().Trim();
+        }
+
+        public double MeasurePowerDbm(int wavelengthNm)
+        {
+            _msgSession.RawIO.Write($&quot;:SENS:POW:WAV {wavelengthNm}NM\n&quot;);
+            string response = Query(&quot;:MEAS:POW?&quot;);
+            return double.Parse(response.Replace(&quot;DBM&quot;, &quot;&quot;).Trim());
+        }
+
+        public void Dispose()
+        {
+            if (_msgSession != null)
+            {
+                _msgSession.Dispose();
+                _msgSession = null;
+            }
+            if (_session != null)
+            {
+                _session.Dispose();
+                _session = null;
+            }
+        }
+    }
+}
+</code></pre>
+<h3 id="wpf-model-view-viewmodel-mvvm-pattern-essentials">WPF Model-View-ViewModel (MVVM) Pattern Essentials</h3>
+<ul>
+<li><strong>Model:</strong> The C# hardware driver classes (<code>OpticalPowerMeter</code>, <code>IXIATrafficClient</code>).</li>
+<li><strong>ViewModel:</strong> Exposes properties and commands for the UI, implementing <code>INotifyPropertyChanged</code> so the UI automatically updates when optical power changes without freezing the UI thread.</li>
+<li><strong>View:</strong> XAML file declaring buttons, text boxes, and gauge controls.</li>
+<li><strong>Multithreading Rule:</strong> Long SCPI sweeps and traffic generation must run on a background worker thread (<code>Task.Run()</code>); only the final results are marshaled back to the UI thread via <code>Dispatcher.Invoke()</code>.</li>
+</ul>
+      </article>
+
+      <div class="footer-nav">
+        <a href="04_Candidate_Resume_Grilling.html" class="footer-btn">← 04: Resume Defense & Traps</a>
+        <a href="06_Managerial_and_HR.html" class="footer-btn" style="margin-left: auto;">06: Managerial & Behavioral →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('lumilens-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('lumilens-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('reading-progress').style.width = scrolled + '%';
+    });
+
+    // Copy code button injection
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

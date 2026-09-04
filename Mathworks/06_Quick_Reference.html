@@ -1,0 +1,2549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Reference & Day-Of Sheet · MathWorks EDG Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #0284c7;
+  
+  --accent-primary: #0284c7; /* MathWorks Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --official-bg: #ecfdf5;
+  --official-border: #10b981;
+  --official-text: #065f46;
+  
+  --pattern-bg: #eef2ff;
+  --pattern-border: #6366f1;
+  --pattern-text: #3730a3;
+  
+  --myread-bg: #fffbeb;
+  --myread-border: #f59e0b;
+  --myread-text: #92400e;
+  
+  --danger-bg: #fff1f2;
+  --danger-border: #f43f5e;
+  --danger-text: #9f1239;
+  
+  --warning-bg: #fff7ed;
+  --warning-border: #ea580c;
+  --warning-text: #9a3412;
+
+  --quote-bg: #f8fafc;
+  --quote-border: #0284c7;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --official-bg: rgba(16, 185, 129, 0.12);
+  --official-border: #10b981;
+  --official-text: #34d399;
+  
+  --pattern-bg: rgba(99, 102, 241, 0.12);
+  --pattern-border: #818cf8;
+  --pattern-text: #a5b4fc;
+  
+  --myread-bg: rgba(245, 158, 11, 0.12);
+  --myread-border: #fbbf24;
+  --myread-text: #fcd34d;
+  
+  --danger-bg: rgba(244, 63, 94, 0.12);
+  --danger-border: #fb7185;
+  --danger-text: #fda4af;
+  
+  --warning-bg: rgba(234, 88, 12, 0.12);
+  --warning-border: #fb923c;
+  --warning-text: #fdba74;
+
+  --quote-bg: #131d2e;
+  --quote-border: #38bdf8;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+/* Top Reading Progress Bar */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 290px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform 0.25s ease;
+}
+
+.sidebar-header {
+  padding: 1.25rem 1.25rem 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.brand-badge {
+  font-size: 0.7rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.candidate-card {
+  margin: 0.85rem 1.25rem;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.75rem;
+}
+
+.candidate-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.candidate-details {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  margin-top: 2px;
+}
+
+.sidebar-nav {
+  padding: 0.5rem 0.75rem;
+  flex: 1;
+}
+
+.nav-section-title {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  padding: 0.5rem 0.65rem 0.35rem 0.65rem;
+  margin-top: 0.4rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+  transition: all 0.15s ease;
+}
+
+.nav-item:hover {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-item-icon {
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+}
+
+.nav-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-tag-legend {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+}
+
+.legend-title {
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-dot.official { background-color: #10b981; }
+.legend-dot.pattern { background-color: #6366f1; }
+.legend-dot.myread { background-color: #f59e0b; }
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Top Navigation Bar */
+.top-bar {
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  color: var(--accent-primary);
+}
+
+.breadcrumbs-separator {
+  color: var(--text-muted);
+}
+
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn-icon {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+}
+
+.btn-icon:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+/* Content Container with right TOC */
+.content-layout {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 2rem 4rem 2rem;
+  flex: 1;
+}
+
+.article-container {
+  width: 100%;
+  max-width: 840px;
+}
+
+/* Right TOC Sidebar */
+.toc-sidebar {
+  width: 230px;
+  margin-left: 2.5rem;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  font-size: 0.78rem;
+}
+
+.toc-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  font-size: 0.7rem;
+}
+
+.toc-list {
+  list-style: none;
+  border-left: 2px solid var(--border-color);
+}
+
+.toc-item {
+  margin-bottom: 0.35rem;
+}
+
+.toc-item.h3 {
+  padding-left: 0.85rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.2rem 0.5rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+  border-left: 2px solid transparent;
+  margin-left: -2px;
+}
+
+.toc-link:hover {
+  color: var(--text-primary);
+}
+
+.toc-link.active {
+  color: var(--accent-primary);
+  border-left-color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* Article Header */
+.article-header {
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.article-stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.article-title {
+  font-size: 2.15rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Markdown Content Styling */
+.markdown-body {
+  font-size: 1.02rem;
+  color: var(--text-primary);
+}
+
+.markdown-body h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 2.25rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.markdown-body h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.015em;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.markdown-body h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.75rem;
+  margin-bottom: 0.65rem;
+  color: var(--text-primary);
+}
+
+.markdown-body h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body p {
+  margin-bottom: 1.15rem;
+}
+
+.markdown-body strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.markdown-body em {
+  font-style: italic;
+}
+
+.markdown-body ul, .markdown-body ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-body li {
+  margin-bottom: 0.45rem;
+}
+
+.markdown-body hr {
+  border: 0;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2.25rem 0;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  vertical-align: 1px;
+  line-height: 1.4;
+  margin: 0 2px;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.badge-official {
+  background-color: var(--official-bg);
+  border: 1px solid var(--official-border);
+  color: var(--official-text);
+}
+.badge-official .badge-dot { background-color: var(--official-border); }
+
+.badge-pattern {
+  background-color: var(--pattern-bg);
+  border: 1px solid var(--pattern-border);
+  color: var(--pattern-text);
+}
+.badge-pattern .badge-dot { background-color: var(--pattern-border); }
+
+.badge-myread {
+  background-color: var(--myread-bg);
+  border: 1px solid var(--myread-border);
+  color: var(--myread-text);
+}
+.badge-myread .badge-dot { background-color: var(--myread-border); }
+
+/* Blockquotes & Callouts */
+.markdown-body blockquote {
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.15rem;
+  background-color: var(--quote-bg);
+  border-left: 4px solid var(--quote-border);
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.markdown-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.callout-box {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  font-size: 0.95rem;
+}
+
+.callout-box.callout-danger {
+  background-color: var(--danger-bg);
+  border-left: 4px solid var(--danger-border);
+  color: var(--danger-text);
+}
+
+.callout-box.callout-warning {
+  background-color: var(--warning-bg);
+  border-left: 4px solid var(--warning-border);
+  color: var(--warning-text);
+}
+
+/* Tables */
+.table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.markdown-body th {
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.markdown-body td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.markdown-body tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-body tbody tr:hover {
+  background-color: var(--bg-primary);
+}
+
+/* Code & Syntax Highlighting */
+.markdown-body code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background-color: var(--bg-inline-code);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+.code-block-wrapper {
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-surface);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 1rem;
+  background-color: var(--bg-code-header);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.copy-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.code-block-wrapper pre {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.code-block-wrapper pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Pygments Syntax Styling */
+pre { line-height: 125%; }
+td.linenos .normal { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f0f0f0; }
+.codehilite .c { color: #60A0B0; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #F00 } /* Error */
+.codehilite .k { color: #007020; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666 } /* Operator */
+.codehilite .ch { color: #60A0B0; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #60A0B0; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #007020 } /* Comment.Preproc */
+.codehilite .cpf { color: #60A0B0; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #60A0B0; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #60A0B0; background-color: #FFF0F0 } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #F00 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #00A000 } /* Generic.Inserted */
+.codehilite .go { color: #888 } /* Generic.Output */
+.codehilite .gp { color: #C65D09; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #04D } /* Generic.Traceback */
+.codehilite .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #007020 } /* Keyword.Pseudo */
+.codehilite .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #902000 } /* Keyword.Type */
+.codehilite .m { color: #40A070 } /* Literal.Number */
+.codehilite .s { color: #4070A0 } /* Literal.String */
+.codehilite .na { color: #4070A0 } /* Name.Attribute */
+.codehilite .nb { color: #007020 } /* Name.Builtin */
+.codehilite .nc { color: #0E84B5; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #60ADD5 } /* Name.Constant */
+.codehilite .nd { color: #555; font-weight: bold } /* Name.Decorator */
+.codehilite .ni { color: #D55537; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #007020 } /* Name.Exception */
+.codehilite .nf { color: #06287E } /* Name.Function */
+.codehilite .nl { color: #002070; font-weight: bold } /* Name.Label */
+.codehilite .nn { color: #0E84B5; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #BB60D5 } /* Name.Variable */
+.codehilite .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #BBB } /* Text.Whitespace */
+.codehilite .mb { color: #40A070 } /* Literal.Number.Bin */
+.codehilite .mf { color: #40A070 } /* Literal.Number.Float */
+.codehilite .mh { color: #40A070 } /* Literal.Number.Hex */
+.codehilite .mi { color: #40A070 } /* Literal.Number.Integer */
+.codehilite .mo { color: #40A070 } /* Literal.Number.Oct */
+.codehilite .sa { color: #4070A0 } /* Literal.String.Affix */
+.codehilite .sb { color: #4070A0 } /* Literal.String.Backtick */
+.codehilite .sc { color: #4070A0 } /* Literal.String.Char */
+.codehilite .dl { color: #4070A0 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #4070A0; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #4070A0 } /* Literal.String.Double */
+.codehilite .se { color: #4070A0; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #4070A0 } /* Literal.String.Heredoc */
+.codehilite .si { color: #70A0D0; font-style: italic } /* Literal.String.Interpol */
+.codehilite .sx { color: #C65D09 } /* Literal.String.Other */
+.codehilite .sr { color: #235388 } /* Literal.String.Regex */
+.codehilite .s1 { color: #4070A0 } /* Literal.String.Single */
+.codehilite .ss { color: #517918 } /* Literal.String.Symbol */
+.codehilite .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #06287E } /* Name.Function.Magic */
+.codehilite .vc { color: #BB60D5 } /* Name.Variable.Class */
+.codehilite .vg { color: #BB60D5 } /* Name.Variable.Global */
+.codehilite .vi { color: #BB60D5 } /* Name.Variable.Instance */
+.codehilite .vm { color: #BB60D5 } /* Name.Variable.Magic */
+.codehilite .il { color: #40A070 } /* Literal.Number.Integer.Long */
+
+[data-theme="dark"] .codehilite {
+  background: #111827 !important;
+}
+[data-theme="dark"] .codehilite pre {
+  background: #111827 !important;
+  color: #f8fafc !important;
+}
+
+/* Links */
+.markdown-body a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.markdown-body a:hover {
+  color: var(--accent-primary-hover);
+}
+
+/* Interactive Checklist Items */
+.interactive-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin: 0.45rem 0;
+  list-style: none;
+}
+
+.interactive-check-item input[type="checkbox"] {
+  margin-top: 0.35rem;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--accent-primary);
+}
+
+.interactive-check-item.checked {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* Bottom Pagination */
+.page-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.pagination-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+  text-decoration: none;
+  flex: 1;
+  max-width: 48%;
+  transition: all 0.15s ease;
+}
+
+.pagination-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.pagination-card.next {
+  text-align: right;
+  margin-left: auto;
+}
+
+.pagination-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.pagination-title {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* Dashboard Hub Grid (for index.html) */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.hub-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.35rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.hub-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.hub-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.hub-card-icon {
+  font-size: 1.5rem;
+}
+
+.hub-card-stage {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: var(--accent-light);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.hub-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  color: var(--text-primary);
+}
+
+.hub-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.hub-card-footer {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.hub-card-arrow {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* Quick Access Box */
+.quick-access-box {
+  margin: 2.5rem 0 1.5rem 0;
+  padding: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.quick-access-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quick-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.quick-link-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.quick-link-pill:hover {
+  border-color: var(--accent-primary);
+  background: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+/* Modal Search */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  width: 92%;
+  max-width: 640px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.modal-search-header {
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-search-input {
+  width: 100%;
+  padding: 1.1rem 1.25rem 1.1rem 2.85rem;
+  font-size: 1.05rem;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  outline: none;
+  font-family: var(--font-sans);
+}
+
+.modal-search-icon {
+  position: absolute;
+  left: 1.1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.modal-results {
+  overflow-y: auto;
+  padding: 0.75rem;
+  flex: 1;
+}
+
+.search-result-item {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  display: block;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: background 0.15s ease;
+  margin-bottom: 4px;
+}
+
+.search-result-item:hover, .search-result-item.selected {
+  background: var(--bg-primary);
+}
+
+.search-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-result-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.search-result-stage {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: var(--accent-light);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.search-result-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.modal-footer {
+  padding: 0.65rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Print Styles */
+@media print {
+  .sidebar, .top-bar, .toc-sidebar, #reading-progress, .page-pagination, .copy-btn, .quick-access-box {
+    display: none !important;
+  }
+  .app-container, .main-wrapper, .content-layout {
+    display: block !important;
+    padding: 0 !important;
+  }
+  .article-container {
+    max-width: 100% !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1100px) {
+  .toc-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .mobile-menu-btn {
+    display: block;
+  }
+  .article-title {
+    font-size: 1.75rem;
+  }
+  .content-layout {
+    padding: 1.5rem 1rem;
+  }
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+  .quick-links-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-brand">
+          <div class="brand-icon">MW</div>
+          <div class="brand-info">
+            <span class="brand-title">MathWorks EDG</span>
+            <span class="brand-badge">CS Track · Prep</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="candidate-card">
+        <div class="candidate-name">Adarsh Saurabh</div>
+        <div class="candidate-details">M.Tech SP & IP · NIT Rourkela</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Navigation Hub</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-item-icon">🏠</span>
+          <span class="nav-item-text">Master Dashboard</span>
+        </a>
+
+        <div class="nav-section-title">Preparation Modules</div>
+        
+        <a href="00_START_HERE.html" class="nav-item">
+          <span class="nav-item-icon">🚀</span>
+          <span class="nav-item-text">Start Here & Master Plan</span>
+        </a>
+        
+        <a href="01_Online_Test.html" class="nav-item">
+          <span class="nav-item-icon">💻</span>
+          <span class="nav-item-text">The 90-Min Online Test</span>
+        </a>
+        
+        <a href="02_Technical_Rounds.html" class="nav-item">
+          <span class="nav-item-icon">⚙️</span>
+          <span class="nav-item-text">Technical Interview Rounds</span>
+        </a>
+        
+        <a href="03_Group_Discussion.html" class="nav-item">
+          <span class="nav-item-icon">👥</span>
+          <span class="nav-item-text">Group Discussion & Activity</span>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html" class="nav-item">
+          <span class="nav-item-icon">👔</span>
+          <span class="nav-item-text">Managerial & HR Rounds</span>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html" class="nav-item">
+          <span class="nav-item-icon">🎯</span>
+          <span class="nav-item-text">Projects Under Interrogation</span>
+        </a>
+        
+        <a href="06_Quick_Reference.html" class="nav-item active">
+          <span class="nav-item-icon">⚡</span>
+          <span class="nav-item-text">Quick Reference & Day-Of Sheet</span>
+        </a>
+        
+        <a href="README.html" class="nav-item">
+          <span class="nav-item-icon">📖</span>
+          <span class="nav-item-text">Repository Overview</span>
+        </a>
+        
+      </nav>
+
+      <div class="nav-tag-legend">
+        <div class="legend-title">Confidence Keys</div>
+        <div class="legend-items">
+          <div class="legend-item"><span class="legend-dot official"></span> Official Document</div>
+          <div class="legend-item"><span class="legend-dot pattern"></span> Interview Pattern</div>
+          <div class="legend-item"><span class="legend-dot myread"></span> Candidate Analysis</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Top Navigation -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn" title="Toggle menu">☰</button>
+          <div class="breadcrumbs">
+            <a href="index.html">Prep Portal</a>
+            <span class="breadcrumbs-separator">/</span>
+            <span>Quick Reference & Day-Of Sheet</span>
+          </div>
+        </div>
+        
+        <div class="top-bar-actions">
+          <button class="btn-icon search-trigger" title="Search documentation (Ctrl+K or /)">🔍</button>
+          <button class="btn-icon" id="theme-toggle" title="Toggle dark/light theme (T)">🌙</button>
+          <button class="btn-icon" onclick="window.print()" title="Print / Save as PDF">🖨️</button>
+        </div>
+      </header>
+
+      <!-- Content Layout -->
+      <main class="content-layout">
+        <article class="article-container">
+          <header class="article-header">
+            <div class="article-stage-badge">Cheat Sheet · Review</div>
+            <h1 class="article-title">⚡ Quick Reference & Day-Of Sheet</h1>
+            <div class="article-meta">
+              <div class="meta-item">⏱️ 6 min read</div>
+              <div class="meta-item">📝 1,058 words</div>
+              <div class="meta-item">🎯 CS Track Focused</div>
+            </div>
+          </header>
+
+          <div class="markdown-body">
+            <h1>Quick Reference — Night Before / Day Of</h1>
+<h2 id="the-three-facts-that-matter-most">The three facts that matter most</h2>
+<ol>
+<li><strong>Python is not allowed.</strong> C / C++ / Java / JavaScript only. Every project on your resume is Python. Fluency in C++ is your #1 risk. <em><span><span class="badge badge-official"><span class="badge-dot"></span> OFFICIAL</span></span></em></li>
+<li><strong>You must use two different languages across the 3 coding questions.</strong> CS track has no opt-out (other tracks do). Do your second-language question <strong>first</strong>, while you're calm. <em><span><span class="badge badge-official"><span class="badge-dot"></span> OFFICIAL</span></span></em></li>
+<li><strong>90 minutes total</strong> for 3 coding questions + aptitude. ~22 min per coding question, ~20 min aptitude. <em><span><span class="badge badge-official"><span class="badge-dot"></span> OFFICIAL</span></span></em></li>
+</ol>
+<h2 id="your-language-split--write-it-here-before-the-test">Your language split — write it here before the test</h2>
+<blockquote>
+<p>Q<strong><em>_ → </em></strong><strong><em>_</em></strong><strong>  ·  Q<strong><em>_ → </em></strong><strong><em>_</em></strong></strong>  ·  Q<strong><em>_ → </em></strong><strong><em>_</em></strong>__</p>
+</blockquote>
+<p>Default plan: <strong>easiest question in Java, other two in C++.</strong></p>
+<hr/>
+<h2 id="test-day-triage">Test-day triage</h2>
+<div class="code-block-wrapper"><div class="code-header"><span>CODE</span><button class="copy-btn" type="button">📋 Copy</button></div><div class="codehilite"><pre><span></span><code><span class="mf">0</span><span class="p">:</span><span class="mf">00</span><span class="err">–</span><span class="mf">0</span><span class="p">:</span><span class="mf">05</span><span class="w">   </span><span class="kr">Read</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="mf">3.</span><span class="w"> </span><span class="n">Rank</span><span class="w"> </span><span class="n">easy</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">hard</span><span class="mf">.</span>
+<span class="mf">0</span><span class="p">:</span><span class="mf">05</span><span class="err">–</span><span class="mf">0</span><span class="p">:</span><span class="mf">25</span><span class="w">   </span><span class="n">Easiest</span><span class="mf">.</span><span class="w"> </span><span class="n">SUBMIT</span><span class="mf">.</span>
+<span class="mf">0</span><span class="p">:</span><span class="mf">25</span><span class="err">–</span><span class="mf">0</span><span class="p">:</span><span class="mf">48</span><span class="w">   </span><span class="n">Second</span><span class="mf">.</span><span class="w"> </span><span class="n">SUBMIT</span><span class="w"> </span><span class="n">even</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="n">partial</span><span class="mf">.</span>
+<span class="mf">0</span><span class="p">:</span><span class="mf">48</span><span class="err">–</span><span class="mf">1</span><span class="p">:</span><span class="mf">12</span><span class="w">   </span><span class="n">Hardest</span><span class="mf">.</span><span class="w"> </span><span class="n">Brute</span><span class="w"> </span><span class="kr">for</span><span class="n">ce</span><span class="w"> </span><span class="n">FIRST</span><span class="p">,</span><span class="w"> </span><span class="n">submit</span><span class="p">,</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="n">optimise</span><span class="mf">.</span>
+<span class="mf">1</span><span class="p">:</span><span class="mf">12</span><span class="err">–</span><span class="mf">1</span><span class="p">:</span><span class="mf">30</span><span class="w">   </span><span class="n">Aptitude</span><span class="mf">.</span><span class="w"> </span><span class="n">Skip</span><span class="w"> </span><span class="n">anything</span><span class="w"> </span><span class="n">over</span><span class="w"> </span><span class="mf">60</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="n">time</span><span class="mf">.</span>
+</code></pre></div></div>
+<p><strong>Working brute force &gt; unfinished optimal.</strong> Never leave a question blank.</p>
+<h2 id="before-every-submit--20-second-check">Before every submit — 20-second check</h2>
+<p>Empty input · single element · all identical · negatives and zero · max size · <strong>integer overflow</strong> (<code>long long</code> when multiplying) · off-by-one on loop bounds · <code>v.size()-1</code> on an empty vector.</p>
+<h2 id="python-brain-traps-in-c">Python-brain traps in C++</h2>
+<p><code>7/2 == 3</code> · <code>int</code> overflows at 2.1e9 · <code>v.size()</code> is unsigned · locals contain garbage unless initialised · <code>for (auto &amp;x : v)</code> to mutate · <code>v.back()</code> not <code>v[-1]</code> · <code>"\n"</code> not <code>endl</code>.</p>
+<hr/>
+<h2 id="interview-the-mathworks-mindset-in-one-line">Interview: the MathWorks mindset in one line</h2>
+<blockquote>
+<p><strong>They build tools for engineers whose products cannot fail. Correctness, testing, readability and clear interfaces beat cleverness and optimality — every time.</strong></p>
+</blockquote>
+<h2 id="the-four-moves-that-score-in-every-technical-round">The four moves that score in every technical round</h2>
+<ol>
+<li>
+<p><strong>Ask 2–3 clarifying questions before writing any code.</strong> Diving in is scored as a negative.</p>
+</li>
+<li>
+<p><strong>Narrate continuously.</strong> Silence reads as stuck. State trade-offs out loud before choosing.</p>
+</li>
+<li>
+<p><strong>Volunteer edge cases</strong> before you're asked for them.</p>
+</li>
+<li>
+<p><strong>Answer "how would you test this?" properly.</strong> This is the MathWorks signature question and where you can beat stronger coders.</p>
+</li>
+</ol>
+<h2 id="edge-case-checklist-recite-for-any-function">Edge-case checklist (recite for any function)</h2>
+<p>empty/null · single element · two elements · all identical · sorted / reverse sorted · boundaries (0, 1, −1, INT_MAX/MIN) · negatives · invalid input · duplicates · very large input · special characters and Unicode · round-trip property</p>
+<h2 id="numerics-one-liners-high-value-low-competition">Numerics one-liners (high value, low competition)</h2>
+<p>Never compare floats with <code>==</code> — use a <strong>relative</strong> epsilon · <code>NaN != NaN</code> is true · <code>double</code> ≈ 15–16 significant digits · catastrophic cancellation when subtracting near-equal numbers · summation order affects error · <strong>C/C++ is row-major, MATLAB and Fortran are column-major.</strong></p>
+<h2 id="c-must-knows">C++ must-knows</h2>
+<p>Virtual destructor or the derived part leaks on <code>delete</code> via base pointer · rule of three/five · shallow vs deep copy → double free · RAII (acquire in constructor, release in destructor) · <code>const char*</code> vs <code>char* const</code> (read right to left) · reference can't be reseated, pointer can · stack vs heap.</p>
+<hr/>
+<h2 id="your-two-scripted-answers--rehearse-out-loud">Your two scripted answers — rehearse out loud</h2>
+<p><strong>"Why the CS track when your M.Tech is Signal &amp; Image Processing?"</strong>
+→ B.Tech is CS; the specialisation sits <em>on top of</em> a CS foundation. The part I enjoy is the software engineering side of image problems. I want to build the tools that image-processing engineers use — my domain knowledge makes me a better developer for that product, not a worse one.</p>
+<p><strong>"Why MathWorks?"</strong>
+→ I've built HOG-based CV pipelines from scratch; MATLAB's Image Processing and Computer Vision toolboxes are the productised version of exactly that. Your customers build things that can't fail, so correctness and testing matter more than shipping speed — that's the discipline I want to learn early. And EDG's rotations mean I see development, testing and application engineering before specialising.</p>
+<p><strong>Do before the interview:</strong> 45 minutes in <strong>MATLAB Online</strong> (free, browser). Load an image, try <code>extractHOGFeatures</code>. Then you can say <em>"when I tried it, I noticed..."</em> — that clause proves the rest isn't rehearsed.</p>
+<hr/>
+<h2 id="project-defence--the-flashpoints">Project defence — the flashpoints</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Your prepared line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>10,000×10,000 units</strong></td>
+<td>Coordinate <em>space</em>, not node count — the search graph was ~10⁴ waypoints; I never materialised 10⁸ cells. <strong>Volunteer this yourself.</strong></td>
+</tr>
+<tr>
+<td><strong>"optimal" paths</strong></td>
+<td>Know whether your heuristic was admissible. If not, qualify the word.</td>
+</tr>
+<tr>
+<td><strong>&lt;0.5s for 10,000+ locations</strong></td>
+<td>One multi-source run or 10,000 separate searches? Timing method? Which i5?</td>
+</tr>
+<tr>
+<td><strong>96.45% accuracy</strong></td>
+<td>Dataset, label source, test-set size. Four significant figures needs justifying — or round it. Offer precision/recall.</td>
+</tr>
+<tr>
+<td><strong>11× faster than ResNet</strong></td>
+<td>Which ResNet, CPU vs GPU, same hardware, absolute fps for both, did you run it yourself.</td>
+</tr>
+<tr>
+<td><strong>"zero-hallucination"</strong></td>
+<td><strong>Reframe:</strong> the arithmetic runs in deterministic Python, the model only extracts values — so the maths can't hallucinate.</td>
+</tr>
+<tr>
+<td><strong>85% workload reduction</strong></td>
+<td>Baseline process and sample size; were outputs verified <em>correct</em> or just completed.</td>
+</tr>
+<tr>
+<td><strong>98% token compression</strong></td>
+<td>Lossy structured extraction, not lossless compression. What was discarded, and why it didn't matter.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Lead with PathMapper</strong> when asked "tell me about a project." Not Uplan.</p>
+<p><strong>When a number is challenged:</strong> <em>"Fair question — let me be precise about what that measured, and where it's softer than the bullet suggests."</em> Volunteering a limitation is a hiring signal at this company.</p>
+<hr/>
+<h2 id="gd-five-moves">GD: five moves</h2>
+<p>Enter in the first 45–60s or after two speakers with a <strong>framing</strong> contribution · speak 4–6 times, 30–45s each, never more · credit someone by name and build on their point · bring in a silent member · <strong>volunteer the closing summary</strong>.</p>
+<p>Fatal: dominating · silence · getting personal · repeating a made point · caving instantly, or refusing to update ever.</p>
+<hr/>
+<h2 id="questions-to-ask-them-pick-two">Questions to ask them (pick two)</h2>
+<ul>
+<li>How do the EDG rotations work in practice — how much say do you get?</li>
+<li>What does the testing culture look like day to day?</li>
+<li>Users have scripts that ran unchanged for a decade — how does that shape development decisions?</li>
+<li>What separates EDG hires who thrive from those who struggle?</li>
+</ul>
+<p>Not in technical/managerial rounds: salary, leave, WFH. Save for HR.</p>
+<hr/>
+<h2 id="logistics-checklist">Logistics checklist</h2>
+<ul>
+<li>[ ] Both languages compile locally — verified <strong>today</strong></li>
+<li>[ ] Language split decided and written down</li>
+<li>[ ] Charger · stable internet · phone hotspot backup</li>
+<li>[ ] Government ID within reach (proctored tests ask)</li>
+<li>[ ] Rough paper and pen</li>
+<li>[ ] Water</li>
+<li>[ ] All other tabs closed — assume tab-switch detection</li>
+<li>[ ] Placement cell confirmed: round structure, GD or no GD, platform, cutoffs</li>
+<li>[ ] Bangalore/Hyderabad flexibility answer ready (say yes if you can)</li>
+<li>[ ] No-PhD answer ready</li>
+</ul>
+<p><strong>Sleep.</strong> 90 minutes of sustained concentration costs more when tired than one extra mock gains.</p>
+          </div>
+
+          
+        <div class="page-pagination">
+          
+        <a href="05_Your_Projects_Grilling.html" class="pagination-card prev">
+          <span class="pagination-label">← Previous</span>
+          <span class="pagination-title">🎯 Projects Under Interrogation</span>
+        </a>
+        
+          
+        <a href="README.html" class="pagination-card next">
+          <span class="pagination-label">Next →</span>
+          <span class="pagination-title">📖 Repository Overview</span>
+        </a>
+        
+        </div>
+        
+        </article>
+
+        
+        <div class="toc-sidebar">
+          <div class="toc-title">On This Page</div>
+          <ul class="toc-list">
+            
+            <li class="toc-item h2">
+              <a href="#the-three-facts-that-matter-most" class="toc-link">The three facts that matter most</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#your-language-split--write-it-here-before-the-test" class="toc-link">Your language split — write it here before the test</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#test-day-triage" class="toc-link">Test-day triage</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#before-every-submit--20-second-check" class="toc-link">Before every submit — 20-second check</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#python-brain-traps-in-c" class="toc-link">Python-brain traps in C++</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#interview-the-mathworks-mindset-in-one-line" class="toc-link">Interview: the MathWorks mindset in one line</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#the-four-moves-that-score-in-every-technical-round" class="toc-link">The four moves that score in every technical round</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#edge-case-checklist-recite-for-any-function" class="toc-link">Edge-case checklist (recite for any function)</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#numerics-one-liners-high-value-low-competition" class="toc-link">Numerics one-liners (high value, low competition)</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#c-must-knows" class="toc-link">C++ must-knows</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#your-two-scripted-answers--rehearse-out-loud" class="toc-link">Your two scripted answers — rehearse out loud</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#project-defence--the-flashpoints" class="toc-link">Project defence — the flashpoints</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#gd-five-moves" class="toc-link">GD: five moves</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#questions-to-ask-them-pick-two" class="toc-link">Questions to ask them (pick two)</a>
+            </li>
+            
+            <li class="toc-item h2">
+              <a href="#logistics-checklist" class="toc-link">Logistics checklist</a>
+            </li>
+            
+          </ul>
+        </div>
+        
+      </main>
+    </div>
+  </div>
+
+  
+  <!-- Search Modal -->
+  <div class="modal-backdrop" id="search-modal">
+    <div class="modal-content">
+      <div class="modal-search-header">
+        <span class="modal-search-icon">🔍</span>
+        <input type="text" class="modal-search-input" id="modal-search-input" placeholder="Search topics, C++ kit, testing checklists, projects, HR questions..." autocomplete="off">
+      </div>
+      <div class="modal-results" id="modal-results">
+        
+        <a href="00_START_HERE.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">🚀 Start Here & Master Plan</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">Process map, strengths/gaps analysis, and 6-day triage plan</div>
+        </a>
+        
+        <a href="00_START_HERE.html#how-to-read-these-files" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">How to read these files</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#-read-this-first-the-one-thing-that-can-sink-you" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">🔴 Read this first: the one thing that can sink you</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#the-funnel" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The funnel</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#what-mathworks-is-actually-screening-for" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">What MathWorks is actually screening for</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#your-position-honestly" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Your position, honestly</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#the-6-day-plan" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The 6-day plan</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-1--language-triage-the-emergency" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 1 — Language triage (the emergency)</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-2--second-language--aptitude" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 2 — Second language + aptitude</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-3--full-timed-mock" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 3 — Full timed mock</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-4--the-mathworks-flavoured-technical-drills" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 4 — The MathWorks-flavoured technical drills</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-5--project-defence-do-not-skip" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 5 — Project defence (do not skip)</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#day-6--gd-managerial-hr-and-calm" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Day 6 — GD, managerial, HR, and calm</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Sub-section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#files-in-this-folder" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Files in this folder</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="00_START_HERE.html#two-things-to-do-today-outside-this-folder" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Two things to do today, outside this folder</span>
+            <span class="search-result-stage">Stage 0 · Strategy</span>
+          </div>
+          <div class="search-result-sub">In Start Here & Master Plan (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">💻 The 90-Min Online Test</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">Two-language rule, C++ survival kit, Python traps & time triage</div>
+        </a>
+        
+        <a href="01_Online_Test.html#what-is-officially-confirmed" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">What is officially confirmed</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#what-is-not-confirmed" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">What is not confirmed</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#-the-python-problem" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">🔴 The Python problem</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#c-survival-kit--memorise-these-they-cover-90-of-test-needs" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">C++ survival kit — memorise these, they cover ~90% of test needs</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Sub-section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#picking-your-second-language" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Picking your second language</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Sub-section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#your-language-split--decide-now-write-it-down" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Your language split — decide now, write it down</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Sub-section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#time-strategy-for-90-minutes" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Time strategy for 90 minutes</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#aptitude--the-20-minute-section" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Aptitude — the 20-minute section</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="01_Online_Test.html#night-before-and-day-of-checklist" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Night-before and day-of checklist</span>
+            <span class="search-result-stage">Stage 1 · Test</span>
+          </div>
+          <div class="search-result-sub">In The 90-Min Online Test (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">⚙️ Technical Interview Rounds</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">Testing mindset, API design, C++ depth, numerics & DSA bank</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#the-mathworks-technical-interview-is-not-a-leetcode-interview" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The MathWorks technical interview is not a LeetCode interview</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-1--testing-drill-this-hardest" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 1 — Testing (drill this hardest)</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#the-universal-edge-case-checklist" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The universal edge-case checklist</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#worked-example-how-would-you-test-a-function-that-reverses-a-string" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Worked example: "How would you test a function that reverses a string?"</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#practise-these" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Practise these</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#vocabulary-to-have-ready" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Vocabulary to have ready</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-2--api-and-interface-design" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 2 — API and interface design</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#the-framework--apply-to-any-design-question" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The framework — apply to any design question</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#likely-prompts" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Likely prompts</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#principles-to-name-explicitly" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Principles to name explicitly</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-3--cc-depth" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 3 — C/C++ depth</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-4--numerics-and-floating-point" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 4 — Numerics and floating point</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-5--debugging-and-code-reading" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 5 — Debugging and code reading</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-6--dsa-question-bank" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 6 — DSA question bank</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#theme-7--puzzles-and-estimation" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Theme 7 — Puzzles and estimation</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#questions-to-ask-your-technical-interviewer" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Questions to ask your technical interviewer</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="02_Technical_Rounds.html#round-day-behaviours-that-get-you-marked-up" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Round-day behaviours that get you marked up</span>
+            <span class="search-result-stage">Stage 2 · Technical</span>
+          </div>
+          <div class="search-result-sub">In Technical Interview Rounds (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">👥 Group Discussion & Activity</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">GD formats, high-scoring tactics, topic bank & fatal traps</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#-confidence-warning--read-before-prepping-this" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">⚠️ Confidence warning — read before prepping this</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#format-a--traditional-topic-based-gd" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Format A — Traditional topic-based GD</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#format-b--group-problem-solving--case-activity" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Format B — Group problem-solving / case activity</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#what-theyre-scoring" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">What they're scoring</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#tactics-that-work" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Tactics that work</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#fatal-mistakes" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Fatal mistakes</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#topic-bank" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Topic bank</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="03_Group_Discussion.html#30-minute-practice-drill-day-6" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">30-minute practice drill (Day 6)</span>
+            <span class="search-result-stage">Stage 3 · GD / Case</span>
+          </div>
+          <div class="search-result-sub">In Group Discussion & Activity (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">👔 Managerial & HR Rounds</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">Why MathWorks, Why CS Track, behavioural bank & verbatim scripts</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#the-two-questions-you-must-not-improvise" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The two questions you must not improvise</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#1-your-mtech-is-in-signal-and-image-processing--why-did-you-choose-the-computer-science-track" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">1. "Your M.Tech is in Signal and Image Processing — why did you choose the Computer Science track?"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#2-youre-an-mtech-student--are-you-planning-a-phd-or-will-you-sit-for-other-companies" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">2. "You're an M.Tech student — are you planning a PhD, or will you sit for other companies?"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#why-mathworks--the-answer-that-separates-you" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Why MathWorks?" — the answer that separates you</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#behavioural-question-bank--with-your-material-mapped" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Behavioural question bank — with your material mapped</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-yourself-2-minutes-prepare-verbatim" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about yourself" (2 minutes, prepare verbatim)</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-led-a-team" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you led a team"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-taught-or-mentored-someone" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you taught or mentored someone"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-failed-or-made-a-mistake" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you failed or made a mistake"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-disagreed-with-a-teammate" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you disagreed with a teammate"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#tell-me-about-a-time-you-had-to-learn-something-quickly" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"Tell me about a time you had to learn something quickly"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#a-time-you-worked-under-pressure--tight-deadline" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"A time you worked under pressure / tight deadline"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#a-time-you-received-difficult-feedback" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">"A time you received difficult feedback"</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#others-to-have-a-line-ready-for" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Others to have a line ready for</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Sub-section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#technical-questions-in-the-managerial-round" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Technical questions in the managerial round</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#hr-round" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">HR round</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#questions-to-ask-them" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Questions to ask them</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="04_Managerial_and_HR.html#delivery-notes" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Delivery notes</span>
+            <span class="search-result-stage">Stage 4 · Leadership</span>
+          </div>
+          <div class="search-result-sub">In Managerial & HR Rounds (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">🎯 Projects Under Interrogation</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">Defending metrics, PathMapper, K-HUKI, Uplan & edge questions</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#priority-order--which-project-to-lead-with" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Priority order — which project to lead with</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#project-1--warehouse-pathmapper-your-flagship" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Project 1 — Warehouse PathMapper (your flagship)</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#the-questions-coming-at-you" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The questions coming at you</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Sub-section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#project-2--k-huki-keyframe-identifier" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Project 2 — K-HUKI keyframe identifier</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#the-questions-coming-at-you" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The questions coming at you</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Sub-section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#project-3--uplan-handle-with-care" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Project 3 — Uplan (handle with care)</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#three-claims-that-need-rework-before-you-say-them-out-loud" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Three claims that need rework before you say them out loud</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Sub-section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#experience-section-probes" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Experience section probes</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#the-numbers-audit--do-this-on-day-5" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The numbers audit — do this on Day 5</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="05_Your_Projects_Grilling.html#two-framing-sentences-to-have-ready" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Two framing sentences to have ready</span>
+            <span class="search-result-stage">Deep-Dive · Projects</span>
+          </div>
+          <div class="search-result-sub">In Projects Under Interrogation (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">⚡ Quick Reference & Day-Of Sheet</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">One-page summary, 20-second checks, C++ gotchas & numerics</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#the-three-facts-that-matter-most" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The three facts that matter most</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#your-language-split--write-it-here-before-the-test" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Your language split — write it here before the test</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#test-day-triage" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Test-day triage</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#before-every-submit--20-second-check" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Before every submit — 20-second check</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#python-brain-traps-in-c" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Python-brain traps in C++</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#interview-the-mathworks-mindset-in-one-line" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Interview: the MathWorks mindset in one line</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#the-four-moves-that-score-in-every-technical-round" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">The four moves that score in every technical round</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#edge-case-checklist-recite-for-any-function" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Edge-case checklist (recite for any function)</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#numerics-one-liners-high-value-low-competition" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Numerics one-liners (high value, low competition)</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#c-must-knows" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">C++ must-knows</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#your-two-scripted-answers--rehearse-out-loud" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Your two scripted answers — rehearse out loud</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#project-defence--the-flashpoints" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Project defence — the flashpoints</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#gd-five-moves" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">GD: five moves</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#questions-to-ask-them-pick-two" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Questions to ask them (pick two)</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="06_Quick_Reference.html#logistics-checklist" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">Logistics checklist</span>
+            <span class="search-result-stage">Cheat Sheet · Review</span>
+          </div>
+          <div class="search-result-sub">In Quick Reference & Day-Of Sheet (Section)</div>
+        </a>
+        
+        <a href="README.html" class="search-result-item">
+          <div class="search-result-header">
+            <span class="search-result-title">📖 Repository Overview</span>
+            <span class="search-result-stage">Overview · Guide</span>
+          </div>
+          <div class="search-result-sub">Folder structure and file index</div>
+        </a>
+        
+        <div id="no-search-results" style="display:none; padding: 2rem; text-align: center; color: var(--text-muted);">
+          No matching topics found. Try searching for "C++", "Test", "PathMapper", "STAR", or "Aptitude".
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span>Press <kbd style="background:var(--bg-primary); padding:2px 5px; border-radius:3px; border:1px solid var(--border-color);">ESC</kbd> to close</span>
+        <span>MathWorks EDG CS Track</span>
+      </div>
+    </div>
+  </div>
+    
+
+  <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Theme Toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  const storedTheme = localStorage.getItem('mw-prep-theme') || 
+                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  
+  document.documentElement.setAttribute('data-theme', storedTheme);
+  updateThemeIcon(storedTheme);
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('mw-prep-theme', next);
+      updateThemeIcon(next);
+    });
+  }
+
+  function updateThemeIcon(theme) {
+    if (!themeToggle) return;
+    themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+    themeToggle.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+  }
+
+  // Mobile menu toggle
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  if (mobileBtn && sidebar) {
+    mobileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !mobileBtn.contains(e.target)) {
+        sidebar.classList.remove('open');
+      }
+    });
+  }
+
+  // Reading progress bar
+  const progressBar = document.getElementById('reading-progress');
+  if (progressBar) {
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / (height || 1)) * 100;
+      progressBar.style.width = scrolled + '%';
+    });
+  }
+
+  // Code Copy Buttons
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrapper = btn.closest('.code-block-wrapper');
+      const pre = wrapper ? wrapper.querySelector('pre') : null;
+      if (pre) {
+        navigator.clipboard.writeText(pre.innerText).then(() => {
+          const original = btn.innerHTML;
+          btn.innerHTML = '✓ Copied!';
+          setTimeout(() => { btn.innerHTML = original; }, 2000);
+        });
+      }
+    });
+  });
+
+  // ScrollSpy for In-Page TOC
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const headings = Array.from(document.querySelectorAll('.markdown-body h2, .markdown-body h3'));
+
+  if (tocLinks.length > 0 && headings.length > 0) {
+    window.addEventListener('scroll', () => {
+      let currentId = '';
+      const scrollPos = window.scrollY + 130;
+
+      headings.forEach(heading => {
+        if (heading.offsetTop <= scrollPos) {
+          currentId = heading.id;
+        }
+      });
+
+      tocLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        link.classList.toggle('active', href === '#' + currentId);
+      });
+    });
+  }
+
+  // Search Modal
+  const searchModal = document.getElementById('search-modal');
+  const modalInput = document.getElementById('modal-search-input');
+  const searchTriggers = document.querySelectorAll('.search-trigger');
+
+  function openSearch() {
+    if (searchModal) {
+      searchModal.style.display = 'flex';
+      if (modalInput) {
+        modalInput.focus();
+        modalInput.select();
+      }
+    }
+  }
+
+  function closeSearch() {
+    if (searchModal) {
+      searchModal.style.display = 'none';
+    }
+  }
+
+  searchTriggers.forEach(t => t.addEventListener('click', openSearch));
+  
+  if (searchModal) {
+    searchModal.addEventListener('click', (e) => {
+      if (e.target === searchModal) closeSearch();
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === '/' && document.activeElement !== modalInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 't' && document.activeElement !== modalInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      if (themeToggle) themeToggle.click();
+    }
+    if (e.key === 'Escape') {
+      closeSearch();
+    }
+  });
+
+  if (modalInput) {
+    modalInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const items = document.querySelectorAll('.search-result-item');
+      let visibleCount = 0;
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const matches = q === '' || text.includes(q);
+        item.style.display = matches ? 'block' : 'none';
+        if (matches) visibleCount++;
+      });
+      const noRes = document.getElementById('no-search-results');
+      if (noRes) {
+        noRes.style.display = (visibleCount === 0 && q !== '') ? 'block' : 'none';
+      }
+    });
+  }
+});
+
+  </script>
+</body>
+</html>

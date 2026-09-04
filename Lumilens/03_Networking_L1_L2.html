@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03: L1/L2 Optics & Networking · Lumilens Interview Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <!-- PrismJS for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #06b6d4;
+  
+  --accent-primary: #0284c7; /* Laser Photon Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --tag-bg: #ecfdf5;
+  --tag-border: #10b981;
+  --tag-text: #065f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(16, 185, 129, 0.12);
+  --tag-border: #10b981;
+  --tag-text: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-text h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 40px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge-lumilens {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #0891b2;
+}
+
+[data-theme="dark"] .badge-lumilens {
+  color: #22d3ee;
+}
+
+.content-body {
+  font-size: 15px;
+}
+
+.content-body h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.content-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.content-body pre code {
+  padding: 16px;
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #1a1f2c;
+  color: #f1f5f9;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">L</div>
+        <div class="brand-text">
+          <h2>Lumilens Prep</h2>
+          <span>29 LPA · NIT Rourkela</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Online Test Mastery</span>
+            <span class="nav-badge">Coding/MCQs</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Python Automation Arch</span>
+            <span class="nav-badge">Pytest/HIL</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="03_Networking_L1_L2.html" class="nav-link active">
+            <span>03: L1/L2 Optics & Networking</span>
+            <span class="nav-badge">Protocols</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="05_Hardware_Integration_SCPI.html" class="nav-link">
+            <span>05: SCPI, VISA & Yield</span>
+            <span class="nav-badge">Hardware</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Managerial & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Quick Cheat Sheet</span>
+            <span class="nav-badge">Emergency</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Study Roadmap & Index</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="../index.html" style="font-size: 12.5px; color: var(--accent-primary); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-color);">← All Companies</a>
+          <div class="badge-lumilens">
+            <span>⚡</span>
+            <span>Silicon Photonics AI Interconnects</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Candidate: <strong>Adarsh Saurabh</strong> (M.Tech)
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1 id="03-layer-1-layer-2-networking-traffic-generators">03: Layer 1 / Layer 2 Networking &amp; Traffic Generators</h1>
+<blockquote>
+<p><strong>Focus:</strong> Physical Optics (L1), Ethernet Switching &amp; Flow Control (L2), and IXIA/Spirent Traffic Simulation<br />
+<strong>Relevance:</strong> Core subject matter tested across Technical Rounds 1 &amp; 2 for Lumilens</p>
+</blockquote>
+<hr />
+<h2 id="1-the-ai-networking-paradigm-why-lumilens-matters">1. The AI Networking Paradigm &amp; Why Lumilens Matters</h2>
+<p>Traditional cloud networks are designed for <strong>North-South traffic</strong> (clients hitting web servers).<br />
+Modern AI supercomputing clusters (training 100B+ parameter LLMs) are dominated by <strong>East-West traffic</strong> (&gt;95% of traffic flows horizontally between GPUs):</p>
+<pre><code>       [ Spine Switches - 51.2T / 102.4T Optical Fabric ]
+          /            |               |            \
+     [Leaf 1]       [Leaf 2]       [Leaf 3]       [Leaf 4]
+     /      \       /      \       /      \       /      \
+  [GPU 1] [GPU 2] [GPU 3] [GPU 4] [GPU 5] [GPU 6] [GPU 7] [GPU 8]
+  &lt;==================== AllReduce / All-to-All ====================&gt;
+</code></pre>
+<h3 id="the-cost-of-a-dropped-packet-in-ai">The Cost of a Dropped Packet in AI</h3>
+<p>In standard TCP web traffic, a dropped packet causes retransmission after a few milliseconds.<br />
+In <strong>Distributed AI Training (PyTorch / Megatron / DeepSpeed)</strong>:
+- GPUs synchronize via collective communication operations (<code>AllReduce</code>, <code>All-to-All</code>).
+- If <strong>one single packet</strong> is dropped between GPU 4 and GPU 5, the entire collective synchronization blocks.
+- <strong>Result:</strong> Thousands of GPUs stall simultaneously (idle execution), wasting millions of dollars in compute time.
+- <strong>Requirement:</strong> AI networks must be <strong>strictly lossless</strong> and have ultra-low latency jitter. This is achieved via <strong>RoCEv2 (RDMA over Converged Ethernet)</strong> with hardware <strong>Priority Flow Control (PFC)</strong> and high-integrity optical links.</p>
+<hr />
+<h2 id="2-layer-1-physical-layer-silicon-photonics">2. Layer 1 (Physical Layer &amp; Silicon Photonics)</h2>
+<h3 id="key-optical-parameters-measurement-cheat-sheet">Key Optical Parameters &amp; Measurement Cheat Sheet</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Typical Values</th>
+<th style="text-align: left;">Failure Mode / Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Tx Optical Power</strong></td>
+<td style="text-align: left;">Total optical power launched by the laser into the fiber.</td>
+<td style="text-align: left;">$-1.0\text{ to }+4.0\text{ dBm}$</td>
+<td style="text-align: left;">If too low: signal lost in noise. If too high: saturates or burns receiver photodiode.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rx Sensitivity</strong></td>
+<td style="text-align: left;">Minimum optical power required at receiver to achieve target Pre-FEC BER.</td>
+<td style="text-align: left;">$-10.0\text{ to }-14.0\text{ dBm}$</td>
+<td style="text-align: left;">If input power drops below sensitivity: bit errors surge exponentially.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Extinction Ratio (ER)</strong></td>
+<td style="text-align: left;">Ratio of optical power in High state ($P_1$) to Low state ($P_0$): $10 \log_{10}(P_1 / P_0)$.</td>
+<td style="text-align: left;">$3.5\text{ to }6.0\text{ dB}$</td>
+<td style="text-align: left;">Low ER closes eye height; excessive ER causes laser chirp and pulse dispersion.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Optical Modulation Amplitude (OMA)</strong></td>
+<td style="text-align: left;">Difference in optical power: $\text{OMA} = P_1 - P_0$ (linear mW).</td>
+<td style="text-align: left;">Measured in $\mu\text{W}$ or $\text{dBm}$</td>
+<td style="text-align: left;">Primary metric for signal power independent of average DC power drift.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Insertion Loss (IL)</strong></td>
+<td style="text-align: left;">Optical power lost traversing connectors, switches, or couplers: $P_{\text{in}}(\text{dBm}) - P_{\text{out}}(\text{dBm})$.</td>
+<td style="text-align: left;">$&lt; 1.5\text{ dB}$ per connector</td>
+<td style="text-align: left;">High loss indicates dirty fiber face, cracked core, or misalignment.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Chromatic Dispersion</strong></td>
+<td style="text-align: left;">Different wavelengths travel at different velocities in fiber, spreading pulses over time.</td>
+<td style="text-align: left;">$\approx 17\text{ ps}/(\text{nm}\cdot\text{km})$ @ $1550\text{ nm}$</td>
+<td style="text-align: left;">Pulse spreading causes Inter-Symbol Interference (ISI) and closes eye width.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="the-optical-eye-diagram">The Optical Eye Diagram</h3>
+<p>The eye diagram is generated by overlaying repetitive high-speed bits on an optical sampling oscilloscope.</p>
+<pre><code>       Amplitude (mW / Volts)
+           ^
+     P1 ---|----/-----------\----  &lt;- Logical '1' Level
+           |   /             \
+           |  /   +-------+   \
+           | /    |       |    \   &lt;- Eye Opening:
+           |&lt;     | EYE   |     &gt;     Height = Vertical Noise Margin
+           | \    | OPEN  |    /      Width  = Horizontal Timing Margin
+           |  \   +-------+   /
+     P0 ---|----\-----------/----  &lt;- Logical '0' Level
+           +---------------------&gt; Time (ps / Unit Intervals)
+                 &lt;--- EW ---&gt;
+</code></pre>
+<ol>
+<li><strong>Eye Height (EH):</strong> Vertical margin between $P_1$ and $P_0$. Closed by amplitude noise, attenuation, and insertion loss.</li>
+<li><strong>Eye Width (EW):</strong> Horizontal opening in Unit Intervals (UI). Closed by jitter and dispersion.</li>
+<li><strong>PAM4 Signaling (Pulse Amplitude Modulation 4-Level):</strong><br />
+   Modern 100G/200G per lane optical systems do not use NRZ (2 levels). They use <strong>PAM4</strong>, packing 2 bits per symbol into 4 voltage/optical levels (00, 01, 11, 10).</li>
+<li>Creates <strong>3 stacked eye openings</strong> in the same vertical amplitude.</li>
+<li><strong>Trade-off:</strong> Cuts required baud rate in half, but incurs an immediate <strong>$-9.5\text{ dB}$ SNR penalty</strong>, making robust Forward Error Correction (FEC) mandatory!</li>
+</ol>
+<hr />
+<h3 id="bit-error-rate-ber-forward-error-correction-fec">Bit Error Rate (BER) &amp; Forward Error Correction (FEC)</h3>
+<p>$$\text{BER} = \frac{\text{Total Bit Errors}}{\text{Total Bits Transmitted}}$$</p>
+<ul>
+<li><strong>Pre-FEC BER:</strong> Raw bit error rate measured at the physical layer before algorithmic error correction.</li>
+<li><strong>KP4 FEC (IEEE 802.3ck):</strong> Standard Reed-Solomon RS(544, 514) FEC used in 100G/lane Ethernet.</li>
+<li>Corrects up to 15 symbol errors per 544-symbol codeword.</li>
+<li><strong>Threshold:</strong> Can correct raw Pre-FEC BER up to <strong>$2.4 \times 10^{-4}$</strong>.</li>
+<li><strong>Post-FEC BER:</strong> Residual bit error rate delivered to the Layer 2 MAC layer.</li>
+<li>Must be strictly <strong>$&lt; 10^{-15}$</strong> (effectively zero bit errors per day at terabit rates).</li>
+<li><strong>Interview Critical Concept:</strong> If Pre-FEC BER rises from $10^{-6}$ to $2.0 \times 10^{-4}$, Layer 2 frame drops remain zero. But the link is on the edge of catastrophic collapse. When Pre-FEC crosses $2.4 \times 10^{-4}$, uncorrectable codewords cause sudden, complete frame loss!</li>
+</ul>
+<hr />
+<h2 id="3-layer-2-data-link-layer-ethernet">3. Layer 2 (Data Link Layer &amp; Ethernet)</h2>
+<h3 id="the-complete-ethernet-frame-structure-ieee-8023">The Complete Ethernet Frame Structure (IEEE 802.3)</h3>
+<pre><code>+------------------------------------------------------------------------------------+
+| Preamble | SFD | Dest MAC | Src MAC | 802.1Q Tag | EtherType | Payload     | FCS   |
+| 7 Bytes  | 1B  | 6 Bytes  | 6 Bytes | 4B (Opt)   | 2 Bytes   | 46-1500 B   | 4B    |
++------------------------------------------------------------------------------------+
+  \_______________/ \________________________________________________/ \_______/
+     PHY Layer                     Protected by CRC-32                  CRC-32
+</code></pre>
+<ol>
+<li><strong>Preamble (7 Bytes: <code>0xAA</code> $\times$ 7):</strong> Alternating 10101010 pattern allowing the receiver PLL to lock clock frequency and phase.</li>
+<li><strong>Start of Frame Delimiter (SFD, 1 Byte: <code>0xAB</code> / <code>10101011</code>):</strong> Signals that the very next bit belongs to the Destination MAC.</li>
+<li><strong>MAC Addresses (6 Bytes each):</strong> Globally unique 48-bit EUI-48 addresses. First 3 bytes = OUI (vendor), last 3 bytes = NIC serial.</li>
+<li><strong>802.1Q VLAN Tag (4 Bytes):</strong></li>
+<li><strong>TPID (2 Bytes, <code>0x8100</code>):</strong> Identifies frame as 802.1Q tagged.</li>
+<li><strong>TCI (2 Bytes):</strong><ul>
+<li><strong>PCP (3 bits):</strong> Priority Code Point (values 0–7 for QoS). Used directly by PFC!</li>
+<li><strong>DEI (1 bit):</strong> Drop Eligible Indicator.</li>
+<li><strong>VID (12 bits):</strong> VLAN ID (1 to 4094).</li>
+</ul>
+</li>
+<li><strong>EtherType (2 Bytes):</strong> Indicates encapsulated Layer 3 protocol (<code>0x0800</code> IPv4, <code>0x86DD</code> IPv6, <code>0x88F7</code> PTP 1588).</li>
+<li><strong>Payload (46 to 1500 Bytes):</strong> Minimum 46 bytes required to ensure minimum frame length of 64 bytes (collision detection requirement in CSMA/CD).</li>
+<li><strong>FCS / CRC-32 (4 Bytes):</strong> Frame Check Sequence. If CRC fails, frame is dropped immediately.</li>
+</ol>
+<hr />
+<h3 id="flow-control-8023x-pause-vs-8021qbb-priority-flow-control-pfc">Flow Control: 802.3x Pause vs 802.1Qbb Priority Flow Control (PFC)</h3>
+<pre><code>[ IEEE 802.3x Standard PAUSE ]
+   Switch Buffer Full ====&gt; Sends PAUSE ====&gt; STOPS ALL TRAFFIC ON LINK
+   Problem: Head-of-Line Blocking (Low-priority video blocks high-priority control).
+
+[ IEEE 802.1Qbb Priority Flow Control (PFC) ]
+   Queue 3 Full (RoCEv2) ====&gt; Sends PFC PAUSE for Priority 3 only ====&gt;
+   Queues 0, 1, 2, 4, 5, 6, 7 continue transmitting unblocked!
+</code></pre>
+<h4 id="pfc-hazards-testing-scenarios">PFC Hazards &amp; Testing Scenarios</h4>
+<ol>
+<li><strong>PFC Deadlock:</strong> A cyclic dependency where Switch A pauses Switch B, which pauses Switch C, which pauses Switch A. All traffic stops forever.</li>
+<li><strong>Pause Storms:</strong> A malfunctioning NIC or optical transceiver generates infinite continuous PFC pause frames, choking the fabric. Test automation must inject continuous pauses and verify timeout/watchdog triggers.</li>
+</ol>
+<hr />
+<h2 id="4-traffic-generators-ixia-spirent-scapy">4. Traffic Generators (IXIA, Spirent, Scapy)</h2>
+<h3 id="rfc-2544-benchmark-suite">RFC 2544 Benchmark Suite</h3>
+<p>In test automation for optical switches and interconnects, RFC 2544 defines the standard test methodologies:
+1. <strong>Throughput:</strong> Maximum rate at which none of the offered frames are dropped.
+2. <strong>Latency:</strong> Time taken for a frame to transit the device (tested at 100%, 75%, 50% load).
+3. <strong>Frame Loss Rate:</strong> Percentage of frames dropped under varying line rates.
+4. <strong>Back-to-Back Frames:</strong> Burst size an optical switch can absorb before dropping packets due to buffer exhaustion.</p>
+<h3 id="hands-on-python-scapy-automation-example">Hands-on Python Scapy Automation Example</h3>
+<pre><code class="language-python">from scapy.all import Ether, IP, UDP, Raw, wrpcap, rdpcap, conf
+import time
+
+def generate_optical_test_stream(output_pcap: str, count: int = 1000, jumbo: bool = False):
+    &quot;&quot;&quot;Generates synthetic test frames with embedded sequence numbers.&quot;&quot;&quot;
+    payload_size = 8960 if jumbo else 1400
+    packets = []
+
+    for seq_id in range(count):
+        # Create Layer 2 Ethernet + Layer 3 IP + Layer 4 UDP
+        pkt = (
+            Ether(dst=&quot;00:11:22:33:44:55&quot;, src=&quot;00:AA:BB:CC:DD:EE&quot;) /
+            IP(src=&quot;192.168.10.1&quot;, dst=&quot;192.168.10.2&quot;) /
+            UDP(sport=50000, dport=50001) /
+            Raw(load=f&quot;SEQ:{seq_id:08d}&quot;.encode() + b&quot;X&quot; * (payload_size - 12))
+        )
+        packets.append(pkt)
+
+    wrpcap(output_pcap, packets)
+    print(f&quot;Generated {count} frames (Jumbo={jumbo}) to {output_pcap}&quot;)
+
+def analyze_captured_pcap(input_pcap: str) -&gt; dict:
+    &quot;&quot;&quot;Parses captured pcap and flags missing or out-of-order sequence IDs.&quot;&quot;&quot;
+    packets = rdpcap(input_pcap)
+    received_seqs = []
+
+    for pkt in packets:
+        if pkt.haslayer(Raw):
+            data = pkt[Raw].load
+            if data.startswith(b&quot;SEQ:&quot;):
+                seq = int(data[4:12].decode())
+                received_seqs.append(seq)
+
+    # Detect drops
+    received_seqs.sort()
+    dropped = []
+    for i in range(len(received_seqs) - 1):
+        if received_seqs[i+1] &gt; received_seqs[i] + 1:
+            dropped.extend(range(received_seqs[i] + 1, received_seqs[i+1]))
+
+    return {
+        &quot;total_captured&quot;: len(packets),
+        &quot;valid_payload_seqs&quot;: len(received_seqs),
+        &quot;dropped_count&quot;: len(dropped),
+        &quot;dropped_seqs&quot;: dropped[:10] # Show first 10
+    }
+</code></pre>
+      </article>
+
+      <div class="footer-nav">
+        <a href="02_Technical_Rounds.html" class="footer-btn">← 02: Python Automation Architecture</a>
+        <a href="04_Candidate_Resume_Grilling.html" class="footer-btn" style="margin-left: auto;">04: Resume Defense & Traps →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('lumilens-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('lumilens-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('reading-progress').style.width = scrolled + '%';
+    });
+
+    // Copy code button injection
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

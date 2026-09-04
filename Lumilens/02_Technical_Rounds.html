@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02: Python Automation Architecture · Lumilens Interview Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <!-- PrismJS for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #06b6d4;
+  
+  --accent-primary: #0284c7; /* Laser Photon Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --tag-bg: #ecfdf5;
+  --tag-border: #10b981;
+  --tag-text: #065f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(16, 185, 129, 0.12);
+  --tag-border: #10b981;
+  --tag-text: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-text h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 40px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge-lumilens {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #0891b2;
+}
+
+[data-theme="dark"] .badge-lumilens {
+  color: #22d3ee;
+}
+
+.content-body {
+  font-size: 15px;
+}
+
+.content-body h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.content-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.content-body pre code {
+  padding: 16px;
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #1a1f2c;
+  color: #f1f5f9;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">L</div>
+        <div class="brand-text">
+          <h2>Lumilens Prep</h2>
+          <span>29 LPA · NIT Rourkela</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Online Test Mastery</span>
+            <span class="nav-badge">Coding/MCQs</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link active">
+            <span>02: Python Automation Arch</span>
+            <span class="nav-badge">Pytest/HIL</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="03_Networking_L1_L2.html" class="nav-link">
+            <span>03: L1/L2 Optics & Networking</span>
+            <span class="nav-badge">Protocols</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="05_Hardware_Integration_SCPI.html" class="nav-link">
+            <span>05: SCPI, VISA & Yield</span>
+            <span class="nav-badge">Hardware</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Managerial & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Quick Cheat Sheet</span>
+            <span class="nav-badge">Emergency</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Study Roadmap & Index</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="../index.html" style="font-size: 12.5px; color: var(--accent-primary); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-color);">← All Companies</a>
+          <div class="badge-lumilens">
+            <span>⚡</span>
+            <span>Silicon Photonics AI Interconnects</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Candidate: <strong>Adarsh Saurabh</strong> (M.Tech)
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1 id="02-python-test-automation-architecture-frameworks">02: Python Test Automation Architecture &amp; Frameworks</h1>
+<blockquote>
+<p><strong>Author / Perspective:</strong> Ponytail (Senior Test Automation Architect)<br />
+<strong>Philosophy:</strong> Ruthless efficiency. Zero boilerplate. Root cause over symptom. Code that actually runs on physical lab hardware without flaky collapses.</p>
+</blockquote>
+<hr />
+<h2 id="1-why-optical-test-automation-is-different">1. Why Optical Test Automation is Different</h2>
+<p>In web QA, if an API fails, you retry the HTTP request.<br />
+In <strong>Optical / Network Switch Test Automation</strong>, if an assertion fails or a script crashes without proper teardown:
+- You can leave a <strong>high-power Class 3B laser turned ON</strong>, burning an Avalanche Photodiode (APD) receiver ($5,000+ damage).
+- An instrument's FIFO buffer remains poisoned with an unread byte, causing the <em>next</em> 50 test cases to fail with shifted data.
+- An optical switch port's MAC table retains stale entries, poisoning multicast test verification.
+- Hardcoded <code>time.sleep(10)</code> creates test runs that take 8 hours instead of 15 minutes, blocking manufacturing line throughput.</p>
+<hr />
+<h2 id="2-the-5-tier-production-architecture">2. The 5-Tier Production Architecture</h2>
+<pre><code>framework/
+├── conftest.py               # Hardware fixtures with deterministic teardown
+├── core/
+│   ├── scpi.py               # Minimal SCPI / VISA wrapper (Power meter, Attenuator)
+│   ├── dut.py                # Network switch console/SSH driver
+│   ├── traffic.py            # Traffic generator (Scapy mock + Hardware IXIA adapter)
+│   ├── daemon_client.py      # Non-blocking socket client for switch test daemons
+│   └── yield_db.py           # SQLite WAL + JSON yield tracker
+└── tests/
+    └── test_optical_transceiver.py  # End-to-end BER vs Optical Rx Power test
+</code></pre>
+<hr />
+<h2 id="3-core-implementation-files">3. Core Implementation Files</h2>
+<h3 id="corescpipy-resilient-scpi-visa-instrument-wrapper"><code>core/scpi.py</code> — Resilient SCPI / VISA Instrument Wrapper</h3>
+<pre><code class="language-python">import socket
+import time
+from typing import Optional
+
+try:
+    import pyvisa
+    HAS_VISA = True
+except ImportError:
+    HAS_VISA = False
+
+class SCPIInstrument:
+    &quot;&quot;&quot;
+    Zero-bloat SCPI wrapper for Optical Power Meters, Attenuators, and Oscilloscopes.
+    Works over PyVISA or falls back to raw TCP socket (port 5025) if VISA runtime is absent.
+    &quot;&quot;&quot;
+    def __init__(self, resource_name: str, timeout_s: float = 3.0):
+        self.resource_name = resource_name
+        self.timeout_s = timeout_s
+        self._inst = None
+        self._sock = None
+
+    def connect(self) -&gt; &quot;SCPIInstrument&quot;:
+        if HAS_VISA and not self.resource_name.startswith(&quot;raw://&quot;):
+            rm = pyvisa.ResourceManager(&quot;@py&quot;)
+            self._inst = rm.open_resource(self.resource_name)
+            self._inst.timeout = int(self.timeout_s * 1000)
+            self._inst.write_termination = &quot;\n&quot;
+            self._inst.read_termination = &quot;\n&quot;
+        else:
+            addr = self.resource_name.replace(&quot;raw://&quot;, &quot;&quot;)
+            host, port = addr.split(&quot;:&quot;)
+            self._sock = socket.create_connection((host, int(port)), timeout=self.timeout_s)
+            self._sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        self.clear_buffer()
+        return self
+
+    def disconnect(self):
+        if self._inst:
+            try:
+                self._inst.close()
+            except Exception:
+                pass
+            self._inst = None
+        if self._sock:
+            try:
+                self._sock.close()
+            except Exception:
+                pass
+            self._sock = None
+
+    def __enter__(self):
+        return self.connect()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.disconnect()
+
+    def write(self, cmd: str):
+        cmd = cmd.strip() + &quot;\n&quot;
+        if self._inst:
+            self._inst.write(cmd)
+        elif self._sock:
+            self._sock.sendall(cmd.encode(&quot;ascii&quot;))
+
+    def query(self, cmd: str) -&gt; str:
+        self.write(cmd)
+        if self._inst:
+            return self._inst.read().strip()
+        elif self._sock:
+            buf = bytearray()
+            while True:
+                chunk = self._sock.recv(1024)
+                if not chunk:
+                    break
+                buf.extend(chunk)
+                if b&quot;\n&quot; in chunk:
+                    break
+            return buf.decode(&quot;ascii&quot;).strip()
+        raise RuntimeError(&quot;Not connected&quot;)
+
+    def query_float(self, cmd: str) -&gt; float:
+        res = self.query(cmd)
+        # Strips out SCPI scientific notations and commas
+        clean = res.split(&quot;,&quot;)[0].replace(&quot;DBM&quot;, &quot;&quot;).replace(&quot;W&quot;, &quot;&quot;).strip()
+        return float(clean)
+
+    def wait_opc(self, timeout_s: Optional[float] = None) -&gt; bool:
+        &quot;&quot;&quot;Halts execution until instrument completes previous operation (*OPC?).&quot;&quot;&quot;
+        orig_timeout = self.timeout_s
+        if timeout_s:
+            self.timeout_s = timeout_s
+        try:
+            return self.query(&quot;*OPC?&quot;) == &quot;1&quot;
+        finally:
+            self.timeout_s = orig_timeout
+
+    def clear_buffer(self):
+        &quot;&quot;&quot;Wipes status registers and flushes pending output queue.&quot;&quot;&quot;
+        self.write(&quot;*CLS&quot;)
+</code></pre>
+<hr />
+<h3 id="coredaemon_clientpy-length-prefixed-binary-socket-client"><code>core/daemon_client.py</code> — Length-Prefixed Binary Socket Client</h3>
+<pre><code class="language-python">import socket
+import struct
+import json
+from typing import Any, Dict
+
+class SwitchDaemonClient:
+    &quot;&quot;&quot;
+    Client for embedded switch telemetry daemons.
+    Uses 4-byte big-endian length prefix to prevent fragmentation truncation.
+    &quot;&quot;&quot;
+    def __init__(self, host: str, port: int, timeout_s: float = 5.0):
+        self.host = host
+        self.port = port
+        self.timeout_s = timeout_s
+        self._sock: Optional[socket.socket] = None
+
+    def connect(self):
+        self._sock = socket.create_connection((self.host, self.port), timeout=self.timeout_s)
+
+    def close(self):
+        if self._sock:
+            self._sock.close()
+            self._sock = None
+
+    def send_command(self, payload: Dict[str, Any]) -&gt; Dict[str, Any]:
+        data = json.dumps(payload).encode(&quot;utf-8&quot;)
+        # Pack length (4-byte unsigned int) followed by payload
+        header = struct.pack(&quot;!I&quot;, len(data))
+        self._sock.sendall(header + data)
+
+        # Read 4-byte response header
+        resp_hdr = self._recv_exact(4)
+        resp_len = struct.unpack(&quot;!I&quot;, resp_hdr)[0]
+
+        # Read full body
+        resp_body = self._recv_exact(resp_len)
+        return json.loads(resp_body.decode(&quot;utf-8&quot;))
+
+    def _recv_exact(self, n: int) -&gt; bytes:
+        buf = bytearray()
+        while len(buf) &lt; n:
+            chunk = self._sock.recv(n - len(buf))
+            if not chunk:
+                raise ConnectionError(&quot;Socket closed prematurely&quot;)
+            buf.extend(chunk)
+        return bytes(buf)
+</code></pre>
+<hr />
+<h3 id="coretrafficpy-traffic-generator-abstraction-scapy-hardware-ixia"><code>core/traffic.py</code> — Traffic Generator Abstraction (Scapy + Hardware IXIA)</h3>
+<pre><code class="language-python">from dataclasses import dataclass
+import time
+
+@dataclass
+class TrafficStats:
+    tx_frames: int
+    rx_frames: int
+    dropped_frames: int
+    loss_ratio: float
+    avg_latency_us: float
+
+class TrafficGenerator:
+    &quot;&quot;&quot;
+    Dual-mode traffic engine:
+    Mock mode (Scapy) for local testing without physical lab gear.
+    Hardware mode (IXIA / REST API) for 100G/400G line rate.
+    &quot;&quot;&quot;
+    def __init__(self, mode: str = &quot;mock&quot;):
+        self.mode = mode
+
+    def transmit_burst(self, port: int, frame_count: int, rate_gbps: float) -&gt; TrafficStats:
+        if self.mode == &quot;mock&quot;:
+            # Simulate slight deterministic jitter and 0 drop
+            return TrafficStats(
+                tx_frames=frame_count,
+                rx_frames=frame_count,
+                dropped_frames=0,
+                loss_ratio=0.0,
+                avg_latency_us=1.45
+            )
+        else:
+            # Connect to IXIA chassis REST/Tcl API
+            # Start generation, wait for completion, read hardware FPGA counters
+            pass
+</code></pre>
+<hr />
+<h3 id="coreyield_dbpy-sqlite-wal-manufacturing-yield-logger"><code>core/yield_db.py</code> — SQLite WAL Manufacturing Yield Logger</h3>
+<pre><code class="language-python">import sqlite3
+import json
+import time
+
+class YieldLogger:
+    &quot;&quot;&quot;
+    SQLite logger running in Write-Ahead Logging (WAL) mode for maximum concurrency
+    during parallel multi-DUT manufacturing tests.
+    &quot;&quot;&quot;
+    def __init__(self, db_path: str = &quot;manufacturing_yield.db&quot;):
+        self.db_path = db_path
+        self._init_db()
+
+    def _init_db(self):
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(&quot;PRAGMA journal_mode=WAL;&quot;)
+            conn.execute(&quot;PRAGMA synchronous=NORMAL;&quot;)
+            conn.execute(&quot;&quot;&quot;
+                CREATE TABLE IF NOT EXISTS test_runs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timestamp REAL,
+                    dut_serial TEXT,
+                    test_name TEXT,
+                    verdict TEXT,
+                    rx_power_dbm REAL,
+                    ber REAL,
+                    packet_loss_pct REAL,
+                    metadata_json TEXT
+                )
+            &quot;&quot;&quot;)
+
+    def log_result(self, serial: str, test_name: str, verdict: str, 
+                   rx_power: float, ber: float, loss_pct: float, meta: dict):
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(&quot;&quot;&quot;
+                INSERT INTO test_runs 
+                (timestamp, dut_serial, test_name, verdict, rx_power_dbm, ber, packet_loss_pct, metadata_json)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            &quot;&quot;&quot;, (time.time(), serial, test_name, verdict, rx_power, ber, loss_pct, json.dumps(meta)))
+</code></pre>
+<hr />
+<h3 id="conftestpy-fixtures-with-apd-laser-safety-teardown"><code>conftest.py</code> — Fixtures with APD Laser Safety Teardown</h3>
+<pre><code class="language-python">import pytest
+from core.scpi import SCPIInstrument
+from core.traffic import TrafficGenerator
+from core.yield_db import YieldLogger
+
+@pytest.fixture(scope=&quot;session&quot;)
+def optical_attenuator():
+    &quot;&quot;&quot;
+    Controls Variable Optical Attenuator (VOA).
+    CRITICAL TEARDOWN: Always resets attenuation to MAXIMUM (30 dB)
+    to protect sensitive APD detectors when fiber is disconnected.
+    &quot;&quot;&quot;
+    voa = SCPIInstrument(&quot;raw://192.168.1.101:5025&quot;).connect()
+    # Safety reset on connect
+    voa.write(&quot;:ATT 30.0DB&quot;)
+    voa.wait_opc()
+
+    yield voa
+
+    # Guaranteed teardown even if tests fail or throw exceptions
+    try:
+        voa.write(&quot;:ATT 30.0DB&quot;)
+        voa.write(&quot;:OUTP:STAT 0&quot;) # Laser safety off
+        voa.wait_opc()
+    finally:
+        voa.disconnect()
+
+@pytest.fixture(scope=&quot;session&quot;)
+def traffic_gen():
+    return TrafficGenerator(mode=&quot;mock&quot;)
+
+@pytest.fixture(scope=&quot;session&quot;)
+def yield_tracker():
+    return YieldLogger()
+</code></pre>
+<hr />
+<h3 id="end-to-end-test-test_optical_transceiverpy">End-to-End Test: <code>test_optical_transceiver.py</code></h3>
+<pre><code class="language-python">import pytest
+import time
+
+@pytest.mark.parametrize(&quot;target_rx_power_dbm, max_allowed_ber&quot;, [
+    (-8.0, 1e-12),   # High input power -&gt; Clean eye, zero bit error
+    (-12.0, 1e-8),   # Moderate power
+    (-15.0, 2.4e-4), # KP4 FEC Limit threshold
+])
+def test_transceiver_ber_vs_rx_power(optical_attenuator, traffic_gen, yield_tracker, target_rx_power_dbm, max_allowed_ber):
+    dut_serial = &quot;LUMI-SiPh-800G-0042&quot;
+
+    # 1. Adjust Variable Optical Attenuator to achieve target power
+    optical_attenuator.write(f&quot;:POW:TARG {target_rx_power_dbm}DBM&quot;)
+    assert optical_attenuator.wait_opc(timeout_s=5.0), &quot;Attenuator failed to settle&quot;
+
+    # 2. Inject 1,000,000 packets through traffic generator
+    stats = traffic_gen.transmit_burst(port=1, frame_count=1_000_000, rate_gbps=100.0)
+
+    # 3. Read measured physical BER (simulated calculation)
+    measured_ber = 1e-14 if target_rx_power_dbm &gt; -10 else 1e-9 if target_rx_power_dbm &gt; -14 else 1.2e-4
+
+    # 4. Determine verdict &amp; log telemetry to manufacturing DB
+    verdict = &quot;PASS&quot; if measured_ber &lt;= max_allowed_ber and stats.loss_ratio == 0.0 else &quot;FAIL&quot;
+    yield_tracker.log_result(
+        serial=dut_serial,
+        test_name=&quot;test_transceiver_ber_vs_rx_power&quot;,
+        verdict=verdict,
+        rx_power=target_rx_power_dbm,
+        ber=measured_ber,
+        loss_pct=stats.loss_ratio * 100.0,
+        meta={&quot;frames&quot;: stats.tx_frames, &quot;latency_us&quot;: stats.avg_latency_us}
+    )
+
+    # 5. Assertions
+    assert stats.dropped_frames == 0, f&quot;Frame drop detected: {stats.dropped_frames} frames lost&quot;
+    assert measured_ber &lt;= max_allowed_ber, f&quot;BER {measured_ber} exceeded spec {max_allowed_ber}&quot;
+</code></pre>
+<hr />
+<h2 id="4-lazy-senior-dev-rules-for-hardware-test-automation">4. Lazy Senior Dev Rules for Hardware Test Automation</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Problem</th>
+<th style="text-align: left;">Junior / Brittle Pattern</th>
+<th style="text-align: left;">Lazy Senior Dev Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Waiting for HW settle</strong></td>
+<td style="text-align: left;"><code>time.sleep(5)</code> everywhere. (Flaky + slow).</td>
+<td style="text-align: left;">Polling with deadline (<code>while time.time() &lt; deadline: if ready(): break; time.sleep(0.05)</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Instrument buffer</strong></td>
+<td style="text-align: left;">Assumes socket buffer is empty on start.</td>
+<td style="text-align: left;">Sends <code>*CLS</code> (Clear Status) immediately on connect and in teardown.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Laser safety</strong></td>
+<td style="text-align: left;">Leaves lasers active when test raises assertion error.</td>
+<td style="text-align: left;">Implements teardown inside pytest fixture <code>yield</code> or <code>try...finally</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Flaky BER testing</strong></td>
+<td style="text-align: left;">Retries test 5 times hoping it passes (<code>reruns=5</code>).</td>
+<td style="text-align: left;">Triages Pre-FEC vs Post-FEC counters; logs optical eye height to locate physical degradation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CI/CD runs</strong></td>
+<td style="text-align: left;">Fails CI if physical bench instrument is offline.</td>
+<td style="text-align: left;">Clean mock fallback (<code>MagicMock</code> / Scapy) allowing CI validation without hardware.</td>
+</tr>
+</tbody>
+</table>
+      </article>
+
+      <div class="footer-nav">
+        <a href="01_Online_Test.html" class="footer-btn">← 01: Online Test Mastery</a>
+        <a href="03_Networking_L1_L2.html" class="footer-btn" style="margin-left: auto;">03: L1/L2 Optics & Networking →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('lumilens-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('lumilens-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('reading-progress').style.width = scrolled + '%';
+    });
+
+    // Copy code button injection
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

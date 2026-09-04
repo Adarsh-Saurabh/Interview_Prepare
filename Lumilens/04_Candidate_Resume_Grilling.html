@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04: Resume Defense & Traps · Lumilens Interview Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <!-- PrismJS for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #06b6d4;
+  
+  --accent-primary: #0284c7; /* Laser Photon Blue */
+  --accent-primary-hover: #0369a1;
+  --accent-light: #e0f2fe;
+  
+  --tag-bg: #ecfdf5;
+  --tag-border: #10b981;
+  --tag-text: #065f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(16, 185, 129, 0.12);
+  --tag-border: #10b981;
+  --tag-text: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-text h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 40px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge-lumilens {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #0891b2;
+}
+
+[data-theme="dark"] .badge-lumilens {
+  color: #22d3ee;
+}
+
+.content-body {
+  font-size: 15px;
+}
+
+.content-body h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.content-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.content-body pre code {
+  padding: 16px;
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #1a1f2c;
+  color: #f1f5f9;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">L</div>
+        <div class="brand-text">
+          <h2>Lumilens Prep</h2>
+          <span>29 LPA · NIT Rourkela</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Online Test Mastery</span>
+            <span class="nav-badge">Coding/MCQs</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Python Automation Arch</span>
+            <span class="nav-badge">Pytest/HIL</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="03_Networking_L1_L2.html" class="nav-link">
+            <span>03: L1/L2 Optics & Networking</span>
+            <span class="nav-badge">Protocols</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link active">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="05_Hardware_Integration_SCPI.html" class="nav-link">
+            <span>05: SCPI, VISA & Yield</span>
+            <span class="nav-badge">Hardware</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Managerial & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Quick Cheat Sheet</span>
+            <span class="nav-badge">Emergency</span>
+          </a>
+        </li>
+        
+
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Study Roadmap & Index</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="../index.html" style="font-size: 12.5px; color: var(--accent-primary); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-color);">← All Companies</a>
+          <div class="badge-lumilens">
+            <span>⚡</span>
+            <span>Silicon Photonics AI Interconnects</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Candidate: <strong>Adarsh Saurabh</strong> (M.Tech)
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1 id="04-candidate-resume-grilling-defensive-playbook">04: Candidate Resume Grilling &amp; Defensive Playbook</h1>
+<blockquote>
+<p><strong>Target Candidate:</strong> Adarsh Saurabh<br />
+<strong>Academic Profile:</strong> M.Tech Signal &amp; Image Processing (NIT Rourkela, CGPA: 8.28) | B.Tech CSE (CGPA: 8.5)<br />
+<strong>Role Applied:</strong> Software Test Automation Engineer (Lumilens, 29 LPA M.Tech)</p>
+</blockquote>
+<hr />
+<h2 id="1-the-core-interview-traps-opening-pitches">1. The Core Interview Traps &amp; Opening Pitches</h2>
+<p>Interviewers at Lumilens will immediately notice that your resume features <strong>Machine Learning, LangGraph, Computer Vision, and Algorithms</strong>, but does not say <em>"Silicon Photonics"</em> or <em>"Optical Transceiver Lab"</em>. They will probe your motivation and competence with three direct challenge questions.</p>
+<hr />
+<h3 id="trap-1-why-test-automation-instead-of-sde-or-ml-engineer">Trap 1: "Why Test Automation instead of SDE or ML Engineer?"</h3>
+<h4 id="the-fatal-answer-losing-move">The Fatal Answer (Losing Move)</h4>
+<blockquote>
+<p><em>"I am open to any role, and I saw Lumilens pays 29 LPA on campus so I applied. Testing is also a good way to start."</em><br />
+<em>(Signal: Desperate, will jump ship in 6 months to an SDE role, doesn't understand the job).</em></p>
+</blockquote>
+<h4 id="the-winning-strategic-answer-high-signal">The Winning Strategic Answer (High Signal)</h4>
+<blockquote>
+<p><em>"My goal isn't generic software development or web CRUD apps—it's high-performance systems engineering. Modern AI infrastructure has hit a physical bottleneck: compute is scaling, but copper interconnects are collapsing under heat and power limits. The hardest engineering problem right now isn't writing another transformer; it's making physical optical fabrics reliably transport terabits of data at zero packet drop.</em><br />
+<em>Test Automation at Lumilens is not manual QA—it's software architecture for hardware validation. It requires writing concurrent Python engines, communicating with sub-nanosecond lab instruments, and solving complex L1/L2 protocol failures. With my Computer Science degree and M.Tech in Signal Processing, I have both the software engineering rigor and the signal-domain mathematics to build robust, automated validation pipelines that keep high-volume photonics manufacturing reliable."</em></p>
+</blockquote>
+<hr />
+<h3 id="trap-2-you-dont-have-optical-hardware-experience-how-will-you-test-our-photonic-transceivers">Trap 2: "You don't have optical hardware experience. How will you test our photonic transceivers?"</h3>
+<h4 id="the-winning-strategic-answer">The Winning Strategic Answer</h4>
+<blockquote>
+<p><em>"An optical transceiver is a physical signal processing system wrapped in high-speed digital protocols. My M.Tech coursework at NIT Rourkela is in Signal Processing: I understand attenuation, Fourier transforms, frequency-domain noise, filter theory, and statistical error rates (SNR, BER). My undergrad is in Computer Science: I know data structures, concurrent Python, socket programming, and object-oriented design.</em><br />
+<em>The typical pure hardware engineer writes fragile, 1,000-line procedural scripts with hardcoded <code>sleep</code> statements that break in CI. The pure software engineer doesn't know why an optical eye collapses or what insertion loss means. I sit precisely at the intersection: I bring clean software architectural practices (pytest fixtures, modular SCPI drivers, deterministic teardown) to validate physical signal hardware."</em></p>
+</blockquote>
+<hr />
+<h2 id="2-project-by-project-interrogation">2. Project-by-Project Interrogation</h2>
+<hr />
+<h3 id="project-1-ibyd-technology-warehouse-pathmapper">Project 1: IBYD Technology — Warehouse PathMapper</h3>
+<p><em>(Python, Heuristic Routing, Performance Testing | 10,000x10,000 Layouts, &lt; 0.5s)</em></p>
+<h4 id="interrogator-question-1-explain-how-you-scaled-a-to-10000-locations-in-under-05-seconds-on-a-laptop-cpu">Interrogator Question 1: "Explain how you scaled A* to 10,000 locations in under 0.5 seconds on a laptop CPU."</h4>
+<ul>
+<li><strong>Expected Answer:</strong></li>
+<li><em>"Standard $A^</em>$ with a naive priority queue (e.g., re-sorting lists) has $O(N \log N)$ or worse insertion overhead. I used Python's <code>heapq</code> module for $O(\log K)$ push/pop operations.*</li>
+<li><em>I used the </em><em>Manhattan Distance heuristic</em><em> ($|x_1 - x_2| + |y_1 - y_2|$) because warehouse grids are rectilinear (4-directional movement, no diagonals).</em></li>
+<li><em>Crucially, the heuristic is </em><em>admissible</em><em> (never overestimates true distance) and </em><em>consistent/monotonic</em><em>, which guarantees that when a node is popped from the open set, the shortest path to it has already been discovered—preventing expensive node re-expansions.</em></li>
+<li><em>For batch routing across thousands of locations, I pre-computed a spatial waypoint hierarchy (hierarchical pathfinding / HPA</em>) rather than running flat $A^<em>$ over the entire $10,000 \times 10,000$ matrix, which reduced the state search space by over 90%."</em></li>
+</ul>
+<h4 id="interrogator-question-2-how-does-warehouse-path-routing-map-to-an-optical-network-switch-fabric">Interrogator Question 2: "How does warehouse path routing map to an optical network switch fabric?"</h4>
+<ul>
+<li><strong>Expected Answer:</strong></li>
+<li><em>"Both are </em><em>resource-constrained flow routing problems on directed graphs</em><em>.</em></li>
+<li><em>In an optical switch fabric (like a Clos or Benes network), light paths (wavelengths) must be routed from ingress transceivers to egress transceivers through optical cross-connects without wavelength collisions (blocking).</em></li>
+<li><em>Just like warehouse aisles suffer from congestion and AGV head-of-line blocking if two paths intersect at the same timestamp, optical switches suffer from buffer contention and HOL blocking.</em></li>
+<li><em>The algorithmic validation methods I used—stress-testing corner cases, verifying zero collisions, and testing latency bounds under 100% capacity—directly apply to validating switch routing tables and traffic scheduling algorithms."</em></li>
+</ul>
+<hr />
+<h3 id="project-2-uplan-adversarial-document-intelligence-pipeline">Project 2: Uplan — Adversarial Document Intelligence Pipeline</h3>
+<p><em>(Python, LangGraph, Multi-Agent Verification, Rule-Based Validation Engine)</em></p>
+<h4 id="interrogator-question-1-your-resume-claims-a-deterministic-rule-based-validation-engine-for-zero-hallucination-logical-checks-how-did-you-architect-that">Interrogator Question 1: "Your resume claims a 'deterministic, rule-based validation engine for zero-hallucination logical checks.' How did you architect that?"</h4>
+<ul>
+<li><strong>Expected Answer:</strong></li>
+<li><em>"LLMs and generative models are stochastic—they produce non-deterministic outputs that make them dangerous for automated verification. To achieve deterministic validation, I decoupled extraction from verification:</em><ol>
+<li><em>The AI layer extracted document metadata into a strictly typed schema (Pydantic models with type assertions).</em></li>
+<li><em>The validation layer was a pure, deterministic Python rule engine using Directed Acyclic Graph (DAG) state transitions.</em></li>
+<li><em>Every mathematical total, date sequence, cross-page balance, and logical constraint was validated by hard assertions with zero tolerance for probabilistic variance.</em></li>
+<li><em>If an assertion failed, the engine generated a structured diagnostic trace (JSON) capturing the exact node, input, rule violation, and diff."</em></li>
+</ol>
+</li>
+</ul>
+<h4 id="interrogator-question-2-how-would-you-apply-this-philosophy-to-testing-optical-hardware">Interrogator Question 2: "How would you apply this philosophy to testing optical hardware?"</h4>
+<ul>
+<li><strong>Expected Answer:</strong></li>
+<li><em>"Hardware testing has an analogous problem: physical components exhibit analog variance (thermal drift, laser phase noise, ambient optical fluctuations).</em></li>
+<li><em>If your test automation framework uses fuzzy or non-deterministic assertions, you get flaky tests that destroy CI/CD velocity.</em></li>
+<li><em>My approach is: </em><em>isolate deterministic software logic from physical hardware bounds</em><em>.</em></li>
+<li><em>We enforce strict statistical boundaries: e.g., Pre-FEC BER must remain within a defined confidence interval over $10^9$ bits, Rx Optical Power must stay within $\pm 0.5\text{ dBm}$ of target after settling. We capture instrument telemetry into structured time-series logs and run deterministic validation rules against the telemetry, ensuring that a pass or fail verdict is 100% reproducible and root-caused."</em></li>
+</ul>
+<hr />
+<h3 id="project-3-k-huki-unsupervised-keyframe-identifier">Project 3: K-HUKI — Unsupervised Keyframe Identifier</h3>
+<p><em>(Python, OpenCV, Algorithm Benchmarking | 96.45% Accuracy, 11x Speedup)</em></p>
+<h4 id="interrogator-question-1-how-did-you-benchmark-9645-accuracy-and-how-did-you-verify-that-your-11x-speedup-didnt-cause-regression">Interrogator Question 1: "How did you benchmark 96.45% accuracy, and how did you verify that your 11x speedup didn't cause regression?"</h4>
+<ul>
+<li><strong>Expected Answer:</strong></li>
+<li><em>"I established an automated ground-truth regression test suite before writing optimization code:</em><ol>
+<li><em>Created a benchmark dataset with human-annotated ground-truth keyframes.</em></li>
+<li><em>Measured baseline accuracy using standard deep learning architectures (ResNet-50 feature extraction) across three metrics: Precision, Recall, and F1-Score.</em></li>
+<li><em>When I developed the HOG (Histogram of Oriented Gradients) pipeline, I ran automated regression tests comparing the F1-score against the baseline.</em></li>
+<li><em>The 11x latency speedup came from replacing GPU matrix convolutions with localized gradient orientation histograms and sliding-window difference thresholds ($L_2$ distance).</em></li>
+<li><em>The 96.45% accuracy represented the F1-score match against ground truth, proving that the speedup did not compromise feature discriminability."</em></li>
+</ol>
+</li>
+</ul>
+<h4 id="interrogator-question-2-what-is-the-parallel-between-keyframe-benchmarking-and-optical-transceiver-signal-validation">Interrogator Question 2: "What is the parallel between keyframe benchmarking and optical transceiver signal validation?"</h4>
+<ul>
+<li><strong>Expected Answer:</strong></li>
+<li><em>"Both are </em><em>statistical feature extraction problems under high data rates</em><em>.</em></li>
+<li><em>In video, you process 30–60 frames per second and detect subtle scene changes while ignoring background noise.</em></li>
+<li><em>In high-speed optical oscilloscopes, you capture gigasamples of raw voltage/optical waveforms and calculate Eye Height, Eye Width, and Jitter.</em></li>
+<li><em>The algorithmic principles are identical: feature extraction, thresholding against noise floors, and validating that automated measurements correlate 100% with physical ground-truth instrument standards."</em></li>
+</ul>
+<hr />
+<h3 id="experience-autobot-robotics-machine-learning-intern">Experience: Autobot Robotics — Machine Learning Intern</h3>
+<p><em>(Developed &amp; deployed 4 models in Django for robotic hardware validation)</em></p>
+<h4 id="interrogator-question-what-was-the-communication-interface-between-your-django-backend-and-the-physical-robotic-hardware-how-did-you-handle-hardware-disconnects">Interrogator Question: "What was the communication interface between your Django backend and the physical robotic hardware? How did you handle hardware disconnects?"</h4>
+<ul>
+<li><strong>Expected Answer:</strong></li>
+<li><em>"The communication used an asynchronous socket protocol over TCP/IP and serial UART interfaces to the onboard microcontroller.</em></li>
+<li><em>The primary engineering challenge was handling hardware unreliability: physical sensors occasionally disconnect, baud rates desynchronize, or motors stall.</em></li>
+<li><em>In my test scripts, I implemented:</em><ol>
+<li><em>Heartbeat pinging with timeout thresholds.</em></li>
+<li><em>Hardware state machine tracking (BOOTING, IDLE, RUNNING, FAULT).</em></li>
+<li><em>Watchdog routines that trigger a safe hardware shutdown if communication drops for $&gt;500\text{ ms}$, preventing physical damage to the robot.</em></li>
+</ol>
+</li>
+<li><em>This taught me the fundamental golden rule of hardware-in-the-loop automation: </em><em>never assume the hardware is in the state you requested—always read back the physical telemetry before proceeding</em><em>."</em></li>
+</ul>
+<hr />
+<h2 id="3-high-pressure-behavioral-scenarios-for-lumilens">3. High-Pressure Behavioral Scenarios for Lumilens</h2>
+<h3 id="scenario-1-the-hardware-engineer-blames-your-test-code">Scenario 1: The Hardware Engineer Blames Your Test Code</h3>
+<blockquote>
+<p><strong>Question:</strong> <em>"You run your automated regression suite on an 800G optical transceiver batch, and 30% of units fail with high packet drop rates. The optical hardware designer says, 'Your Python script is buggy or your traffic generator is dropping packets; my optical engine is fine.' How do you resolve this?"</em></p>
+</blockquote>
+<p><strong>Winning Response (Ponytail Root-Cause Triage):</strong>
+1. <strong>Never argue with opinions; isolate the layers with telemetry.</strong>
+2. <strong>Layer 1 Sanity Check:</strong> Query the transceiver's onboard Digital Diagnostic Monitoring (DDM) registers:
+   - What is the Rx Optical Power ($P_{\text{rx}}$)? Is it above receiver sensitivity?
+   - What is the laser bias current ($I_{\text{bias}}$) and temperature?
+   - What is the raw <strong>Pre-FEC Bit Error Rate</strong>?
+3. <strong>Loopback Isolation:</strong>
+   - Put the switch port into <strong>Internal PMA/PCS Loopback</strong>. Transmit the same traffic burst.
+   - If packet loss occurs in internal loopback: it is a software/switch buffer issue.
+   - If internal loopback has 0% loss: the issue is strictly in the physical optical domain (transceiver optics, laser coupling, or fiber patch cord).
+4. <strong>Independent Verification:</strong> Connect an optical power meter and high-speed sampling oscilloscope to the Tx port. Measure Eye Height and Extinction Ratio.
+5. <strong>Report with Evidence:</strong> Present a unified Grafana / SQLite report showing: <em>"At $-11\text{ dBm}$ input power, Pre-FEC BER is $4.5 \times 10^{-4}$ (exceeding KP4 threshold of $2.4 \times 10^{-4}$), while internal loopback has zero loss. The optical transmitter eye height is collapsed by $40\%$. Here are the scope traces."</em></p>
+      </article>
+
+      <div class="footer-nav">
+        <a href="03_Networking_L1_L2.html" class="footer-btn">← 03: L1/L2 Optics & Networking</a>
+        <a href="05_Hardware_Integration_SCPI.html" class="footer-btn" style="margin-left: auto;">05: SCPI, VISA & Yield →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('lumilens-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('lumilens-theme', next);
+      themeIcon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('reading-progress').style.width = scrolled + '%';
+    });
+
+    // Copy code button injection
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>
