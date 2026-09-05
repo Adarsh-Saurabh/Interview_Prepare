@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#090d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Juspay Interview Preparation Portal ? Adarsh Saurabh</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.92);
+  --bg-subtle: #f1f5f9;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #6366f1;
+  
+  --accent-primary: #4f46e5;
+  --accent-primary-hover: #4338ca;
+  --accent-light: #eef2ff;
+  
+  --tag-bg: #f5f3ff;
+  --tag-border: #8b5cf6;
+  --tag-text: #6d28d9;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-header: rgba(13, 19, 34, 0.92);
+  --bg-subtle: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #818cf8;
+  
+  --accent-primary: #818cf8;
+  --accent-primary-hover: #a5b4fc;
+  --accent-light: rgba(99, 102, 241, 0.15);
+  
+  --tag-bg: rgba(139, 92, 246, 0.15);
+  --tag-border: #8b5cf6;
+  --tag-text: #c4b5fd;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.logo-badge {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.logo-text h1 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.logo-text p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-icon {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-icon:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 5rem 1.25rem;
+  width: 100%;
+}
+
+.hero-section {
+  margin-bottom: 2rem;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid #6366f1;
+  color: #4f46e5;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.85rem;
+}
+
+[data-theme="dark"] .hero-badge {
+  color: #a5b4fc;
+}
+
+.hero-title {
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+}
+
+.hero-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 780px;
+  line-height: 1.6;
+}
+
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.progress-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.progress-percent {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: var(--bg-subtle);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #8b5cf6, #06b6d4);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 9999px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+  .stats-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.85rem;
+  text-align: center;
+}
+
+.stat-val {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  line-height: 1.2;
+}
+
+.stat-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.controls-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .controls-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  font-size: 0.92rem;
+  font-family: var(--font-sans);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.filter-btn {
+  padding: 8px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.filter-btn.active, .filter-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: var(--bg-subtle);
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .modules-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1080px) {
+  .modules-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.mod-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.mod-card:hover {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.mod-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.6rem;
+}
+
+.mod-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+  text-transform: uppercase;
+}
+
+.mod-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  accent-color: var(--accent-primary);
+}
+
+.mod-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.mod-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1.2rem;
+  flex-grow: 1;
+}
+
+.mod-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: opacity 0.15s ease;
+}
+
+.mod-btn:hover {
+  opacity: 0.92;
+}
+
+/* Bottom Mobile Navigation */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+  }
+}
+
+.b-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px 12px;
+}
+
+.b-nav-item:hover, .b-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.b-nav-icon {
+  font-size: 16px;
+}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo-group">
+        <div class="logo-badge">J</div>
+        <div class="logo-text">
+          <h1>Juspay Interview Prep</h1>
+          <p>21?27 LPA ? NIT Rourkela Track</p>
+        </div>
+      </a>
+      <div class="header-actions">
+        <a href="../index.html" class="btn-icon">? All Companies</a>
+        <button class="btn-icon" id="theme-toggle">
+          <span id="theme-icon">??</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="hero-badge">On-Campus SDE Mastery</div>
+      <h1 class="hero-title">Juspay Engineering Interview Portal</h1>
+      <p class="hero-subtitle">Comprehensive preparation suite for Juspay Technologies: OA Graph algorithms, Tree of Space locking hackathon, Concurrency, Payment Gateway LLD, and Candidate defense.</p>
+    </div>
+
+    <!-- Progress Card -->
+    <div class="progress-card">
+      <div class="progress-header">
+        <span class="progress-title">Your Preparation Progress</span>
+        <span class="progress-percent" id="progress-percent">0% Completed</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-val">350M+</div>
+        <div class="stat-sub">Daily Txns</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">$1T+</div>
+        <div class="stat-sub">Annual TPV</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">21?27 LPA</div>
+        <div class="stat-sub">Campus CTC</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">99.999%</div>
+        <div class="stat-sub">Uptime SLA</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-bar">
+      <div class="search-box">
+        <span class="search-icon">??</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Search modules (e.g. Tree of Space, Idempotency, Graph, MESI, Uplan)...">
+      </div>
+
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">All Modules</button>
+        <button class="filter-btn" data-filter="coding">Coding & OA</button>
+        <button class="filter-btn" data-filter="systems">Systems & LLD</button>
+        <button class="filter-btn" data-filter="defense">Defense & HR</button>
+      </div>
+    </div>
+
+    <!-- Modules Grid -->
+    <div class="modules-grid" id="modules-grid">
+
+      <!-- MOD 00 -->
+      <article class="mod-card" data-category="systems" data-search="company role scale hyperswitch kvdb xyne spaces nit rourkela ctc euler">
+        <div class="mod-top">
+          <span class="mod-badge">Strategy</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_00" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">00: Company & Role Deep Dive</h3>
+        <p class="mod-desc">350M+ transactions, $1T TPV scale, PureScript/Haskell/Rust stack, in-house KvDB, Xyne Spaces, and NIT Rourkela CTC breakdown.</p>
+        <a href="00_START_HERE.html" class="mod-btn">Launch Module ?</a>
+      </article>
+
+      <!-- MOD 01 -->
+      <article class="mod-card" data-category="coding" data-search="graphs online test maximum weight node nearest meeting cell largest sum cycle functional graphs">
+        <div class="mod-top">
+          <span class="mod-badge">Algorithms</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_01" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">01: OA Graph Mastery</h3>
+        <p class="mod-desc">The 3 classic Juspay graph OA problems: Maximum Weight Node, Nearest Meeting Cell, and Largest Sum Cycle with complete C++20 and Python code.</p>
+        <a href="01_Online_Test_Graphs.html" class="mod-btn">Launch Module ?</a>
+      </article>
+
+      <!-- MOD 02 -->
+      <article class="mod-card" data-category="coding" data-search="tree of space hackathon lock unlock upgradelock n-ary tree locking thread safety concurrency">
+        <div class="mod-top">
+          <span class="mod-badge">Concurrency</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_02" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">02: Tree of Space Hackathon</h3>
+        <p class="mod-desc">Thread-Safe N-ary Tree Locking with lock(), unlock(), and upgradeLock(). Proofs for O(depth) and deadlock freedom via canonical order.</p>
+        <a href="02_Tree_of_Space_Hackathon.html" class="mod-btn">Launch Module ?</a>
+      </article>
+
+      <!-- MOD 03 -->
+      <article class="mod-card" data-category="systems" data-search="concurrency os operating systems race conditions atomics futex mesi cache lines deadlocks">
+        <div class="mod-top">
+          <span class="mod-badge">Systems</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_03" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">03: Concurrency & OS Systems</h3>
+        <p class="mod-desc">MESI cache coherence, false sharing (64-byte padding), memory barriers, Futex, and deadlock prevention in multi-account payment transfers.</p>
+        <a href="03_Concurrency_and_OS.html" class="mod-btn">Launch Module ?</a>
+      </article>
+
+      <!-- MOD 04 -->
+      <article class="mod-card" data-category="systems" data-search="system design lld payment gateway idempotency redlock fencing tokens state machine saga">
+        <div class="mod-top">
+          <span class="mod-badge">Architecture</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_04" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">04: Payment Gateway LLD</h3>
+        <p class="mod-desc">Payment finite state machines, dual-layer idempotency (Redis + DB constraints), Martin Kleppmann Redlock critique, and jittered webhook retries.</p>
+        <a href="04_System_Design_LLD_Payment_Gateway.html" class="mod-btn">Launch Module ?</a>
+      </article>
+
+      <!-- MOD 05 -->
+      <article class="mod-card" data-category="defense" data-search="candidate resume defense adarsh uplan pathmapper alt data radar signal processing dsp xyne spaces">
+        <div class="mod-top">
+          <span class="mod-badge">Defense</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_05" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">05: Resume Defense & Traps</h3>
+        <p class="mod-desc">Adarsh's profile defense: bridging Uplan to Xyne Spaces, PathMapper to Dynamic Routing, and defending M.Tech Signal Processing via group delay math.</p>
+        <a href="05_Candidate_Resume_Grilling.html" class="mod-btn">Launch Module ?</a>
+      </article>
+
+      <!-- MOD 06 -->
+      <article class="mod-card" data-category="defense" data-search="managerial hr culture samaaj sarkaar bazaar outage simulation star format big billion days">
+        <div class="mod-top">
+          <span class="mod-badge">Behavioral</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_06" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">06: Outages & HR Strategy</h3>
+        <p class="mod-desc">24/7 payment outage incident simulation (Big Billion Days HDFC crash), Samaaj-Sarkaar-Bazaar alignment, and STAR leadership stories.</p>
+        <a href="06_Managerial_and_HR.html" class="mod-btn">Launch Module ?</a>
+      </article>
+
+      <!-- MOD 07 -->
+      <article class="mod-card" data-category="defense" data-search="quick reference cheat sheet formulas one-liners caveman ponytail emergency revision">
+        <div class="mod-top">
+          <span class="mod-badge">CheatSheet</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_07" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">07: Quick Reference Cheatsheet</h3>
+        <p class="mod-desc">Ultra-dense Caveman & Ponytail emergency cheat sheet: Tree of Space invariants, graph blueprints, systems formulas, and 30-second pitches.</p>
+        <a href="07_Quick_Reference.html" class="mod-btn">Launch Module ?</a>
+      </article>
+
+      <!-- ROADMAP -->
+      <article class="mod-card" data-category="defense" data-search="study roadmap checklist 3-day plan hour by hour schedule">
+        <div class="mod-top">
+          <span class="mod-badge">Roadmap</span>
+          <input type="checkbox" class="mod-check" data-id="juspay_readme" onchange="updateProgress()">
+        </div>
+        <h3 class="mod-title">Study Roadmap & Checklist</h3>
+        <p class="mod-desc">Tactical 3-day hour-by-hour preparation schedule and exit criteria for NIT Rourkela on-campus recruitment.</p>
+        <a href="README.html" class="mod-btn">Launch Roadmap ?</a>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="b-nav-item">
+      <span class="b-nav-icon">??</span>
+      <span>Hub</span>
+    </a>
+    <a href="01_Online_Test_Graphs.html" class="b-nav-item">
+      <span class="b-nav-icon">??</span>
+      <span>Graphs</span>
+    </a>
+    <a href="02_Tree_of_Space_Hackathon.html" class="b-nav-item">
+      <span class="b-nav-icon">??</span>
+      <span>Hackathon</span>
+    </a>
+    <a href="07_Quick_Reference.html" class="b-nav-item">
+      <span class="b-nav-icon">?</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="b-nav-item" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      <span class="b-nav-icon">?</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    function applyTheme(theme) {
+      htmlEl.setAttribute('data-theme', theme);
+      localStorage.setItem('juspay-theme', theme);
+      if (themeIcon) themeIcon.textContent = theme === 'dark' ? '??' : '??';
+    }
+
+    const savedTheme = localStorage.getItem('juspay-theme') || 'dark';
+    applyTheme(savedTheme);
+
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const current = htmlEl.getAttribute('data-theme');
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    }
+
+    // Checkbox Progress Tracking
+    const totalBoxes = 9;
+    function updateProgress() {
+      const checked = document.querySelectorAll('.mod-check:checked').length;
+      const pct = Math.round((checked / totalBoxes) * 100);
+      document.getElementById('progress-percent').textContent = `${pct}% Completed (${checked}/${totalBoxes})`;
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+
+      const states = {};
+      document.querySelectorAll('.mod-check').forEach(cb => {
+        states[cb.dataset.id] = cb.checked;
+      });
+      localStorage.setItem('juspay_module_progress', JSON.stringify(states));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem('juspay_module_progress');
+      if (saved) {
+        try {
+          const states = JSON.parse(saved);
+          document.querySelectorAll('.mod-check').forEach(cb => {
+            if (states[cb.dataset.id]) cb.checked = true;
+          });
+        } catch (e) {}
+      }
+      updateProgress();
+    }
+    loadProgress();
+
+    // Search and Filter
+    const searchInput = document.getElementById('search-input');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.mod-card');
+
+    let currentFilter = 'all';
+
+    function filterCards() {
+      const q = (searchInput.value || '').toLowerCase().trim();
+      cards.forEach(c => {
+        const cat = c.dataset.category || '';
+        const searchTerms = (c.dataset.search || '').toLowerCase();
+        const title = c.querySelector('.mod-title').textContent.toLowerCase();
+        const desc = c.querySelector('.mod-desc').textContent.toLowerCase();
+
+        const matchCat = (currentFilter === 'all') || (cat === currentFilter);
+        const matchQuery = !q || searchTerms.includes(q) || title.includes(q) || desc.includes(q);
+
+        c.style.display = (matchCat && matchQuery) ? 'flex' : 'none';
+      });
+    }
+
+    if (searchInput) searchInput.addEventListener('input', filterCards);
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        filterCards();
+      });
+    });
+  </script>
+</body>
+</html>

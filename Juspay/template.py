@@ -1,0 +1,851 @@
+# Juspay Portal Page Template
+def render_page(title, active_page, content_html, prev_link=None, prev_title=None, next_link=None, next_title=None):
+    nav_items = [
+        ("index.html", "Overview & Hub", "Portal"),
+        ("00_START_HERE.html", "00: Company & Role Deep Dive", "Strategy"),
+        ("01_Online_Test_Graphs.html", "01: OA Graph Problems", "Algorithms"),
+        ("02_Tree_of_Space_Hackathon.html", "02: Tree of Space Hackathon", "Concurrency"),
+        ("03_Concurrency_and_OS.html", "03: Concurrency & OS Systems", "Systems"),
+        ("04_System_Design_LLD_Payment_Gateway.html", "04: Payment Gateway LLD", "Design"),
+        ("05_Candidate_Resume_Grilling.html", "05: Resume Defense & Traps", "Defense"),
+        ("06_Managerial_and_HR.html", "06: Outages & HR Strategy", "Behavioral"),
+        ("07_Quick_Reference.html", "07: Quick Reference & Cheatsheet", "CheatSheet"),
+        ("README.html", "Study Roadmap & Checklist", "Roadmap"),
+    ]
+
+    sidebar_links = ""
+    for url, label, badge in nav_items:
+        is_active = " active" if url == active_page else ""
+        sidebar_links += f"""
+        <li>
+          <a href="{url}" class="nav-link{is_active}">
+            <span>{label}</span>
+            <span class="nav-badge">{badge}</span>
+          </a>
+        </li>"""
+
+    footer_buttons = ""
+    if prev_link:
+        footer_buttons += f'<a href="{prev_link}" class="footer-btn">? {prev_title}</a>'
+    if next_link:
+        style = ' style="margin-left: auto;"' if not prev_link else ''
+        footer_buttons += f'<a href="{next_link}" class="footer-btn"{style}>{next_title} ?</a>'
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#090d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>{title}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {{delimiters: [{{left: '$$', right: '$$', display: true}}, {{left: '$', right: '$', display: false}}, {{left: '\\(', right: '\\)', display: false}}, {{left: '\\[', right: '\\]', display: true}}]}});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {{
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #6366f1;
+  
+  --accent-primary: #4f46e5;
+  --accent-primary-hover: #4338ca;
+  --accent-light: #eef2ff;
+  
+  --tag-bg: #f5f3ff;
+  --tag-border: #8b5cf6;
+  --tag-text: #6d28d9;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.15);
+}}
+
+[data-theme="dark"] {{
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1f293d;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #818cf8;
+  
+  --accent-primary: #818cf8;
+  --accent-primary-hover: #a5b4fc;
+  --accent-light: rgba(99, 102, 241, 0.15);
+  
+  --tag-bg: rgba(139, 92, 246, 0.15);
+  --tag-border: #8b5cf6;
+  --tag-text: #c4b5fd;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}}
+
+* {{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}}
+
+html {{
+  scroll-behavior: smooth;
+  font-size: 16px;
+}}
+
+body {{
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}}
+
+#reading-progress {{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4f46e5, #8b5cf6, #06b6d4);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}}
+
+.app-container {{
+  display: flex;
+  min-height: 100vh;
+}}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {{
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}}
+
+.sidebar-backdrop.active {{
+  display: block;
+}}
+
+/* Sidebar */
+.sidebar {{
+  width: 300px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}}
+
+.sidebar-brand {{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}}
+
+.brand-left {{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}}
+
+.brand-icon {{
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 17px;
+  box-shadow: var(--shadow-sm);
+}}
+
+.brand-text h2 {{
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}}
+
+.brand-text span {{
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}}
+
+.drawer-close-btn {{
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}}
+
+.nav-section-title {{
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  padding-left: 8px;
+}}
+
+.nav-links {{
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}}
+
+.nav-link {{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  min-height: 40px;
+}}
+
+.nav-link:hover {{
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}}
+
+.nav-link.active {{
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}}
+
+.nav-badge {{
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}}
+
+.theme-toggle-btn {{
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}}
+
+.theme-toggle-btn:hover {{
+  background: var(--border-color);
+}}
+
+/* Main Content Area */
+.main-content {{
+  flex-grow: 1;
+  padding: 32px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}}
+
+.top-bar {{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}}
+
+.top-bar-left {{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}}
+
+.mobile-menu-btn {{
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+}}
+
+.hub-link-btn {{
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  border: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}}
+
+.badge-juspay {{
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid #6366f1;
+  color: #4f46e5;
+  white-space: nowrap;
+}}
+
+[data-theme="dark"] .badge-juspay {{
+  color: #a5b4fc;
+}}
+
+.content-body {{
+  font-size: 15px;
+  line-height: 1.7;
+}}
+
+.content-body h1 {{
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}}
+
+.content-body h2 {{
+  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-weight: 700;
+  margin-top: 34px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}}
+
+.content-body h3 {{
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}}
+
+.content-body h4 {{
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}}
+
+.content-body p {{
+  margin-bottom: 14px;
+}}
+
+.content-body ul, .content-body ol {{
+  margin-bottom: 16px;
+  padding-left: 20px;
+}}
+
+.content-body li {{
+  margin-bottom: 6px;
+}}
+
+.content-body blockquote {{
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 12px 16px;
+  margin: 18px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}}
+
+.content-body code {{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 5px;
+  border-radius: 4px;
+}}
+
+.content-body pre {{
+  position: relative;
+  margin: 18px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border-color);
+  background-color: #1a1f2c;
+}}
+
+.content-body pre code {{
+  padding: 14px;
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #f1f5f9;
+  white-space: pre;
+  word-break: normal;
+}}
+
+.copy-btn {{
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.85);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}}
+
+.copy-btn:hover {{
+  background: #6366f1;
+  color: #ffffff;
+}}
+
+/* Table Responsive Scrolling */
+.content-body table {{
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 13px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}}
+
+.content-body th, .content-body td {{
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  min-width: 120px;
+}}
+
+.content-body th {{
+  background-color: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--text-primary);
+}}
+
+.content-body tr:last-child td {{
+  border-bottom: none;
+}}
+
+/* Callout cards */
+.callout {{
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}}
+
+.callout-title {{
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--accent-primary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}}
+
+.katex-display {{
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0;
+}}
+
+.footer-nav {{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+}}
+
+.footer-btn {{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}}
+
+.footer-btn:hover {{
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}}
+
+/* Bottom Mobile Navigation Bar */
+.mobile-bottom-nav {{
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}}
+
+.b-nav-item {{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  min-width: 48px;
+}}
+
+.b-nav-item:hover, .b-nav-item.active {{
+  color: var(--accent-primary);
+}}
+
+.b-nav-icon {{
+  font-size: 16px;
+}}
+
+/* Mobile Breakpoint Adjustments */
+@media (max-width: 850px) {{
+  .sidebar {{
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 85vw;
+    height: 100vh;
+    z-index: 1050;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }}
+
+  .sidebar.open {{
+    transform: translateX(0);
+  }}
+
+  .drawer-close-btn {{
+    display: flex;
+  }}
+
+  .mobile-menu-btn {{
+    display: flex;
+  }}
+
+  .main-content {{
+    padding: 18px 16px 76px 16px;
+  }}
+
+  .mobile-bottom-nav {{
+    display: flex;
+  }}
+
+  .footer-nav {{
+    flex-direction: column;
+  }}
+
+  .footer-btn {{
+    width: 100%;
+    justify-content: center;
+  }}
+}}
+
+@media (max-width: 480px) {{
+  .top-bar {{
+    flex-wrap: wrap;
+  }}
+  .badge-juspay {{
+    display: none;
+  }}
+}}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">J</div>
+          <div class="brand-text">
+            <h2>Juspay Prep</h2>
+            <span>21?27 LPA ? NIT Rourkela</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close sidebar">?</button>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+{sidebar_links}
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">??</span>
+        <span>Toggle Theme</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>?</span>
+            <span>Modules</span>
+          </button>
+          <a href="../index.html" class="hub-link-btn">? All Companies</a>
+          <a href="index.html" class="hub-link-btn">Dashboard Hub</a>
+        </div>
+        <div class="badge-juspay">350M+ Txns/Day ? $1T TPV</div>
+      </header>
+
+      <article class="content-body">
+{content_html}
+      </article>
+
+      <div class="footer-nav">
+        {footer_buttons}
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="b-nav-item">
+      <span class="b-nav-icon">??</span>
+      <span>Hub</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-modules">
+      <span class="b-nav-icon">??</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="b-nav-item">
+      <span class="b-nav-icon">?</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-theme">
+      <span class="b-nav-icon" id="b-nav-theme-icon">??</span>
+      <span>Theme</span>
+    </button>
+    <button class="b-nav-item" onclick="window.scrollTo({{top:0, behavior:'smooth'}})">
+      <span class="b-nav-icon">?</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const bThemeBtn = document.getElementById('b-nav-theme');
+    const themeIcon = document.getElementById('theme-icon');
+    const bThemeIcon = document.getElementById('b-nav-theme-icon');
+    const htmlEl = document.documentElement;
+
+    function applyTheme(theme) {{
+      htmlEl.setAttribute('data-theme', theme);
+      localStorage.setItem('juspay-theme', theme);
+      const icon = theme === 'dark' ? '??' : '??';
+      if (themeIcon) themeIcon.textContent = icon;
+      if (bThemeIcon) bThemeIcon.textContent = icon;
+    }}
+
+    const savedTheme = localStorage.getItem('juspay-theme') || 'dark';
+    applyTheme(savedTheme);
+
+    function toggleTheme() {{
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    }}
+
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+    if (bThemeBtn) bThemeBtn.addEventListener('click', toggleTheme);
+
+    // Mobile Drawer Logic
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+
+    function openDrawer() {{
+      sidebar.classList.add('open');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }}
+
+    function closeDrawer() {{
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }}
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+
+    // Reading progress bar
+    window.addEventListener('scroll', () => {{
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (height > 0) {{
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('reading-progress').style.width = scrolled + '%';
+      }}
+    }});
+
+    // Copy code buttons
+    document.querySelectorAll('pre').forEach(pre => {{
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {{
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {{
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        }});
+      }});
+      pre.appendChild(btn);
+    }});
+  </script>
+</body>
+</html>"""

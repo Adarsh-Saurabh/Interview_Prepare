@@ -430,6 +430,15 @@ main {
   background: linear-gradient(135deg, #0284c7, #06b6d4);
 }
 
+
+.avatar-juspay {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+.btn-juspay-theme {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
 .avatar-mathworks {
   background: linear-gradient(135deg, #0284c7, #0369a1);
 }
@@ -719,7 +728,7 @@ footer {
     <div class="progress-card">
       <div class="progress-header">
         <span>Overall Preparation Progress</span>
-        <span id="progress-text">0 / 17 Modules Completed (0%)</span>
+        <span id="progress-text">0 / 26 Modules Completed (0%)</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progress-fill"></div>
@@ -729,11 +738,11 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">2</div>
+        <div class="stat-val" id="stat-companies">3</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">17</div>
+        <div class="stat-val">26</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
@@ -763,6 +772,117 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+      <!-- COMPANY 0: JUSPAY (RECENT) -->
+      <article class="card" data-company="juspay" data-date="2026-09-05" data-category="software" data-search="juspay payment gateway euler hyperswitch kvdb xyne spaces tree of space concurrency functional programming purescript haskell rust 21-27 lpa recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-juspay">J</div>
+            <div class="company-title">
+              <h3>Juspay Technologies</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 05 Sep 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(99,102,241,0.12); border:1px solid #6366f1; color:#4f46e5;">
+            21?27 LPA (M.Tech)
+          </span>
+        </div>
+
+        <div class="card-role">Software Development Engineer (SDE) ? Core Systems & AI</div>
+        <p class="card-desc">
+          India's foundational payment infrastructure company (350M+ daily transactions, $1T+ TPV, 99.999% SLA). Builders of UPI Common Library, HyperSwitch (Rust), in-house KvDB, and Xyne Spaces.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('juspay-points', 'juspay-arrow')">
+            <span class="points-title">?? Main Points Taught for Juspay</span>
+            <span class="toggle-arrow" id="juspay-arrow">?</span>
+          </div>
+          <div class="points-content" id="juspay-points">
+            <div class="point-item">
+              <span class="point-bullet">?</span>
+              <span><strong>Functional State Machines:</strong> PureScript, Haskell & Rust. Algebraic Data Types (ADTs) mathematically make illegal financial states unrepresentable at compile time; monadic effect isolation for side effects.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">?</span>
+              <span><strong>The Tree of Space Hackathon:</strong> Thread-Safe N-ary Tree Locking with ancestor-descendant mutual exclusion in \(O(\text{depth})\) time, using descendant counters and canonical Top-Down lock ordering for deadlock freedom.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">?</span>
+              <span><strong>OA Functional Graph Mastery:</strong> Maximum Weight Node, Nearest Meeting Cell, and Largest Sum Cycle resolved in \(O(N)\) time using Kahn's topological in-degree peeling and cycle detection.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">?</span>
+              <span><strong>Dynamic Routing & Signal Processing:</strong> Why Simple Moving Averages fail with group delay \(\tau_g = (N-1)/2\); using discrete-time Kalman filtering and closed-loop control theory (PID) to route transactions in sub-second windows without thundering herds.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">?</span>
+              <span><strong>Payment Gateway LLD & Idempotency:</strong> Dual-layer idempotency (Redis distributed lock + PostgreSQL ACID unique constraint), Martin Kleppmann Redlock critique, monotonic Fencing Tokens, and Saga pattern.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">?</span>
+              <span><strong>Adarsh's Resume Defense:</strong> Seamlessly mapping Uplan (LangGraph multi-agent & knowledge graphs) to Xyne Spaces, and PathMapper (\(A^*\) grid pathfinding) to dynamic payment routing engines.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="module-list-title">
+          <span>Preparation Modules (Tap to Read)</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);">Check box to mark read</span>
+        </div>
+
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_00" onchange="updateProgress()">
+            <a href="Juspay/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Deep Dive</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_01" onchange="updateProgress()">
+            <a href="Juspay/01_Online_Test_Graphs.html" style="text-decoration:none; color:inherit;">01: OA Graphs</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_02" onchange="updateProgress()">
+            <a href="Juspay/02_Tree_of_Space_Hackathon.html" style="text-decoration:none; color:inherit;">02: Tree of Space</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_03" onchange="updateProgress()">
+            <a href="Juspay/03_Concurrency_and_OS.html" style="text-decoration:none; color:inherit;">03: Concurrency/OS</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_04" onchange="updateProgress()">
+            <a href="Juspay/04_System_Design_LLD_Payment_Gateway.html" style="text-decoration:none; color:inherit;">04: Payment LLD</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_05" onchange="updateProgress()">
+            <a href="Juspay/05_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">05: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_06" onchange="updateProgress()">
+            <a href="Juspay/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Outages & HR</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_07" onchange="updateProgress()">
+            <a href="Juspay/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: Cheat Sheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="jp_readme" onchange="updateProgress()">
+            <a href="Juspay/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Juspay/index.html" class="btn-open btn-juspay-theme">
+            <span>Launch Juspay Portal</span>
+            <span>?</span>
+          </a>
+        </div>
+      </article>
+
 
       <!-- COMPANY 1: LUMILENS (RECENT) -->
       <article class="card" data-company="lumilens" data-date="2026-08-28" data-category="hardware" data-search="lumilens software test automation optical silicon photonics siph cpo pytest scpi visa ixia ber 29 lpa recent">
@@ -1089,7 +1209,7 @@ footer {
     });
 
     // LocalStorage Checkbox Tracker
-    const totalModules = 17;
+    const totalModules = 26;
     function updateProgress() {
       const checks = document.querySelectorAll('.module-check');
       let completed = 0;
