@@ -428,6 +428,21 @@ main {
 
 
 
+
+.avatar-ibm {
+  background: linear-gradient(135deg, #0f62fe, #0043ce);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.btn-ibm-theme {
+  background: linear-gradient(135deg, #0f62fe, #0043ce);
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
 .avatar-swiggy {
   background: linear-gradient(135deg, #fc8019, #ea580c);
   color: #ffffff;
@@ -752,7 +767,7 @@ footer {
     <div class="progress-card">
       <div class="progress-header">
         <span>Overall Preparation Progress</span>
-        <span id="progress-text">0 / 47 Modules Completed (0%)</span>
+        <span id="progress-text">0 / 56 Modules Completed (0%)</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progress-fill"></div>
@@ -762,11 +777,11 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">4</div>
+        <div class="stat-val" id="stat-companies">6</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">35</div>
+        <div class="stat-val">56</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
@@ -796,6 +811,124 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+      <!-- COMPANY: IBM SYSTEMS (RECENT) -->
+      <article class="card" data-company="ibm" data-date="2026-09-17" data-category="software" data-search="ibm systems isdl software engineer power10 telum z16 openbmc linux kernel virtual memory lock-free ring buffer c++ python 18.75 lpa recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-ibm">IBM</div>
+            <div class="company-title">
+              <h3>IBM Systems (ISDL)</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 17 Sep 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(15,98,254,0.16); border:1px solid #0f62fe; color:#0f62fe;">
+            18.75 LPA · ₹40k Stipend (M.Tech)
+          </span>
+        </div>
+
+        <div class="card-role">Software Engineer — Systems Software, Firmware & Hypervisors</div>
+        <p class="card-desc">
+          IBM India Systems Development Lab (ISDL), Bangalore/Kochi. Powers 70% of global banking transactions and 95% of top airlines. Core focus: 99.99999% uptime (seven nines), zero silent data corruption (SDC), IBM POWER10 (SMT8, MMA, OMI 1TB/s, Memory Inception), Telum z16 (5.0+ GHz, Virtual L3/L4 cache rings, on-chip NNPA AI engine), and OpenBMC Linux firmware.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('ibm-points', 'ibm-arrow')">
+            <span class="points-title">💡 Main Points Taught for IBM Systems (ISDL)</span>
+            <span class="toggle-arrow" id="ibm-arrow">▼</span>
+          </div>
+          <div class="points-content" id="ibm-points">
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>The Seven Nines (99.99999%) & Zero SDC:</strong> Designing fault-tolerant systems with &lt;3.15 seconds unplanned downtime per year; end-to-end ECC, lockstep execution, and formal hardware/software verification.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Telum z16 Microarchitecture:</strong> 8 cores @ 5.0+ GHz with private 32MB L2 caches dynamically routed into a shared 256MB Virtual L3 over a 320 GB/s ring bus; integrated on-chip NNPA (6 TFLOPS FP16) for &lt;1ms in-transaction fraud inferencing.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>POWER10 Enterprise Scale:</strong> Up to 15 SMT8 cores (120 hardware threads), Matrix Math Accelerators (MMA), Open Memory Interface (OMI, 1 TB/s), and Memory Inception optical NUMA pooling across chassis.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Systems Programming & OS Internals:</strong> 4-level paging (PGD &rarr; PUD &rarr; PMD &rarr; PTE), Copy-on-Write <code>fork()</code>, futex wait-queues vs spinlocks, and eliminating cache-line false sharing via <code>alignas(64)</code>.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>OpenBMC & Firmware Architecture:</strong> Linux SoC managing out-of-band hardware sensors via I2C/SMBus/eSPI, D-Bus object trees, and exposing Redfish REST APIs without consuming host CPU cycles.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Firmware Telemetry LLD:</strong> Single-Producer Single-Consumer (SPSC) lock-free circular ring buffer with acquire/release memory barriers in POSIX shared memory (<code>/dev/shm</code>).</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Signature OA Coding Mastery:</strong> Sliding window sensor spike detection, bitmask buddy memory allocator, fault-tolerant network Dijkstra, and thread-safe task scheduler.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Adarsh's Strategic Defense:</strong> Bridging M.Tech Signal Processing to hardware clock jitter & sensor telemetry; defending PathMapper 1D flat cache layout (10,000 nodes in &lt;0.5s).</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="module-list-title">
+          <span>Preparation Modules (Tap to Read)</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);">Check box to mark read</span>
+        </div>
+
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_00" onchange="updateProgress()">
+            <a href="IBM/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Intel & Role</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_01" onchange="updateProgress()">
+            <a href="IBM/01_Online_Test.html" style="text-decoration:none; color:inherit;">01: OA Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_02" onchange="updateProgress()">
+            <a href="IBM/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: Systems & OS</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_03" onchange="updateProgress()">
+            <a href="IBM/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: Hardware Arch</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_04" onchange="updateProgress()">
+            <a href="IBM/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_05" onchange="updateProgress()">
+            <a href="IBM/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: Firmware LLD</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_06" onchange="updateProgress()">
+            <a href="IBM/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Life at IBM</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_07" onchange="updateProgress()">
+            <a href="IBM/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="ibm_readme" onchange="updateProgress()">
+            <a href="IBM/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="IBM/index.html" class="btn-open btn-ibm-theme">
+            <span>Launch IBM Systems Portal</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
 
       <!-- COMPANY 0: SWIGGY (RECENT) -->
       <article class="card" data-company="swiggy" data-date="2026-09-17" data-category="software" data-search="swiggy data scientist fte 4-stage eta vrptw dispatch batching instamart dark store h3 geospatial xgboost lightgbm triton quantile pinball loss python sql 26 lpa recent">
@@ -1462,7 +1595,7 @@ footer {
     });
 
     // LocalStorage Checkbox Tracker
-    const totalModules = document.querySelectorAll('.module-check').length || 47;
+    const totalModules = document.querySelectorAll('.module-check').length || 56;
     function updateProgress() {
       const checks = document.querySelectorAll('.module-check');
       let completed = 0;
