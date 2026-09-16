@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#0a0e17">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>01: Signature OA Coding Problems · Swiggy DS Prep</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #fc8019;
+  
+  --accent-primary: #ea580c;
+  --accent-primary-hover: #c2410c;
+  --accent-light: rgba(234, 88, 12, 0.12);
+  
+  --tag-bg: #fff7ed;
+  --tag-border: #fdba74;
+  --tag-text: #9a3412;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.15);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0a0e17;
+  --bg-surface: #0f172a;
+  --bg-card: #131d31;
+  --bg-sidebar: #0b1120;
+  --bg-code-header: #1e293b;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #fc8019;
+  
+  --accent-primary: #fc8019;
+  --accent-primary-hover: #ea580c;
+  --accent-light: rgba(252, 128, 25, 0.14);
+  
+  --tag-bg: rgba(252, 128, 25, 0.16);
+  --tag-border: #ea580c;
+  --tag-text: #fed7aa;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #fc8019, #f97316, #10b981);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #fc8019, #ea580c);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 900;
+  font-size: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-section-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  padding-left: 8px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  min-height: 40px;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 32px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hub-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  border: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.badge-swiggy {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(252, 128, 25, 0.16);
+  border: 1px solid #ea580c;
+  color: #ea580c;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .badge-swiggy {
+  color: #fc8019;
+}
+
+.content-body {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.content-body h1 {
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.content-body h2 {
+  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-weight: 700;
+  margin-top: 34px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+.content-body p {
+  margin-bottom: 14px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 16px;
+  padding-left: 20px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 12px 16px;
+  margin: 18px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 18px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border-color);
+  background-color: #141923;
+}
+
+.content-body pre code {
+  padding: 14px;
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #f8fafc;
+  white-space: pre;
+  word-break: normal;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.85);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #fc8019;
+  color: #000000;
+  font-weight: 700;
+}
+
+/* Table Responsive Scrolling */
+.content-body table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 13px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  min-width: 120px;
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+.callout {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+
+.callout-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--accent-primary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Bottom Mobile Navigation Bar */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.b-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  min-width: 48px;
+}
+
+.b-nav-item:hover, .b-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.b-nav-icon {
+  font-size: 16px;
+}
+
+/* Mobile Breakpoint Adjustments */
+@media (max-width: 850px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 290px;
+    transform: translateX(-100%);
+    box-shadow: 20px 0 25px -5px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .drawer-close-btn {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .main-content {
+    padding: 20px 16px 80px 16px;
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">S</div>
+          <div class="brand-text">
+            <h2>Swiggy DS Portal</h2>
+            <span>Adarsh Saurabh · NIT Rourkela</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="nav-section-title">Preparation Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test.html" class="nav-link active">
+            <span>01: Signature OA Coding Problems</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Machine Coding & ML Pipeline</span>
+            <span class="nav-badge">Coding</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Domain_Deep_Dive.html" class="nav-link">
+            <span>03: Swiggy Bytes & 4-Stage ETA</span>
+            <span class="nav-badge">Domain</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Logistics Grilling</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_System_Design_or_HIL.html" class="nav-link">
+            <span>05: Real-Time ETA & Dispatch ML Design</span>
+            <span class="nav-badge">System Design</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Life at Swiggy & Cultural Values</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: CheatSheet & Formula Vault</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Dark Mode</span>
+      </button>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <a href="../index.html" class="hub-link-btn">← All Companies</a>
+        </div>
+        <div class="badge-swiggy">
+          <span>⚡ Swiggy Data Scientist (26 LPA)</span>
+        </div>
+      </div>
+
+      <article class="content-body">
+        <h1>01: Signature OA Coding Problems</h1>
+<p>Swiggy's Online Assessment features algorithmic challenges inspired by hyperlocal logistics: geospatial graph bipartite matching, interval scheduling for kitchen capacity, and dark-store pick route optimization.</p>
+<hr />
+<h2>Problem 1: Optimal Bipartite Rider-to-Order Dispatch</h2>
+<h3>Problem Statement</h3>
+<p>Given $M$ pending orders with pickup coordinates $[rx_i, ry_i]$ and ready timestamps $T_i$, and $N$ active delivery partners located at $[dx_j, dy_j]$ with speed $S_j$. <br />
+Each delivery partner can accept at most 1 order. Travel time between points $(x_1, y_1)$ and $(x_2, y_2)$ is defined by Manhattan distance divided by speed:<br />
+$$\text{time}(i, j) = \frac{|rx_i - dx_j| + |ry_i - dy_j|}{S_j}$$<br />
+If a delivery partner arrives before food ready time $T_i$, they wait until $T_i$. Total delay penalty for an order is:<br />
+$$\text{Penalty}(i, j) = \max(0, \text{time}(i, j) - T_i) + 0.5 \times \text{time}(i, j)$$<br />
+Find the global assignment of riders to orders that minimizes the sum of delay penalties for all matched orders, ensuring at least $\min(M, N)$ orders are dispatched.</p>
+<h3>Python 3 Solution (Min-Cost Max-Flow / Hungarian Equivalent via SciPy)</h3>
+<pre><code class="language-python">import numpy as np
+from scipy.optimize import linear_sum_assignment
+
+def solve_dispatch(orders, riders):
+    &quot;&quot;&quot;
+    orders: list of dicts [{'rx': float, 'ry': float, 'ready_t': float}]
+    riders: list of dicts [{'dx': float, 'dy': float, 'speed': float}]
+    Returns: list of (order_idx, rider_idx, cost), total_cost
+    &quot;&quot;&quot;
+    M = len(orders)
+    N = len(riders)
+
+    # Cost matrix C of dimension M x N
+    cost_matrix = np.zeros((M, N), dtype=np.float64)
+
+    for i in range(M):
+        rx, ry, ready_t = orders[i]['rx'], orders[i]['ry'], orders[i]['ready_t']
+        for j in range(N):
+            dx, dy, speed = riders[j]['dx'], riders[j]['dy'], riders[j]['speed']
+            travel_time = (abs(rx - dx) + abs(ry - dy)) / speed
+            delay = max(0.0, travel_time - ready_t)
+            cost_matrix[i, j] = delay + 0.5 * travel_time
+
+    # Hungarian Algorithm (Modified Jonker-Volgenant) O(min(M,N) * M * N)
+    row_ind, col_ind = linear_sum_assignment(cost_matrix)
+
+    matches = []
+    total_cost = 0.0
+    for r, c in zip(row_ind, col_ind):
+        matches.append((int(r), int(c), float(cost_matrix[r, c])))
+        total_cost += cost_matrix[r, c]
+
+    return matches, total_cost
+</code></pre>
+<h3>C++20 Solution (Successive Shortest Path with SPFA / Dijkstra Potentials)</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;cmath&gt;
+#include &lt;queue&gt;
+#include &lt;numeric&gt;
+#include &lt;iomanip&gt;
+
+struct Edge {
+    int to;
+    int capacity;
+    int flow;
+    double cost;
+    int rev;
+};
+
+class MinCostMaxFlow {
+    int n;
+    std::vector&lt;std::vector&lt;Edge&gt;&gt; adj;
+    std::vector&lt;double&gt; dist, potential;
+    std::vector&lt;int&gt; parent_edge, parent_node;
+
+public:
+    MinCostMaxFlow(int nodes) : n(nodes), adj(nodes), dist(nodes), potential(nodes, 0.0),
+                                parent_edge(nodes), parent_node(nodes) {}
+
+    void add_edge(int from, int to, int cap, double cost) {
+        adj[from].push_back({to, cap, 0, cost, (int)adj[to].size()});
+        adj[to].push_back({from, 0, 0, -cost, (int)adj[from].size() - 1});
+    }
+
+    std::pair&lt;int, double&gt; solve(int src, int sink) {
+        int flow = 0;
+        double cost = 0;
+        const double INF = 1e18;
+
+        while (true) {
+            std::fill(dist.begin(), dist.end(), INF);
+            std::priority_queue&lt;std::pair&lt;double, int&gt;, 
+                                std::vector&lt;std::pair&lt;double, int&gt;&gt;, 
+                                std::greater&lt;&gt;&gt; pq;
+
+            dist[src] = 0.0;
+            pq.push({0.0, src});
+
+            while (!pq.empty()) {
+                auto [d, u] = pq.top();
+                pq.pop();
+                if (d &gt; dist[u]) continue;
+
+                for (int i = 0; i &lt; (int)adj[u].size(); ++i) {
+                    const Edge&amp; e = adj[u][i];
+                    if (e.capacity - e.flow &gt; 0) {
+                        double red_cost = e.cost + potential[u] - potential[e.to];
+                        if (dist[e.to] &gt; dist[u] + red_cost + 1e-9) {
+                            dist[e.to] = dist[u] + red_cost;
+                            parent_node[e.to] = u;
+                            parent_edge[e.to] = i;
+                            pq.push({dist[e.to], e.to});
+                        }
+                    }
+                }
+            }
+
+            if (dist[sink] &gt;= INF - 1e-4) break;
+
+            for (int i = 0; i &lt; n; ++i) {
+                if (dist[i] &lt; INF) potential[i] += dist[i];
+            }
+
+            int push = 1; // unit capacity match
+            flow += push;
+            cost += push * potential[sink];
+
+            for (int curr = sink; curr != src; curr = parent_node[curr]) {
+                int p = parent_node[curr];
+                int idx = parent_edge[curr];
+                adj[p][idx].flow += push;
+                adj[curr][adj[p][idx].rev].flow -= push;
+            }
+        }
+        return {flow, cost};
+    }
+};
+</code></pre>
+<hr />
+<h2>Problem 2: Kitchen Capacity &amp; Delay Cascade Detection</h2>
+<h3>Problem Statement</h3>
+<p>A restaurant kitchen has $K$ cooking burners. Each order $i$ requires cooking continuously from $start_i$ to $end_i$ with burner requirement $b_i$. If incoming orders exceed capacity $K$, lower-priority orders are queued, delaying subsequent deliveries.<br />
+Given $N$ orders with tuples $[start_i, end_i, b_i, priority_i]$, determine:<br />
+1. Peak simultaneous burner utilization.<br />
+2. The exact timestamps where capacity $K$ was breached.</p>
+<h3>Python 3 Solution (Sweep-Line Event Processing)</h3>
+<pre><code class="language-python">def analyze_kitchen_capacity(orders, K):
+    &quot;&quot;&quot;
+    orders: list of [start, end, burners, priority]
+    K: total available burners
+    Returns: peak_burners, breach_intervals
+    &quot;&quot;&quot;
+    events = []
+    for idx, (s, e, b, p) in enumerate(orders):
+        events.append((s, +b, idx))  # order starts cooking
+        events.append((e, -b, idx))  # order finishes
+
+    # Sort events by time; on tie, process end (-b) before start (+b)
+    events.sort(key=lambda x: (x[0], x[1]))
+
+    current_load = 0
+    peak_load = 0
+    breaches = []
+    in_breach = False
+    breach_start = None
+
+    for t, delta_b, idx in events:
+        current_load += delta_b
+        peak_load = max(peak_load, current_load)
+
+        if current_load &gt; K and not in_breach:
+            in_breach = True
+            breach_start = t
+        elif current_load &lt;= K and in_breach:
+            in_breach = False
+            breaches.append((breach_start, t))
+
+    return peak_load, breaches
+</code></pre>
+<hr />
+<h2>Problem 3: Signature Swiggy SQL Window Questions</h2>
+<h3>Challenge A: Rolling 7-Day Rider Utilization &amp; Idle Ratio</h3>
+<p>Calculate each delivery partner's 7-day rolling average of completed orders and their idle ratio.</p>
+<pre><code class="language-sql">WITH daily_stats AS (
+    SELECT 
+        de_id,
+        order_date,
+        COUNT(order_id) AS completed_orders,
+        SUM(login_duration_mins) AS total_login_mins,
+        SUM(active_trip_duration_mins) AS active_trip_mins
+    FROM delivery_executive_logs
+    GROUP BY de_id, order_date
+),
+rolling_metrics AS (
+    SELECT 
+        de_id,
+        order_date,
+        completed_orders,
+        ROUND(AVG(completed_orders) OVER (
+            PARTITION BY de_id 
+            ORDER BY order_date 
+            ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+        ), 2) AS rolling_7d_avg_orders,
+        ROUND(
+            (SUM(total_login_mins - active_trip_mins) OVER (
+                PARTITION BY de_id 
+                ORDER BY order_date 
+                ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+            ) * 100.0) / 
+            NULLIF(SUM(total_login_mins) OVER (
+                PARTITION BY de_id 
+                ORDER BY order_date 
+                ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+            ), 0), 2
+        ) AS rolling_7d_idle_pct
+    FROM daily_stats
+)
+SELECT * 
+FROM rolling_metrics
+WHERE order_date &gt;= CURRENT_DATE - INTERVAL '30 days'
+ORDER BY de_id, order_date DESC;
+</code></pre>
+<h3>Challenge B: Detecting Persistent Kitchen Delay Outliers</h3>
+<p>Identify restaurant branches where the 90th percentile food prep time exceeds the promised standard SLA by $&gt;15$ minutes over the last 14 days.</p>
+<pre><code class="language-sql">WITH order_delays AS (
+    SELECT 
+        restaurant_id,
+        cuisine_type,
+        DATE(placed_at) AS order_day,
+        prep_time_minutes,
+        standard_sla_minutes,
+        (prep_time_minutes - standard_sla_minutes) AS delay_minutes,
+        PERCENTILE_CONT(0.90) WITHIN GROUP (ORDER BY prep_time_minutes) OVER (
+            PARTITION BY restaurant_id, DATE(placed_at)
+        ) AS p90_prep_time
+    FROM food_orders
+    WHERE placed_at &gt;= CURRENT_DATE - INTERVAL '14 days'
+)
+SELECT 
+    restaurant_id,
+    cuisine_type,
+    ROUND(AVG(p90_prep_time), 1) AS avg_p90_prep_time,
+    ROUND(AVG(standard_sla_minutes), 1) AS avg_promised_sla,
+    COUNT(DISTINCT order_day) AS days_with_severe_breach
+FROM order_delays
+WHERE (p90_prep_time - standard_sla_minutes) &gt; 15
+GROUP BY restaurant_id, cuisine_type
+HAVING COUNT(DISTINCT order_day) &gt;= 5
+ORDER BY days_with_severe_breach DESC, avg_p90_prep_time DESC;
+</code></pre>
+      </article>
+
+      <div class="footer-nav">
+        <a href="00_START_HERE.html" class="footer-btn">← 00: Company Deep Dive</a><a href="02_Technical_Rounds.html" class="footer-btn">02: Machine Coding & ML Pipeline →</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="b-nav-item">
+      <span class="b-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-modules">
+      <span class="b-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="b-nav-item">
+      <span class="b-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-theme">
+      <span class="b-nav-icon" id="b-nav-theme-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="b-nav-item" id="b-nav-top">
+      <span class="b-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+    const bNavThemeIcon = document.getElementById('b-nav-theme-icon');
+    
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('swiggy_prep_theme', theme);
+      if (theme === 'dark') {
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        if (bNavThemeIcon) bNavThemeIcon.textContent = '☀️';
+      } else {
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        if (bNavThemeIcon) bNavThemeIcon.textContent = '🌙';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('swiggy_prep_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    if (bNavTheme) bNavTheme.addEventListener('click', toggleTheme);
+
+    // Mobile Drawer Navigation
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('reading-progress');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Add Copy Buttons to Pre Code Blocks
+    document.querySelectorAll('pre').forEach(pre => {
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.textContent = 'Copy';
+      copyBtn.addEventListener('click', () => {
+        const code = pre.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.textContent).then(() => {
+            copyBtn.textContent = 'Copied!';
+            copyBtn.style.background = '#10b981';
+            copyBtn.style.color = '#ffffff';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy';
+              copyBtn.style.background = '';
+              copyBtn.style.color = '';
+            }, 2000);
+          });
+        }
+      });
+      pre.appendChild(copyBtn);
+    });
+  </script>
+</body>
+</html>

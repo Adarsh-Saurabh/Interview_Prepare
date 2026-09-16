@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#090d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>IBM Systems (ISDL) Interview Preparation Portal · Adarsh Saurabh</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f4f7fb;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.92);
+  --bg-subtle: #edf2f9;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #dbe4ef;
+  --border-focus: #0f62fe;
+  
+  --accent-primary: #0f62fe;
+  --accent-primary-hover: #0043ce;
+  --accent-light: rgba(15, 98, 254, 0.1);
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #101626;
+  --bg-card: #151d30;
+  --bg-header: rgba(16, 22, 38, 0.92);
+  --bg-subtle: #1c263c;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #4589ff;
+  
+  --accent-primary: #4589ff;
+  --accent-primary-hover: #78a9ff;
+  --accent-light: rgba(69, 137, 255, 0.12);
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.logo-badge {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0f62fe, #0043ce);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-sm);
+}
+
+.logo-text h1 {
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.logo-text p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hub-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  border: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.btn-icon {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+main {
+  flex-grow: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 5rem 1rem;
+  width: 100%;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(15, 98, 254, 0.15);
+  border: 1px solid #0f62fe;
+  color: #0f62fe;
+  margin-bottom: 0.75rem;
+}
+
+[data-theme="dark"] .hero-tag {
+  color: #4589ff;
+  border-color: #4589ff;
+}
+
+.hero h2 {
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.hero p {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Stats Row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+  .stats-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+/* Modules Grid */
+.modules-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .modules-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.mod-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.mod-card:hover {
+  border-color: var(--border-focus);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.mod-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.mod-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border: 1px solid var(--border-color);
+  text-transform: uppercase;
+}
+
+.mod-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.mod-card p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.mod-footer {
+  margin-top: auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Fixed Mobile Bottom Nav */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+  }
+}
+
+.b-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px 12px;
+}
+
+.b-nav-item:hover, .b-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.b-nav-icon {
+  font-size: 16px;
+}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo-group">
+        <div class="logo-badge">IBM</div>
+        <div class="logo-text">
+          <h1>IBM Systems Prep Hub</h1>
+          <p>Software Engineer · ISDL NIT Rourkela</p>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <a href="../index.html" class="hub-btn">← All Companies</a>
+        <button class="btn-icon" id="theme-toggle" title="Toggle Theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-tag">Targeted On-Campus Preparation Suite</div>
+      <h2>IBM Systems (ISDL) On-Campus Portal</h2>
+      <p>Comprehensive technical and systems architecture preparation for the Software Engineer recruitment drive by IBM India Systems Development Lab (ISDL) (6M+FTE, ₹40k/mo M.Tech / ₹30k/mo B.Tech Stipend, ₹18.75 LPA CTC).</p>
+    </section>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">18.75 LPA</div>
+        <div class="stat-label">Full-Time CTC</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">40 KPM</div>
+        <div class="stat-label">M.Tech Stipend</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">8 Modules</div>
+        <div class="stat-label">HTML Preparation</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">100%</div>
+        <div class="stat-label">Mobile Optimized</div>
+      </div>
+    </div>
+
+    <div class="modules-grid">
+      <a href="00_START_HERE.html" class="mod-card">
+        <div class="mod-top">
+          <span class="mod-badge">Strategy</span>
+          <span>Module 00</span>
+        </div>
+        <h3>Company & Role Intel</h3>
+        <p>ISDL lab overview, ₹18.75 LPA CTC, ₹40k/mo stipend, 4-stage recruitment workflow, and evaluation rubrics.</p>
+        <div class="mod-footer">Read Strategy Guide →</div>
+      </a>
+
+      <a href="01_Online_Test.html" class="mod-card">
+        <div class="mod-top">
+          <span class="mod-badge">Algorithms</span>
+          <span>Module 01</span>
+        </div>
+        <h3>Signature OA Coding Problems</h3>
+        <p>Sliding window sensor spikes, bitmask buddy allocator, fault-tolerant network Dijkstra, and thread-safe task scheduler.</p>
+        <div class="mod-footer">Explore Coding Problems →</div>
+      </a>
+
+      <a href="02_Technical_Rounds.html" class="mod-card">
+        <div class="mod-top">
+          <span class="mod-badge">Core Systems</span>
+          <span>Module 02</span>
+        </div>
+        <h3>Systems Programming & OS</h3>
+        <p>Process memory layout, Copy-on-Write <code>fork()</code>, virtual memory paging, TLB misses, cache lines, and false sharing.</p>
+        <div class="mod-footer">Master OS & Concurrency →</div>
+      </a>
+
+      <a href="03_Domain_Deep_Dive.html" class="mod-card">
+        <div class="mod-top">
+          <span class="mod-badge">Architecture</span>
+          <span>Module 03</span>
+        </div>
+        <h3>POWER10, z16 & OpenBMC</h3>
+        <p>Telum 5.0+ GHz virtual cache ring, NNPA AI accelerator, Power10 Memory Inception fabric, and OpenBMC D-Bus IPC.</p>
+        <div class="mod-footer">Explore Server Hardware →</div>
+      </a>
+
+      <a href="04_Candidate_Resume_Grilling.html" class="mod-card">
+        <div class="mod-top">
+          <span class="mod-badge">Defense</span>
+          <span>Module 04</span>
+        </div>
+        <h3>Candidate Resume Defense & Traps</h3>
+        <p>Signal Processing to Systems bridge, Warehouse PathMapper cache defense, Uplan AST verification, and K-HUKI edge compute.</p>
+        <div class="mod-footer">Prepare Hostile Counters →</div>
+      </a>
+
+      <a href="05_System_Design_or_HIL.html" class="mod-card">
+        <div class="mod-top">
+          <span class="mod-badge">System Design</span>
+          <span>Module 05</span>
+        </div>
+        <h3>Firmware Telemetry LLD</h3>
+        <p>Out-of-band BMC telemetry, lock-free circular ring buffer (SPSC), cache-line isolation, and Redfish SSE streaming.</p>
+        <div class="mod-footer">Study System Architecture →</div>
+      </a>
+
+      <a href="06_Managerial_and_HR.html" class="mod-card">
+        <div class="mod-top">
+          <span class="mod-badge">Behavioral</span>
+          <span>Module 06</span>
+        </div>
+        <h3>Life at IBM & 4 STAR Stories</h3>
+        <p>IBM Nine Values, Seven Nines ($99.99999\%$), zero SDC philosophy, tape-out bug triage, and 4 STAR stories tailored to Adarsh Saurabh.</p>
+        <div class="mod-footer">Review Cultural Framework →</div>
+      </a>
+
+      <a href="07_Quick_Reference.html" class="mod-card">
+        <div class="mod-top">
+          <span class="mod-badge">CheatSheet</span>
+          <span>Module 07</span>
+        </div>
+        <h3>Caveman Systems CheatSheet</h3>
+        <p>Ultra-dense hardware latency numbers, memory ordering barriers, Linux diagnostics (<code>perf</code>, <code>strace</code>), and 10 rapid-fire Q&As.</p>
+        <div class="mod-footer">Open Quick Reference →</div>
+      </a>
+
+      <a href="README.html" class="mod-card" style="grid-column: 1 / -1;">
+        <div class="mod-top">
+          <span class="mod-badge">Roadmap</span>
+          <span>Checklist</span>
+        </div>
+        <h3>3-Day Milestone Study Plan & Study Tracker</h3>
+        <p>Day-by-day 72-hour execution curriculum with comprehensive module roadmap for the IBM Systems on-campus recruitment drive.</p>
+        <div class="mod-footer">View 3-Day Roadmap →</div>
+      </a>
+    </div>
+  </main>
+
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="b-nav-item active">
+      <span class="b-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <a href="01_Online_Test.html" class="b-nav-item">
+      <span class="b-nav-icon">📑</span>
+      <span>OA Code</span>
+    </a>
+    <a href="07_Quick_Reference.html" class="b-nav-item">
+      <span class="b-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-theme">
+      <span class="b-nav-icon" id="b-nav-theme-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+  </nav>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const bNavTheme = document.getElementById('b-nav-theme');
+    const bNavThemeIcon = document.getElementById('b-nav-theme-icon');
+    
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('ibm_prep_theme', theme);
+      if (theme === 'dark') {
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (bNavThemeIcon) bNavThemeIcon.textContent = '☀️';
+      } else {
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (bNavThemeIcon) bNavThemeIcon.textContent = '🌙';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('ibm_prep_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    if (bNavTheme) bNavTheme.addEventListener('click', toggleTheme);
+  </script>
+</body>
+</html>

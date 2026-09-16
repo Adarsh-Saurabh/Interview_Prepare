@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#0c111c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>01: Signature OA Problems · IBM Systems</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f4f6f9;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #edf2f7;
+  --bg-code-header: #e2e8f0;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #0f62fe;
+  
+  --accent-primary: #0f62fe;
+  --accent-primary-hover: #0043ce;
+  --accent-light: rgba(15, 98, 254, 0.1);
+  
+  --tag-bg: #e0eaff;
+  --tag-border: #0f62fe;
+  --tag-text: #002d9c;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-surface: #101626;
+  --bg-card: #151d30;
+  --bg-sidebar: #0b1120;
+  --bg-code-header: #1c273e;
+  --bg-inline-code: #1c273e;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #4589ff;
+  
+  --accent-primary: #4589ff;
+  --accent-primary-hover: #0f62fe;
+  --accent-light: rgba(69, 137, 255, 0.12);
+  
+  --tag-bg: rgba(15, 98, 254, 0.18);
+  --tag-border: #4589ff;
+  --tag-text: #a6c8ff;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0f62fe, #4589ff, #0043ce);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0f62fe, #0043ce);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+  letter-spacing: -0.5px;
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-section-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 14px 8px 8px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.nav-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.nav-link.active .nav-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--border-focus);
+}
+
+/* Main Layout */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-bottom: 70px;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hub-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  border: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.badge-ibm {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(15, 98, 254, 0.15);
+  border: 1px solid #0f62fe;
+  color: #0f62fe;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .badge-ibm {
+  color: #4589ff;
+}
+
+/* Content Body */
+.content-body {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.content-body h1 {
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.content-body h2 {
+  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-weight: 700;
+  margin-top: 34px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+.content-body p {
+  margin-bottom: 14px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 16px;
+  padding-left: 20px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* Cards & Callouts */
+.callout {
+  padding: 16px 20px;
+  border-radius: 10px;
+  background-color: var(--bg-surface);
+  border-left: 4px solid var(--accent-primary);
+  border-right: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  margin: 20px 0;
+  font-size: 14.5px;
+}
+
+.callout-warning {
+  border-left-color: #ef4444;
+}
+
+.callout-success {
+  border-left-color: #10b981;
+}
+
+.callout-tip {
+  border-left-color: #0f62fe;
+}
+
+.callout-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Grids */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.metric-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  line-height: 1.2;
+}
+
+.metric-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Tables with Touch Scroll */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 20px 0;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  text-align: left;
+  min-width: 500px;
+}
+
+th {
+  background: var(--bg-code-header);
+  padding: 12px 14px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Code Blocks & Copy Button */
+pre {
+  position: relative;
+  border-radius: 10px;
+  margin: 18px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+}
+
+code {
+  font-family: var(--font-mono) !important;
+}
+
+:not(pre) > code {
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.88em;
+  color: var(--accent-primary);
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Bottom Module Navigation */
+.footer-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* Fixed Mobile Bottom Bar */
+.bottom-nav-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  justify-content: space-around;
+  align-items: center;
+}
+
+.b-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.b-nav-icon {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.b-nav-item.active, .b-nav-item:hover {
+  color: var(--accent-primary);
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .drawer-close-btn {
+    display: flex;
+  }
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+  .bottom-nav-bar {
+    display: flex;
+  }
+  .main-wrapper {
+    padding-bottom: 74px;
+  }
+}
+
+@media (max-width: 640px) {
+  .content-body {
+    font-size: 14.5px;
+  }
+  .top-nav {
+    padding: 8px 16px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+  
+  <div class="app-container">
+    <!-- Backdrop for Mobile Drawer -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <!-- Sidebar / Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">IBM</div>
+          <div class="brand-text">
+            <h2>IBM Systems</h2>
+            <span>ISDL Software Engineer</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close Menu">✕</button>
+      </div>
+
+      <div class="nav-section-title">Preparation Modules</div>
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test.html" class="nav-link active">
+            <span>01: Signature OA Problems</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Systems Programming & OS</span>
+            <span class="nav-badge">Core Systems</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Domain_Deep_Dive.html" class="nav-link">
+            <span>03: POWER10, z16 & OpenBMC</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_System_Design_or_HIL.html" class="nav-link">
+            <span>05: Firmware Telemetry LLD</span>
+            <span class="nav-badge">System Design</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Life at IBM & STAR Stories</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Caveman Systems CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <a href="../index.html" class="nav-link" style="background:var(--accent-light); color:var(--accent-primary);">
+          <span>← All Companies</span>
+          <span class="nav-badge">Hub</span>
+        </a>
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+      <header class="top-nav">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <a href="../index.html" class="hub-link-btn">← All Companies</a>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="badge-ibm">₹18.75 LPA · ISDL Core</span>
+        </div>
+      </header>
+
+      <div style="max-width:960px; margin:0 auto; padding:28px 20px; width:100%;">
+        <article class="content-body">
+          
+<h1>01: Signature OA Coding Problems · IBM Systems</h1>
+<div class="callout callout-tip">
+  <div class="callout-title">⚡ HackerRank Online Assessment Insights</div>
+  <p><strong>Duration:</strong> 90 Minutes | <strong>Format:</strong> 2 Coding Problems + 15 Systems & OS MCQs<br>
+  <strong>Passing Threshold:</strong> 100% test cases passed on Problem 1, &ge; 80% on Problem 2, &ge; 80% on MCQs.<br>
+  <strong>Core Themes:</strong> Monotonic Deques, Bitmask Buddy Allocators, Fault-Tolerant Graph Routing, and Concurrency.</p>
+</div>
+
+<h2>Problem 1: Sliding Window Server Telemetry Outlier Counter</h2>
+<p>In IBM Power10 enterprise servers, telemetry sensors record instantaneous CPU metrics every second. Given an array <code>metrics</code> of length $N$, a window size $K$, and threshold $T$, count the windows whose maximum &ge; $T$ in optimal $O(N)$ time.</p>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Approach</th>
+        <th>Time Complexity</th>
+        <th>Space Complexity</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Brute Force</strong></td>
+        <td>$O(N \cdot K)$</td>
+        <td>$O(1)$</td>
+        <td><span style="color:#ef4444; font-weight:700;">TLE on $N=10^5, K=10^4$</span></td>
+      </tr>
+      <tr>
+        <td><strong>Max-Heap (Priority Queue)</strong></td>
+        <td>$O(N \log K)$</td>
+        <td>$O(K)$</td>
+        <td>Passes partial test cases</td>
+      </tr>
+      <tr>
+        <td><strong>Monotonic Decreasing Deque</strong></td>
+        <td>$O(N)$</td>
+        <td>$O(K)$</td>
+        <td><span style="color:#10b981; font-weight:700;">Optimal 100% Score</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Production C++17 Solution ($O(N)$ Monotonic Deque)</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;deque&gt;
+
+struct TelemetryResult {
+    int anomaly_count;
+    std::vector&lt;int&gt; window_maxima;
+};
+
+TelemetryResult detectTelemetryAnomalies(const std::vector&lt;int&gt;&amp; metrics, int k, int threshold) {
+    int n = metrics.size();
+    if (n == 0 || k &lt;= 0 || k &gt; n) return {0, {}};
+
+    std::deque&lt;int&gt; dq; // Stores indices with strictly decreasing values
+    std::vector&lt;int&gt; window_maxima;
+    int anomaly_count = 0;
+
+    for (int i = 0; i &lt; n; ++i) {
+        // Evict elements falling behind current sliding window
+        if (!dq.empty() &amp;&amp; dq.front() &lt;= i - k) {
+            dq.pop_front();
+        }
+
+        // Maintain monotonic decreasing order (pop smaller elements from back)
+        while (!dq.empty() &amp;&amp; metrics[dq.back()] &lt;= metrics[i]) {
+            dq.pop_back();
+        }
+
+        dq.push_back(i);
+
+        // Record window maximum once full window size k is reached
+        if (i &gt;= k - 1) {
+            int current_max = metrics[dq.front()];
+            window_maxima.push_back(current_max);
+            if (current_max &gt;= threshold) {
+                anomaly_count++;
+            }
+        }
+    }
+
+    return {anomaly_count, window_maxima};
+}</code></pre>
+
+<h2>Problem 2: Bitmask Memory & Buddy Allocator Simulator</h2>
+<p>IBM PowerVM firmware partitions physical RAM in aligned blocks of power-of-two sizes ($2^K$). Given a 64-bit bitmap representing 64 contiguous 4KB pages, allocate and free memory blocks using low-level bitwise operations.</p>
+
+<div class="callout callout-success">
+  <div class="callout-title">💡 Bitwise Mechanics</div>
+  <ul>
+    <li>Contiguous block mask of size $S$: <code>mask = (size == 64) ? ~0ULL : ((1ULL &lt;&lt; size) - 1ULL)</code></li>
+    <li>Alignment check: <code>offset % size == 0</code> ensures power-of-two physical page alignment.</li>
+    <li>Allocate block: <code>bitmap |= (mask &lt;&lt; offset)</code></li>
+    <li>Free block: <code>bitmap &amp;= ~(mask &lt;&lt; offset)</code></li>
+  </ul>
+</div>
+
+<pre><code class="language-cpp">class BuddyBitmapAllocator {
+private:
+    uint64_t bitmap; // 64 pages (0 = Free, 1 = Allocated)
+
+public:
+    BuddyBitmapAllocator() : bitmap(0ULL) {}
+
+    int allocate(int size) {
+        if (size &lt;= 0 || (size &amp; (size - 1)) != 0 || size &gt; 64) return -1;
+        uint64_t block_mask = (size == 64) ? ~0ULL : ((1ULL &lt;&lt; size) - 1ULL);
+
+        for (int offset = 0; offset &lt;= 64 - size; offset += size) {
+            uint64_t shifted_mask = block_mask &lt;&lt; offset;
+            if ((bitmap &amp; shifted_mask) == 0ULL) {
+                bitmap |= shifted_mask; // Allocate
+                return offset;
+            }
+        }
+        return -1; // Out of memory
+    }
+
+    bool free(int offset, int size) {
+        if (offset &lt; 0 || offset + size &gt; 64 || (offset % size) != 0) return false;
+        uint64_t block_mask = (size == 64) ? ~0ULL : ((1ULL &lt;&lt; size) - 1ULL);
+        uint64_t shifted_mask = block_mask &lt;&lt; offset;
+
+        if ((bitmap &amp; shifted_mask) != shifted_mask) return false; // Not fully allocated
+        bitmap &amp;= ~shifted_mask; // Free
+        return true;
+    }
+};</code></pre>
+
+<h2>Problem 3: Fault-Tolerant Enterprise Network Routing</h2>
+<p>Interconnecting $N$ drawer nodes where optical links can dynamically drop. Find the minimum latency path from $S$ to $D$ bypassing all failed links using Dijkstra's algorithm with priority queue and edge hash filtering.</p>
+
+<pre><code class="language-cpp">int routeAroundFaults(int n, const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; edges, 
+                       int src, int dest, 
+                       const std::vector&lt;std::pair&lt;int, int&gt;&gt;&amp; failed_links) {
+    // 1. Hash failed edges for O(1) lookup
+    std::unordered_set&lt;uint64_t&gt; failed_set;
+    for (const auto&amp; fl : failed_links) {
+        int u = fl.first, v = fl.second;
+        if (u &gt; v) std::swap(u, v);
+        failed_set.insert(((uint64_t)u &lt;&lt; 32) | (uint32_t)v);
+    }
+
+    // 2. Build adjacency list filtering out failed links
+    std::vector&lt;std::vector&lt;Edge&gt;&gt; adj(n);
+    for (const auto&amp; e : edges) {
+        int u = e[0], v = e[1], w = e[2];
+        int su = u, sv = v;
+        if (su &gt; sv) std::swap(su, sv);
+        if (failed_set.find(((uint64_t)su &lt;&lt; 32) | (uint32_t)sv) == failed_set.end()) {
+            adj[u].push_back({v, w});
+            adj[v].push_back({u, w});
+        }
+    }
+
+    // 3. Dijkstra min-heap: O((V + E) log V)
+    std::vector&lt;int&gt; dist(n, 1e9);
+    std::priority_queue&lt;std::pair&lt;int, int&gt;, std::vector&lt;std::pair&lt;int, int&gt;&gt;, std::greater&lt;&gt;&gt; pq;
+
+    dist[src] = 0;
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        if (d &gt; dist[u]) continue;
+        if (u == dest) return d;
+
+        for (const auto&amp; edge : adj[u]) {
+            if (dist[u] + edge.weight &lt; dist[edge.to]) {
+                dist[edge.to] = dist[u] + edge.weight;
+                pq.push({dist[edge.to], edge.to});
+            }
+        }
+    }
+    return (dist[dest] == 1e9) ? -1 : dist[dest];
+}</code></pre>
+
+<h2>Problem 4: Thread-Safe Priority Task Scheduler</h2>
+<p>Concurrent producer-consumer queue supporting prioritized hardware interrupt scheduling with <code>std::mutex</code>, <code>std::condition_variable</code>, and graceful shutdown handling.</p>
+
+<pre><code class="language-cpp">class ThreadSafeTaskQueue {
+private:
+    std::priority_queue&lt;Task&gt; pq;
+    mutable std::mutex mtx;
+    std::condition_variable cv;
+    bool shutdown_flag = false;
+
+public:
+    void push(int id, int priority, uint64_t timestamp) {
+        {
+            std::lock_guard&lt;std::mutex&gt; lock(mtx);
+            pq.push({id, priority, timestamp});
+        }
+        cv.notify_one();
+    }
+
+    bool pop(Task&amp; out_task) {
+        std::unique_lock&lt;std::mutex&gt; lock(mtx);
+        cv.wait(lock, [this]() { return !pq.empty() || shutdown_flag; });
+
+        if (shutdown_flag &amp;&amp; pq.empty()) return false;
+
+        out_task = pq.top();
+        pq.pop();
+        return true;
+    }
+
+    void shutdown() {
+        {
+            std::lock_guard&lt;std::mutex&gt; lock(mtx);
+            shutdown_flag = true;
+        }
+        cv.notify_all();
+    }
+};</code></pre>
+
+        </article>
+
+        <nav class="footer-nav">
+          <a href="00_START_HERE.html" class="footer-btn">← 00: Company & Role Intel</a><a href="02_Technical_Rounds.html" class="footer-btn">02: Systems Programming & OS →</a>
+        </nav>
+      </div>
+    </main>
+  </div>
+
+  <!-- Fixed Mobile Bottom Bar -->
+  <nav class="bottom-nav-bar">
+    <a href="index.html" class="b-nav-item">
+      <span class="b-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-modules">
+      <span class="b-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="b-nav-item">
+      <span class="b-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-theme">
+      <span class="b-nav-icon" id="b-nav-theme-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="b-nav-item" id="b-nav-top">
+      <span class="b-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+    const bNavThemeIcon = document.getElementById('b-nav-theme-icon');
+    
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('ibm_prep_theme', theme);
+      if (theme === 'dark') {
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        if (bNavThemeIcon) bNavThemeIcon.textContent = '☀️';
+      } else {
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        if (bNavThemeIcon) bNavThemeIcon.textContent = '🌙';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('ibm_prep_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    if (bNavTheme) bNavTheme.addEventListener('click', toggleTheme);
+
+    // Mobile Drawer Navigation
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('reading-progress');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Add Copy Buttons to Pre Code Blocks
+    document.querySelectorAll('pre').forEach(pre => {
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.textContent = 'Copy';
+      copyBtn.addEventListener('click', () => {
+        const code = pre.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.textContent).then(() => {
+            copyBtn.textContent = 'Copied!';
+            copyBtn.style.background = '#0f62fe';
+            copyBtn.style.color = '#ffffff';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy';
+              copyBtn.style.background = '';
+              copyBtn.style.color = '';
+            }, 2000);
+          });
+        }
+      });
+      pre.appendChild(copyBtn);
+    });
+  </script>
+</body>
+</html>

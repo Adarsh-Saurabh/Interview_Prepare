@@ -427,6 +427,18 @@ main {
 }
 
 
+
+.avatar-swiggy {
+  background: linear-gradient(135deg, #fc8019, #ea580c);
+  color: #ffffff;
+}
+
+.btn-swiggy-theme {
+  background: linear-gradient(135deg, #fc8019, #ea580c);
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
 .avatar-cred {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   color: #080c14;
@@ -740,7 +752,7 @@ footer {
     <div class="progress-card">
       <div class="progress-header">
         <span>Overall Preparation Progress</span>
-        <span id="progress-text">0 / 35 Modules Completed (0%)</span>
+        <span id="progress-text">0 / 47 Modules Completed (0%)</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progress-fill"></div>
@@ -784,6 +796,121 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+      <!-- COMPANY 0: SWIGGY (RECENT) -->
+      <article class="card" data-company="swiggy" data-date="2026-09-17" data-category="software" data-search="swiggy data scientist fte 4-stage eta vrptw dispatch batching instamart dark store h3 geospatial xgboost lightgbm triton quantile pinball loss python sql 26 lpa recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-swiggy">S</div>
+            <div class="company-title">
+              <h3>Swiggy</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 17 Sep 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(252,128,25,0.16); border:1px solid #ea580c; color:#ea580c;">
+            26 LPA · ₹18L Base + ₹8L ESOP
+          </span>
+        </div>
+
+        <div class="card-role">Data Scientist (FTE) — Hyperlocal Logistics & Quick Commerce</div>
+        <p class="card-desc">
+          India's premier hyperlocal delivery and quick-commerce leader (3.5B+ orders, 300k+ active DE fleet, 100k+ peak dinner RPS). Core focus: 4-Stage decoupled ETA architecture ($T_{\text{O2A}} + T_{\text{FM}} + T_{\text{WT}} + T_{\text{LM}}$), VRPTW dispatch batching, Instamart dark store layout & picker TSP traversal, and sub-25ms Triton model serving.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('swiggy-points', 'swiggy-arrow')">
+            <span class="points-title">💡 Main Points Taught for Swiggy</span>
+            <span class="toggle-arrow" id="swiggy-arrow">▼</span>
+          </div>
+          <div class="points-content" id="swiggy-points">
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>The 4-Stage Decoupled ETA Framework:</strong> Modeling $T_{\text{O2A}}$ (assignment matching delay), $T_{\text{FM}}$ (first-mile travel), $T_{\text{WT}}$ (kitchen prep time wildcard), and $T_{\text{LM}}$ (last-mile doorstep friction) independently.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Quantile Regression Intervals:</strong> Using Pinball Loss $L_q(y, \hat{y})$ for 10th and 90th percentiles to display reliable delivery windows to customers rather than noisy point estimates.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Combinatorial Dispatch & Batching:</strong> Solving the Vehicle Routing Problem with Time Windows (VRPTW) over Uber H3 hexagons (Res 8/9), balancing driver hourly productivity against customer delivery delay penalties.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Instamart Dark Store TSP Optimization:</strong> ABC layout classification for high-velocity SKUs and serpentine in-store pathfinding to keep pick-and-pack times strictly under 150 seconds.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Low-Latency ML Architecture:</strong> Dual-path Feast feature store (Redis Cluster &lt;5ms for sliding-window features, Apache Iceberg for training) with Triton ONNX inference servers delivering sub-25ms p99 latency at 100k RPS.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Signature OA Mastery:</strong> Hungarian Algorithm for bipartite rider-order assignment, sweep-line interval scheduling for kitchen load bottlenecks, and advanced SQL window queries for rolling rider idle ratios.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Adarsh's Strategic Defense:</strong> Mapping Warehouse PathMapper ($10,000 \times 10,000$ grid heuristic search) to Instamart dark stores, and framing M.Tech Signal Processing as the optimal foundation for noisy mobile GPS telemetry.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="module-list-title">
+          <span>Preparation Modules (Tap to Read)</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);">Check box to mark read</span>
+        </div>
+
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_00" onchange="updateProgress()">
+            <a href="Swiggy/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Deep Dive</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_01" onchange="updateProgress()">
+            <a href="Swiggy/01_Online_Test.html" style="text-decoration:none; color:inherit;">01: OA Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_02" onchange="updateProgress()">
+            <a href="Swiggy/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: Machine Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_03" onchange="updateProgress()">
+            <a href="Swiggy/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: 4-Stage ETA</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_04" onchange="updateProgress()">
+            <a href="Swiggy/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_05" onchange="updateProgress()">
+            <a href="Swiggy/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: System Design</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_06" onchange="updateProgress()">
+            <a href="Swiggy/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Life at Swiggy</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_07" onchange="updateProgress()">
+            <a href="Swiggy/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="swiggy_readme" onchange="updateProgress()">
+            <a href="Swiggy/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Swiggy/index.html" class="btn-open btn-swiggy-theme">
+            <span>Launch Swiggy Portal</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
+
 
             <!-- COMPANY 0: CRED (RECENT) -->
       <article class="card" data-company="cred" data-date="2026-09-17" data-category="software" data-search="cred data science mle intern machine learning triton feast gnn credit risk underwriting fraud detection python sql 24 lpa recent">
@@ -1335,7 +1462,7 @@ footer {
     });
 
     // LocalStorage Checkbox Tracker
-    const totalModules = 35;
+    const totalModules = document.querySelectorAll('.module-check').length || 47;
     function updateProgress() {
       const checks = document.querySelectorAll('.module-check');
       let completed = 0;
