@@ -426,6 +426,18 @@ main {
   flex-shrink: 0;
 }
 
+
+.avatar-cred {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #080c14;
+}
+
+.btn-cred-theme {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #080c14 !important;
+  font-weight: 800;
+}
+
 .avatar-lumilens {
   background: linear-gradient(135deg, #0284c7, #06b6d4);
 }
@@ -728,7 +740,7 @@ footer {
     <div class="progress-card">
       <div class="progress-header">
         <span>Overall Preparation Progress</span>
-        <span id="progress-text">0 / 26 Modules Completed (0%)</span>
+        <span id="progress-text">0 / 35 Modules Completed (0%)</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progress-fill"></div>
@@ -738,11 +750,11 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">3</div>
+        <div class="stat-val" id="stat-companies">4</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">26</div>
+        <div class="stat-val">35</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
@@ -773,7 +785,121 @@ footer {
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
 
-      <!-- COMPANY 0: JUSPAY (RECENT) -->
+            <!-- COMPANY 0: CRED (RECENT) -->
+      <article class="card" data-company="cred" data-date="2026-09-17" data-category="software" data-search="cred data science mle intern machine learning triton feast gnn credit risk underwriting fraud detection python sql 24 lpa recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-cred">C</div>
+            <div class="company-title">
+              <h3>CRED</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 17 Sep 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(245,158,11,0.15); border:1px solid #f59e0b; color:#d97706;">
+            24 LPA · 1.1 LPM Stipend (M.Tech)
+          </span>
+        </div>
+
+        <div class="card-role">Data Science and MLE Intern (6M + PPO)</div>
+        <p class="card-desc">
+          India's exclusive community for high-trust creditworthy individuals ($100B+ TPV, 13M+ affluent members). End-to-end ML underwriting, real-time fraud detection with GNNs, sub-15ms Triton ONNX inference, and Feast streaming feature stores.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('cred-points', 'cred-arrow')">
+            <span class="points-title">💡 Main Points Taught for CRED</span>
+            <span class="toggle-arrow" id="cred-arrow">▼</span>
+          </div>
+          <div class="points-content" id="cred-points">
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Credit Risk Economics:</strong> Basel Expected Loss $\text{EL} = \text{PD} \times \text{EAD} \times \text{LGD}$. Discrimination validated via Kolmogorov-Smirnov (KS) statistic (target 40%–60%).</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Population Stability Index (PSI):</strong> Continuous drift telemetry ($\text{PSI} &lt; 0.1$ stable, $\ge 0.25$ triggers automated model retraining in Kubeflow).</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Real-Time Fraud GNNs:</strong> Detecting collusive fraud rings using heterogeneous GraphSAGE with 2-hop dynamic neighbor sampling ($K_1=15, K_2=10$) for &lt;15ms live inference.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Low-Latency MLE Architecture:</strong> Dual-path feature store (Flink streaming to Redis via Feast, Snowflake for batch); model serving on Triton Inference Server with ONNX and circuit-breaker fallbacks.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Machine Coding Feature Store:</strong> Thread-safe in-memory sliding-window feature registry with TTL eviction, handling concurrent transaction recording and multi-window aggregations.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Signature OA Mastery:</strong> Monotonic Deque for sliding window max anomaly velocity ($O(N)$), Bitmask DP for optimal debt settlement ($O(2^M \cdot M)$), and 3-color DFS cycle detection for money laundering loops.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Adarsh's Strategic Defense:</strong> Bridging Signal Processing (stochastic noise estimation, non-stationary time series) to financial telemetry, and mapping Warehouse PathMapper to dynamic payment gateway routing.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="module-list-title">
+          <span>Preparation Modules (Tap to Read)</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);">Check box to mark read</span>
+        </div>
+
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_00" onchange="updateProgress()">
+            <a href="Cred/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Deep Dive</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_01" onchange="updateProgress()">
+            <a href="Cred/01_Online_Test.html" style="text-decoration:none; color:inherit;">01: OA Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_02" onchange="updateProgress()">
+            <a href="Cred/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: Machine Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_03" onchange="updateProgress()">
+            <a href="Cred/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: Credit Risk & GNN</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_04" onchange="updateProgress()">
+            <a href="Cred/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_05" onchange="updateProgress()">
+            <a href="Cred/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: System Design</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_06" onchange="updateProgress()">
+            <a href="Cred/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Life at CRED</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_07" onchange="updateProgress()">
+            <a href="Cred/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="cred_readme" onchange="updateProgress()">
+            <a href="Cred/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Cred/index.html" class="btn-open btn-cred-theme">
+            <span>Launch CRED Portal</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
+
+<!-- COMPANY 1: JUSPAY (RECENT) -->
       <article class="card" data-company="juspay" data-date="2026-09-05" data-category="software" data-search="juspay payment gateway euler hyperswitch kvdb xyne spaces tree of space concurrency functional programming purescript haskell rust 21-27 lpa recent">
         <div class="card-top">
           <div class="company-id">
@@ -781,7 +907,7 @@ footer {
             <div class="company-title">
               <h3>Juspay Technologies</h3>
               <div class="date-badge">
-                <span class="badge-recent">Recent</span>
+                <span class="badge-earlier">Earlier</span>
                 <span>Created: 05 Sep 2026</span>
               </div>
             </div>
@@ -1209,7 +1335,7 @@ footer {
     });
 
     // LocalStorage Checkbox Tracker
-    const totalModules = 26;
+    const totalModules = 35;
     function updateProgress() {
       const checks = document.querySelectorAll('.module-check');
       let completed = 0;

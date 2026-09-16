@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#090d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>01: Signature OA Coding Problems · CRED Prep Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #f59e0b;
+  
+  --accent-primary: #d97706;
+  --accent-primary-hover: #b45309;
+  --accent-light: rgba(245, 158, 11, 0.12);
+  
+  --tag-bg: #fef3c7;
+  --tag-border: #f59e0b;
+  --tag-text: #92400e;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.15);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #080c14;
+  --bg-surface: #0f172a;
+  --bg-card: #131d31;
+  --bg-sidebar: #0b1120;
+  --bg-code-header: #1e293b;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #fbbf24;
+  
+  --accent-primary: #fbbf24;
+  --accent-primary-hover: #f59e0b;
+  --accent-light: rgba(251, 191, 36, 0.12);
+  
+  --tag-bg: rgba(245, 158, 11, 0.15);
+  --tag-border: #f59e0b;
+  --tag-text: #fde68a;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24, #10b981);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #080c14;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-section-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  padding-left: 8px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  min-height: 40px;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+.theme-toggle-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  padding: 32px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hub-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  border: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.badge-cred {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid #f59e0b;
+  color: #d97706;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .badge-cred {
+  color: #fbbf24;
+}
+
+.content-body {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.content-body h1 {
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.content-body h2 {
+  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-weight: 700;
+  margin-top: 34px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+}
+
+.content-body h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-body h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+.content-body p {
+  margin-bottom: 14px;
+}
+
+.content-body ul, .content-body ol {
+  margin-bottom: 16px;
+  padding-left: 20px;
+}
+
+.content-body li {
+  margin-bottom: 6px;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--bg-card);
+  padding: 12px 16px;
+  margin: 18px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+.content-body code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background-color: var(--bg-inline-code);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.content-body pre {
+  position: relative;
+  margin: 18px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border-color);
+  background-color: #141923;
+}
+
+.content-body pre code {
+  padding: 14px;
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #f8fafc;
+  white-space: pre;
+  word-break: normal;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.85);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: #f59e0b;
+  color: #000000;
+  font-weight: 700;
+}
+
+/* Table Responsive Scrolling */
+.content-body table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 13px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.content-body th, .content-body td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  min-width: 120px;
+}
+
+.content-body th {
+  background-color: var(--bg-sidebar);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.content-body tr:last-child td {
+  border-bottom: none;
+}
+
+/* Callout cards */
+.callout {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+
+.callout-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--accent-primary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Bottom Mobile Navigation Bar */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.b-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  min-width: 48px;
+}
+
+.b-nav-item:hover, .b-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.b-nav-icon {
+  font-size: 16px;
+}
+
+/* Mobile Breakpoint Adjustments */
+@media (max-width: 850px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 85vw;
+    height: 100vh;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .drawer-close-btn {
+    display: flex;
+  }
+  
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+  
+  .main-content {
+    padding: 20px 16px 80px 16px;
+  }
+  
+  .mobile-bottom-nav {
+    display: flex;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">C</div>
+          <div class="brand-text">
+            <h2>CRED Prep Hub</h2>
+            <span>Data Science & MLE</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close Drawer">✕</button>
+      </div>
+
+      <div class="nav-section-title">Modules</div>
+      <ul class="nav-links">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Deep Dive</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test.html" class="nav-link active">
+            <span>01: Signature OA Coding Problems</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Machine Coding & ML Pipeline</span>
+            <span class="nav-badge">Coding</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Domain_Deep_Dive.html" class="nav-link">
+            <span>03: Credit Risk, Fraud & GNNs</span>
+            <span class="nav-badge">Domain</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_System_Design_or_HIL.html" class="nav-link">
+            <span>05: Real-Time Underwriting ML Design</span>
+            <span class="nav-badge">System Design</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Life at CRED & Culture Fit</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Caveman & Ponytail CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <button class="theme-toggle-btn" id="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Dark Mode</span>
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <a href="../index.html" class="hub-link-btn">← All Companies</a>
+        </div>
+        <span class="badge-cred">CRED · 24 LPA · M.Tech</span>
+      </div>
+
+      <article class="content-body">
+        
+<h1>01: Signature OA Coding Problems & Mastery</h1>
+<p class="lead">Production-grade C++ and Python solutions for the top algorithmic challenges, SQL window queries, and statistical probability questions asked in CRED's on-campus Online Assessments.</p>
+
+<div class="callout">
+  <div class="callout-title">💡 Assessment Blueprint</div>
+  <p><strong>Platform:</strong> HackerRank &nbsp;|&nbsp; <strong>Duration:</strong> 90–105 Mins &nbsp;|&nbsp; <strong>Sections:</strong> 2–3 Coding Problems (Hard/Medium) + SQL Window Functions + Statistics & Probability MCQs.</p>
+</div>
+
+<h2>Problem 1: Transaction Velocity & Sliding Window Maximum</h2>
+<p>In high-throughput credit card processing, detecting bursts of high-value transactions requires tracking the maximum transaction in a moving window of size $k$ across an input stream of length $N$.</p>
+
+<h3>Monotonic Decreasing Deque ($O(N)$ Time, $O(k)$ Space)</h3>
+<ul>
+  <li><strong>Eviction:</strong> Pop indices from the back of the double-ended queue if their value is $\le$ the incoming transaction.</li>
+  <li><strong>Expiry:</strong> Pop indices from the front that are older than $i - k$.</li>
+  <li><strong>Result:</strong> Front of the deque always stores the maximum element in the active window.</li>
+</ul>
+
+<pre><code class="language-python">from collections import deque
+from typing import List
+
+def max_sliding_window(transactions: List[int], k: int) -> List[int]:
+    if not transactions or k <= 0:
+        return []
+    if k == 1:
+        return transactions
+
+    n = len(transactions)
+    if k >= n:
+        return [max(transactions)]
+
+    deq = deque()  # Stores indices
+    result = []
+
+    for i in range(n):
+        while deq and deq[0] <= i - k:
+            deq.popleft()
+
+        while deq and transactions[deq[-1]] <= transactions[i]:
+            deq.pop()
+
+        deq.append(i)
+
+        if i >= k - 1:
+            result.append(transactions[deq[0]])
+
+    return result</code></pre>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;deque&gt;
+#include &lt;algorithm&gt;
+
+class FraudVelocityDetector {
+public:
+    static std::vector&lt;int&gt; maxSlidingWindow(const std::vector&lt;int&gt;& nums, int k) {
+        std::vector&lt;int&gt; result;
+        std::deque&lt;int&gt; dq; // Stores indices
+        int n = nums.size();
+
+        if (n == 0 || k <= 0) return result;
+        if (k >= n) {
+            result.push_back(*std::max_element(nums.begin(), nums.end()));
+            return result;
+        }
+
+        result.reserve(n - k + 1);
+
+        for (int i = 0; i < n; ++i) {
+            while (!dq.empty() && dq.front() <= i - k) {
+                dq.pop_front();
+            }
+
+            while (!dq.empty() && nums[dq.back()] <= nums[i]) {
+                dq.pop_back();
+            }
+
+            dq.push_back(i);
+
+            if (i >= k - 1) {
+                result.push_back(nums[dq.front()]);
+            }
+        }
+
+        return result;
+    }
+};</code></pre>
+
+<h2>Problem 2: Optimal Debt Settlement & Cash Flow Minimizer</h2>
+<p>Given a ledger of transactions between individuals, calculate the <strong>minimum number of transfers</strong> required to clear all debt balances. (Classic CRED split-settlement optimization).</p>
+
+<div class="callout">
+  <div class="callout-title">📐 Mathematical Formulation</div>
+  <p>If $M$ users have non-zero balances, and we partition them into $K$ disjoint subsets where the sum of balances in each subset equals $0$, the minimum number of transactions is strictly $M - K$. We maximize $K$ using <strong>Bitmask Dynamic Programming</strong> in $O(2^M \cdot M)$ time.</p>
+</div>
+
+<pre><code class="language-python">from typing import List
+from collections import defaultdict
+
+def min_transfers(transactions: List[List[int]]) -> int:
+    balance_map = defaultdict(int)
+
+    for u, v, amount in transactions:
+        balance_map[u] -= amount
+        balance_map[v] += amount
+
+    balances = [b for b in balance_map.values() if b != 0]
+    m = len(balances)
+    if m == 0:
+        return 0
+
+    total_subsets = 1 << m
+    subset_sum = [0] * total_subsets
+    for mask in range(total_subsets):
+        for i in range(m):
+            if (mask & (1 << i)):
+                subset_sum[mask] = subset_sum[mask ^ (1 << i)] + balances[i]
+                break
+
+    dp = [0] * total_subsets
+
+    for mask in range(1, total_subsets):
+        if subset_sum[mask] == 0:
+            dp[mask] = 1
+            submask = (mask - 1) & mask
+            while submask > 0:
+                if subset_sum[submask] == 0:
+                    dp[mask] = max(dp[mask], dp[submask] + dp[mask ^ submask])
+                submask = (submask - 1) & mask
+        else:
+            submask = (mask - 1) & mask
+            while submask > 0:
+                dp[mask] = max(dp[mask], dp[submask] + dp[mask ^ submask])
+                submask = (submask - 1) & mask
+
+    return m - dp[total_subsets - 1]</code></pre>
+
+<h2>Problem 3: Syndicated Fraud Ring Detection (Directed Cycle Detection)</h2>
+<p>Detect money laundering loops where transactions cycle through mule accounts. Solved using 3-Color DFS in $O(V + E)$ time.</p>
+
+<pre><code class="language-python">from typing import List, Tuple
+
+def find_max_fraud_ring(v: int, edges: List[Tuple[int, int, int]]) -> Tuple[bool, int, List[int]]:
+    adj = {i: [] for i in range(v)}
+    for src, dst, weight in edges:
+        adj[src].append((dst, weight))
+
+    color = [0] * v  # 0=White, 1=Gray, 2=Black
+    parent = [-1] * v
+    edge_w = [0] * v
+
+    max_sum = -1
+    best_cycle = []
+
+    def dfs(u: int):
+        nonlocal max_sum, best_cycle
+        color[u] = 1
+
+        for nxt, w in adj[u]:
+            if color[nxt] == 1:
+                curr, curr_sum, curr_cycle = u, w, [nxt]
+                while curr != nxt and curr != -1:
+                    curr_cycle.append(curr)
+                    curr_sum += edge_w[curr]
+                    curr = parent[curr]
+                curr_cycle.reverse()
+
+                if curr_sum > max_sum:
+                    max_sum = curr_sum
+                    best_cycle = curr_cycle
+            elif color[nxt] == 0:
+                parent[nxt] = u
+                edge_w[nxt] = w
+                dfs(nxt)
+        color[u] = 2
+
+    for node in range(v):
+        if color[node] == 0:
+            dfs(node)
+
+    return (max_sum != -1, max_sum, best_cycle)</code></pre>
+
+<h2>4. Advanced SQL & Probability Essentials</h2>
+
+<h3>Signature SQL: Consecutive Monthly Spend Surges (≥50%)</h3>
+<pre><code class="language-sql">WITH monthly_spend AS (
+    SELECT 
+        user_id,
+        DATE_TRUNC('month', transaction_date) AS txn_month,
+        SUM(amount) AS total_amount
+    FROM card_transactions
+    WHERE transaction_date >= '2026-01-01'
+    GROUP BY user_id, DATE_TRUNC('month', transaction_date)
+),
+spend_with_lags AS (
+    SELECT 
+        user_id,
+        txn_month,
+        total_amount,
+        LAG(total_amount, 1) OVER (PARTITION BY user_id ORDER BY txn_month) AS prev_m1,
+        LAG(total_amount, 2) OVER (PARTITION BY user_id ORDER BY txn_month) AS prev_m2
+    FROM monthly_spend
+)
+SELECT DISTINCT user_id
+FROM spend_with_lags
+WHERE prev_m2 IS NOT NULL
+  AND prev_m1 >= 1.5 * prev_m2
+  AND total_amount >= 1.5 * prev_m1;</code></pre>
+
+<h3>Probability Deep Dive: Bayes' Theorem & The Base Rate Fallacy</h3>
+<p>If fraud prevalence is $P(	ext{Fraud}) = 0.1\%$, with True Positive Rate $99\%$ and False Positive Rate $1\%$, an alert gives:</p>
+$$P(	ext{Fraud} \mid 	ext{Alert}) = rac{0.99 	imes 0.001}{(0.99 	imes 0.001) + (0.01 	imes 0.999)} pprox \mathbf{9.02\%}$$
+<p><strong>System Design Takeaway:</strong> Never block transactions purely on single-model raw threshold alerts. Trigger secondary step-up verification (2FA, biometric authentication) to prevent insulting creditworthy members.</p>
+
+      </article>
+
+      <div class="footer-nav">
+        <a href="00_START_HERE.html" class="footer-btn">← 00: Company & Role Deep Dive</a><a href="02_Technical_Rounds.html" class="footer-btn">02: Machine Coding & ML Pipeline →</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- Fixed Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
+    <a href="index.html" class="b-nav-item">
+      <span class="b-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-modules">
+      <span class="b-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="b-nav-item">
+      <span class="b-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="b-nav-item" id="b-nav-theme">
+      <span class="b-nav-icon" id="b-nav-theme-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="b-nav-item" id="b-nav-top">
+      <span class="b-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+    const bNavThemeIcon = document.getElementById('b-nav-theme-icon');
+    
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('cred_prep_theme', theme);
+      if (theme === 'dark') {
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        if (bNavThemeIcon) bNavThemeIcon.textContent = '☀️';
+      } else {
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        if (bNavThemeIcon) bNavThemeIcon.textContent = '🌙';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('cred_prep_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    if (bNavTheme) bNavTheme.addEventListener('click', toggleTheme);
+
+    // Mobile Drawer Navigation
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('reading-progress');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Add Copy Buttons to Pre Code Blocks
+    document.querySelectorAll('pre').forEach(pre => {
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.textContent = 'Copy';
+      copyBtn.addEventListener('click', () => {
+        const code = pre.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.textContent).then(() => {
+            copyBtn.textContent = 'Copied!';
+            copyBtn.style.background = '#10b981';
+            copyBtn.style.color = '#ffffff';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy';
+              copyBtn.style.background = '';
+              copyBtn.style.color = '';
+            }, 2000);
+          });
+        }
+      });
+      pre.appendChild(copyBtn);
+    });
+  </script>
+</body>
+</html>
