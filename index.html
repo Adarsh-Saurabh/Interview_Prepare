@@ -729,6 +729,11 @@ footer {
   margin-top: auto;
 }
   </style>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
 </head>
 <body>
 
@@ -950,7 +955,7 @@ footer {
 
         <div class="card-role">Data Scientist (FTE) — Hyperlocal Logistics & Quick Commerce</div>
         <p class="card-desc">
-          India's premier hyperlocal delivery and quick-commerce leader (3.5B+ orders, 300k+ active DE fleet, 100k+ peak dinner RPS). Core focus: 4-Stage decoupled ETA architecture ($T_{\text{O2A}} + T_{\text{FM}} + T_{\text{WT}} + T_{\text{LM}}$), VRPTW dispatch batching, Instamart dark store layout & picker TSP traversal, and sub-25ms Triton model serving.
+          India's premier hyperlocal delivery and quick-commerce leader (3.5B+ orders, 300k+ active DE fleet, 100k+ peak dinner RPS). Core focus: 4-Stage decoupled ETA architecture (T<sub>O2A</sub> + T<sub>FM</sub> + T<sub>WT</sub> + T<sub>LM</sub>), VRPTW dispatch batching, Instamart dark store layout & picker TSP traversal, and sub-25ms Triton model serving.
         </p>
 
         <!-- Main Points Taught Section -->
@@ -962,11 +967,11 @@ footer {
           <div class="points-content" id="swiggy-points">
             <div class="point-item">
               <span class="point-bullet">▸</span>
-              <span><strong>The 4-Stage Decoupled ETA Framework:</strong> Modeling $T_{\text{O2A}}$ (assignment matching delay), $T_{\text{FM}}$ (first-mile travel), $T_{\text{WT}}$ (kitchen prep time wildcard), and $T_{\text{LM}}$ (last-mile doorstep friction) independently.</span>
+              <span><strong>The 4-Stage Decoupled ETA Framework:</strong> Modeling T<sub>O2A</sub> (assignment matching delay), T<sub>FM</sub> (first-mile travel), T<sub>WT</sub> (kitchen prep time wildcard), and T<sub>LM</sub> (last-mile doorstep friction) independently.</span>
             </div>
             <div class="point-item">
               <span class="point-bullet">▸</span>
-              <span><strong>Quantile Regression Intervals:</strong> Using Pinball Loss $L_q(y, \hat{y})$ for 10th and 90th percentiles to display reliable delivery windows to customers rather than noisy point estimates.</span>
+              <span><strong>Quantile Regression Intervals:</strong> Using Pinball Loss L<sub>q</sub>(y, ŷ) for 10th and 90th percentiles to display reliable delivery windows to customers rather than noisy point estimates.</span>
             </div>
             <div class="point-item">
               <span class="point-bullet">▸</span>
@@ -986,7 +991,7 @@ footer {
             </div>
             <div class="point-item">
               <span class="point-bullet">▸</span>
-              <span><strong>Adarsh's Strategic Defense:</strong> Mapping Warehouse PathMapper ($10,000 \times 10,000$ grid heuristic search) to Instamart dark stores, and framing M.Tech Signal Processing as the optimal foundation for noisy mobile GPS telemetry.</span>
+              <span><strong>Adarsh's Strategic Defense:</strong> Mapping Warehouse PathMapper (10,000 × 10,000 grid heuristic search) to Instamart dark stores, and framing M.Tech Signal Processing as the optimal foundation for noisy mobile GPS telemetry.</span>
             </div>
           </div>
         </div>
@@ -1077,7 +1082,7 @@ footer {
           <div class="points-content" id="cred-points">
             <div class="point-item">
               <span class="point-bullet">▸</span>
-              <span><strong>Credit Risk Economics:</strong> Basel Expected Loss $\text{EL} = \text{PD} \times \text{EAD} \times \text{LGD}$. Discrimination validated via Kolmogorov-Smirnov (KS) statistic (target 40%–60%).</span>
+              <span><strong>Credit Risk Economics:</strong> Basel Expected Loss $EL = PD × EAD × LGD$. Discrimination validated via Kolmogorov-Smirnov (KS) statistic (target 40%–60%).</span>
             </div>
             <div class="point-item">
               <span class="point-bullet">▸</span>
@@ -1195,15 +1200,15 @@ footer {
             </div>
             <div class="point-item">
               <span class="point-bullet">?</span>
-              <span><strong>The Tree of Space Hackathon:</strong> Thread-Safe N-ary Tree Locking with ancestor-descendant mutual exclusion in \(O(\text{depth})\) time, using descendant counters and canonical Top-Down lock ordering for deadlock freedom.</span>
+              <span><strong>The Tree of Space Hackathon:</strong> Thread-Safe N-ary Tree Locking with ancestor-descendant mutual exclusion in O(depth) time, using descendant counters and canonical Top-Down lock ordering for deadlock freedom.</span>
             </div>
             <div class="point-item">
               <span class="point-bullet">?</span>
-              <span><strong>OA Functional Graph Mastery:</strong> Maximum Weight Node, Nearest Meeting Cell, and Largest Sum Cycle resolved in \(O(N)\) time using Kahn's topological in-degree peeling and cycle detection.</span>
+              <span><strong>OA Functional Graph Mastery:</strong> Maximum Weight Node, Nearest Meeting Cell, and Largest Sum Cycle resolved in O(N) time using Kahn's topological in-degree peeling and cycle detection.</span>
             </div>
             <div class="point-item">
               <span class="point-bullet">?</span>
-              <span><strong>Dynamic Routing & Signal Processing:</strong> Why Simple Moving Averages fail with group delay \(\tau_g = (N-1)/2\); using discrete-time Kalman filtering and closed-loop control theory (PID) to route transactions in sub-second windows without thundering herds.</span>
+              <span><strong>Dynamic Routing & Signal Processing:</strong> Why Simple Moving Averages fail with group delay \(τ<sub>g</sub> = (N-1)/2\); using discrete-time Kalman filtering and closed-loop control theory (PID) to route transactions in sub-second windows without thundering herds.</span>
             </div>
             <div class="point-item">
               <span class="point-bullet">?</span>
