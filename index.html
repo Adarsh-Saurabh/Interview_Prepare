@@ -429,6 +429,19 @@ main {
 
 
 
+.avatar-pace {
+  background: linear-gradient(135deg, #10b981, #047857);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.btn-pace-theme {
+  background: linear-gradient(135deg, #10b981, #047857);
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
 .avatar-ibm {
   background: linear-gradient(135deg, #0f62fe, #0043ce);
   color: #ffffff;
@@ -782,16 +795,16 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">6</div>
+        <div class="stat-val" id="stat-companies">7</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">56</div>
+        <div class="stat-val">65</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">29 LPA</div>
-        <div class="stat-sub">Top CTC (Lumilens)</div>
+        <div class="stat-val">41 LPA</div>
+        <div class="stat-sub">Top CTC (Pace HFT)</div>
       </div>
       <div class="stat-box">
         <div class="stat-val">100%</div>
@@ -816,6 +829,124 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+      <!-- COMPANY: PACE STOCK BROKING (RECENT) -->
+      <article class="card" data-company="pace" data-date="2026-09-19" data-category="software" data-search="pace stock broking hft low latency quant quantitative software developer c++ cache order book kernel bypass solarflare openonload dpdk 41 lpa recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-pace">P</div>
+            <div class="company-title">
+              <h3>Pace Stock Broking</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 19 Sep 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(16,185,129,0.16); border:1px solid #10b981; color:#10b981;">
+            41.00 LPA · ₹75k Stipend
+          </span>
+        </div>
+
+        <div class="card-role">Software Developer — Quantitative & Low-Latency Trading Systems</div>
+        <p class="card-desc">
+          Pace Stock Broking Services Pvt. Ltd. Proprietary High-Frequency Trading (HFT) and MFT desk operating on NSE, BSE, and MCX. Core focus: sub-microsecond tick-to-trade loops, in-memory Limit Order Books (LOB), kernel bypass networking (Solarflare OpenOnload / DPDK), cache line alignment, zero-allocation C++ memory pools, and quantitative alpha modeling on large time-series datasets.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('pace-points', 'pace-arrow')">
+            <span class="points-title">💡 Main Points Taught for Pace Stock Broking</span>
+            <span class="toggle-arrow" id="pace-arrow">▼</span>
+          </div>
+          <div class="points-content" id="pace-points">
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>The Race for Microseconds:</strong> The anatomy of an ultra-low-latency tick-to-trade cycle; sub-microsecond processing, deterministic execution, and eliminating heap allocation on the hot path.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Exchange Co-Location & Protocols:</strong> Multicast UDP market data dissemination (ITCH / FAST), sequence gap detection, and binary point-to-point execution protocols (OUCH / FIX).</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Kernel Bypass Networking:</strong> Bypassing the Linux TCP/IP stack via Solarflare OpenOnload and DPDK to deliver raw network packets directly into user-space ring buffers in &lt;400 ns.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Low-Latency Modern C++:</strong> Eliminating vtable and dynamic dispatch overhead via CRTP compile-time polymorphism; struct alignment and padding to avoid cache line false sharing via <code>alignas(64)</code>.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Hardware Cache Exploitation:</strong> Row-major vs column-major traversal benchmarks, hardware prefetchers, L1/L2/L3 cache misses, and lock-free SPSC circular ring buffers.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Production Limit Order Book (LOB) LLD:</strong> Two-sided price-time priority auction, $O(1)$ order lookup and cancellations via hash maps + doubly linked lists, and pre-allocated memory pools.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Signature OA Problem Mastery:</strong> Monotonic stack subarray contribution techniques, DSU dynamic connectivity, 2D grid constrained pathfinding, and coin toss probability derivations.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Adarsh's Strategic Defense:</strong> Bridging M.Tech Signal Processing (Fourier, Kalman, stochastic signals) to quantitative modeling; defending Warehouse PathMapper (10k grid in &lt;0.5s), Alternative Data Radar, and K-HOG (11× faster preprocessing).</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="module-list-title">
+          <span>Preparation Modules (Tap to Read)</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);">Check box to mark read</span>
+        </div>
+
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_00" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Intel & Role</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_01" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/01_Online_Test.html" style="text-decoration:none; color:inherit;">01: OA Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_02" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: C++ & Systems</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_03" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: Microstructure</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_04" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_05" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: Order Book LLD</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_06" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Prop Culture</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_07" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="pace_readme" onchange="updateProgress()">
+            <a href="Pace_Stock_Broking/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Pace_Stock_Broking/index.html" class="btn-open btn-pace-theme">
+            <span>Launch Pace Stock Broking Portal</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
 
       <!-- COMPANY: IBM SYSTEMS (RECENT) -->
       <article class="card" data-company="ibm" data-date="2026-09-17" data-category="software" data-search="ibm systems isdl software engineer power10 telum z16 openbmc linux kernel virtual memory lock-free ring buffer c++ python 18.75 lpa recent">
