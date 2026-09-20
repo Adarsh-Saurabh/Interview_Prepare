@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#070c18">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>01: Signature OA Coding & Core CS Problems</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #e2e8f0;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0b1523;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --border-focus: #2563eb;
+  
+  --accent-primary: #2563eb;
+  --accent-primary-hover: #1d4ed8;
+  --accent-light: rgba(37, 99, 235, 0.12);
+  
+  --tag-bg: #eff6ff;
+  --tag-border: #3b82f6;
+  --tag-text: #1d4ed8;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #070c18;
+  --bg-surface: #0e172a;
+  --bg-card: #131f37;
+  --bg-sidebar: #09101f;
+  --bg-code-header: #1e293b;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #60a5fa;
+  
+  --accent-primary: #3b82f6;
+  --accent-primary-hover: #60a5fa;
+  --accent-light: rgba(59, 130, 246, 0.16);
+  
+  --tag-bg: rgba(59, 130, 246, 0.15);
+  --tag-border: #3b82f6;
+  --tag-text: #93c5fd;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #06b6d4, #10b981);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+  letter-spacing: -0.5px;
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-section-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 14px 8px 8px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.nav-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.nav-link.active .nav-badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--border-focus);
+  color: var(--accent-primary);
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 58px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent-primary);
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hub-return-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.hub-return-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.content-container {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 32px 100px;
+  flex: 1;
+}
+
+/* Typography & Markdown Render Styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin-top: 0;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--border-color);
+}
+
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1.05rem;
+}
+
+p {
+  margin-bottom: 1.2em;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+ul, ol {
+  margin-bottom: 1.3em;
+  padding-left: 1.5em;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+li {
+  margin-bottom: 0.45em;
+}
+
+/* Code Blocks & Inlines */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 2px 6px;
+  background-color: var(--bg-inline-code);
+  border-radius: 4px;
+  color: var(--accent-primary);
+}
+
+pre {
+  position: relative;
+  background-color: #0d1117 !important;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 1.3em 0 1.6em;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre code {
+  background-color: transparent !important;
+  padding: 0;
+  border-radius: 0;
+  color: #e6edf3;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Tables Responsive Wrapper */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.4em 0;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--bg-surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: left;
+  min-width: 580px;
+}
+
+th {
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: var(--accent-light);
+}
+
+/* Blockquotes & Callouts */
+blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 12px 18px;
+  margin: 1.3em 0;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-primary);
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2.2em 0;
+}
+
+/* Footer Navigation Buttons */
+.module-footer-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background-color: var(--accent-light);
+}
+
+/* Fixed Bottom Nav for Mobile */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 58px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+  height: 100%;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-icon {
+  font-size: 16px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .drawer-close-btn {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .content-container {
+    padding: 24px 18px 80px;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">C</div>
+          <div class="brand-text">
+            <h2>Celonis Prep Suite</h2>
+            <span>Associate Engineer · 22 LPA</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="nav-section-title">Navigation Modules</div>
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test.html" class="nav-link active">
+            <span>01: Signature OA Problems</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Concurrency & Core Systems</span>
+            <span class="nav-badge">Engineering</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Domain_Deep_Dive.html" class="nav-link">
+            <span>03: Process Mining & OCPM</span>
+            <span class="nav-badge">Domain</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_System_Design_or_HIL.html" class="nav-link">
+            <span>05: Event Ingestion LLD</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Culture & Values</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Process Mining CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <div class="breadcrumb">
+            <a href="../index.html">← All Companies</a>
+            <span>/</span>
+            <a href="index.html">Celonis</a>
+          </div>
+        </div>
+        
+        <div class="top-bar-right">
+          <a href="index.html" class="hub-return-btn">
+            <span>🏠 Hub</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1>01: Signature OA Coding &amp; Core CS Problems</h1>
+<h2>1. Online Assessment (OA) Architecture</h2>
+<ul>
+<li><strong>Platform</strong>: HackerRank / HackerEarth / Mettl</li>
+<li><strong>Duration</strong>: 90 – 120 Minutes</li>
+<li><strong>Section 1</strong>: 2–3 Algorithmic Coding Problems (Medium to Hard difficulty).</li>
+<li><strong>Section 2</strong>: 10–15 Computer Science Fundamentals MCQs (Operating Systems, DBMS, OOPs, Concurrency, and SQL).</li>
+</ul>
+<hr />
+<h2>2. Signature Coding Problem 1: Process Variant Topological Sort &amp; Cycle Detection</h2>
+<h3>Problem Statement</h3>
+<p>In an automated process mining engine, business workflows are represented as a directed graph where vertices represent activities (e.g., <code>Create Order</code>, <code>Credit Check</code>, <code>Dispatch</code>) and directed edges represent valid sequencing dependencies.<br />
+Given $N$ activities labeled $0$ to $N-1$ and a list of directed prerequisite pairs $[u, v]$ meaning activity $u$ must complete before activity $v$ can start:<br />
+1. Determine if the business process contains circular deadlocks (infinite looping/cycles).<br />
+2. If no cycle exists, return a valid linear execution order (Topological Sort).<br />
+3. If multiple valid orders exist, return the lexicographically smallest execution order. If a cycle exists, return an empty array.</p>
+<h3>Optimal Solution: Kahn's Algorithm with Min-Heap (Priority Queue)</h3>
+<ul>
+<li><strong>Time Complexity</strong>: $\mathcal{O}(V \log V + E)$ where $V$ is the number of activities and $E$ is dependencies.</li>
+<li><strong>Space Complexity</strong>: $\mathcal{O}(V + E)$ for adjacency list and in-degree tracking.</li>
+</ul>
+<h4>C++ Implementation</h4>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+
+std::vector&lt;int&gt; findProcessExecutionOrder(int numActivities, const std::vector&lt;std::pair&lt;int, int&gt;&gt;&amp; dependencies) {
+    std::vector&lt;std::vector&lt;int&gt;&gt; adj(numActivities);
+    std::vector&lt;int&gt; inDegree(numActivities, 0);
+
+    for (const auto&amp; edge : dependencies) {
+        adj[edge.first].push_back(edge.second);
+        inDegree[edge.second]++;
+    }
+
+    // Min-heap ensures lexicographically smallest ordering
+    std::priority_queue&lt;int, std::vector&lt;int&gt;, std::greater&lt;int&gt;&gt; minHeap;
+    for (int i = 0; i &lt; numActivities; ++i) {
+        if (inDegree[i] == 0) {
+            minHeap.push(i);
+        }
+    }
+
+    std::vector&lt;int&gt; executionOrder;
+    while (!minHeap.empty()) {
+        int current = minHeap.top();
+        minHeap.pop();
+        executionOrder.push_back(current);
+
+        for (int neighbor : adj[current]) {
+            inDegree[neighbor]--;
+            if (inDegree[neighbor] == 0) {
+                minHeap.push(neighbor);
+            }
+        }
+    }
+
+    // If topological order does not contain all activities, a cycle exists
+    if (executionOrder.size() != static_cast&lt;size_t&gt;(numActivities)) {
+        return {}; // Process Deadlock Detected
+    }
+
+    return executionOrder;
+}
+</code></pre>
+<h4>Python Implementation</h4>
+<pre><code class="language-python">import heapq
+from typing import List, Tuple
+
+def find_process_execution_order(num_activities: int, dependencies: List[Tuple[int, int]]) -&gt; List[int]:
+    adj = {i: [] for i in range(num_activities)}
+    in_degree = [0] * num_activities
+
+    for u, v in dependencies:
+        adj[u].append(v)
+        in_degree[v] += 1
+
+    min_heap = [i for i in range(num_activities) if in_degree[i] == 0]
+    heapq.heapify(min_heap)
+
+    order = []
+    while min_heap:
+        curr = heapq.heappop(min_heap)
+        order.append(curr)
+
+        for neighbor in adj[curr]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                heapq.heappush(min_heap, neighbor)
+
+    return order if len(order) == num_activities else []
+</code></pre>
+<hr />
+<h2>3. Signature Coding Problem 2: Maximum Ingested Events in Sliding Window $\Delta T$</h2>
+<h3>Problem Statement</h3>
+<p>A Celonis ingestion buffer receives high-frequency event records $[t_0, t_1, \dots, t_{n-1}]$ where each timestamp represents an incoming event record in milliseconds. Given a sliding monitoring interval $W$, calculate the maximum number of events received within any time window of length $W$ (inclusive: $[t, t + W]$).</p>
+<h4>Python Optimal Two-Pointer Sliding Window Solution</h4>
+<pre><code class="language-python">def max_events_in_window(timestamps: List[int], window_size: int) -&gt; int:
+    if not timestamps:
+        return 0
+
+    timestamps.sort()
+    max_events = 0
+    left = 0
+
+    for right in range(len(timestamps)):
+        # Shrink left pointer if window duration exceeded
+        while timestamps[right] - timestamps[left] &gt; window_size:
+            left += 1
+        max_events = max(max_events, right - left + 1)
+
+    return max_events
+</code></pre>
+<ul>
+<li><strong>Time Complexity</strong>: $\mathcal{O}(N \log N)$ for sorting (or $\mathcal{O}(N)$ if already sorted by time).</li>
+<li><strong>Space Complexity</strong>: $\mathcal{O}(1)$ auxiliary.</li>
+</ul>
+<hr />
+<h2>4. Signature SQL Assessment Problem: Process Bottleneck Transition Detection</h2>
+<h3>Problem Statement</h3>
+<p>Given an event log table <code>celonis_event_log</code> with columns <code>case_id</code>, <code>activity_name</code>, and <code>event_timestamp</code>, write an optimal SQL query to calculate:<br />
+1. The immediate next activity in each case.<br />
+2. The duration in hours between consecutive activities.<br />
+3. Filter out all cases where any single activity transition took longer than 48 hours (Process Bottlenecks).</p>
+<h4>Production SQL Solution</h4>
+<pre><code class="language-sql">WITH ProcessTransitions AS (
+    SELECT 
+        case_id,
+        activity_name AS current_activity,
+        event_timestamp AS start_time,
+        LEAD(activity_name) OVER (
+            PARTITION BY case_id 
+            ORDER BY event_timestamp ASC
+        ) AS next_activity,
+        LEAD(event_timestamp) OVER (
+            PARTITION BY case_id 
+            ORDER BY event_timestamp ASC
+        ) AS next_time
+    FROM celonis_event_log
+),
+TransitionDurations AS (
+    SELECT
+        case_id,
+        current_activity,
+        next_activity,
+        start_time,
+        next_time,
+        ROUND(EXTRACT(EPOCH FROM (next_time - start_time)) / 3600.0, 2) AS duration_hours
+    FROM ProcessTransitions
+    WHERE next_activity IS NOT NULL
+)
+SELECT 
+    case_id,
+    current_activity,
+    next_activity,
+    duration_hours
+FROM TransitionDurations
+WHERE duration_hours &gt; 48.0
+ORDER BY duration_hours DESC;
+</code></pre>
+
+        <div class="module-footer-nav">
+          <a href="00_START_HERE.html" class="footer-btn">← 00: Company & Role Intel</a><a href="02_Technical_Rounds.html" class="footer-btn">02: Concurrency & Core Systems →</a>
+        </div>
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- Fixed Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-modules">
+      <span class="bottom-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-theme">
+      <span class="bottom-nav-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="bottom-nav-item" id="b-nav-top">
+      <span class="bottom-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('celonis_theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('celonis_theme', 'light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('celonis_theme') || 'dark';
+    setTheme(savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    if (bNavTheme) bNavTheme.addEventListener('click', toggleTheme);
+
+    // Mobile Drawer Navigation
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('reading-progress');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Add Copy Buttons to Pre Code Blocks
+    document.querySelectorAll('pre').forEach(pre => {
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.textContent = 'Copy';
+      copyBtn.addEventListener('click', () => {
+        const code = pre.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.textContent).then(() => {
+            copyBtn.textContent = 'Copied!';
+            copyBtn.style.background = '#2563eb';
+            copyBtn.style.color = '#ffffff';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy';
+              copyBtn.style.background = '';
+              copyBtn.style.color = '';
+            }, 2000);
+          });
+        }
+      });
+      pre.appendChild(copyBtn);
+    });
+  </script>
+</body>
+</html>

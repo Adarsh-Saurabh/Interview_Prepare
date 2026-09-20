@@ -429,6 +429,19 @@ main {
 
 
 
+.avatar-celonis {
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.btn-celonis-theme {
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
 .avatar-pace {
   background: linear-gradient(135deg, #10b981, #047857);
   color: #ffffff;
@@ -785,7 +798,7 @@ footer {
     <div class="progress-card">
       <div class="progress-header">
         <span>Overall Preparation Progress</span>
-        <span id="progress-text">0 / 56 Modules Completed (0%)</span>
+        <span id="progress-text">0 / 74 Modules Completed (0%)</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progress-fill"></div>
@@ -795,11 +808,11 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">7</div>
+        <div class="stat-val" id="stat-companies">8</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">65</div>
+        <div class="stat-val">74</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
@@ -812,11 +825,11 @@ footer {
       </div>
     </div>
 
-    <!-- Search & Filters -->
+    <!-- Filter & Search Controls -->
     <div class="controls-bar">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="search-input" class="search-input" placeholder="Search companies, tech, or modules (e.g. Pytest, SCPI, MATLAB, BER, GD)...">
+        <input type="text" id="search-input" placeholder="Search by company, role, tech stack (e.g., Process Mining, C++, Graph, FPGA, Python)..." autocomplete="off">
       </div>
 
       <div class="filter-sort-group">
@@ -830,15 +843,133 @@ footer {
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
 
-      <!-- COMPANY: PACE STOCK BROKING (RECENT) -->
-      <article class="card" data-company="pace" data-date="2026-09-19" data-category="software" data-search="pace stock broking hft low latency quant quantitative software developer c++ cache order book kernel bypass solarflare openonload dpdk 41 lpa recent">
+      <!-- COMPANY: CELONIS (RECENT) -->
+      <article class="card" data-company="celonis" data-date="2026-09-20" data-category="software" data-search="celonis process mining ems execution management pql associate engineer graph dag topological sort concurrency event log 22 lpa recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-celonis">C</div>
+            <div class="company-title">
+              <h3>Celonis</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 20 Sep 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(37,99,235,0.16); border:1px solid #2563eb; color:#2563eb;">
+            22.00 LPA · 6M + FTE
+          </span>
+        </div>
+
+        <div class="card-role">Associate Engineer — Process Mining & Core Systems</div>
+        <p class="card-desc">
+          Celonis SE (Decacorn, $13B+ Valuation). Global category creator of Process Mining and the Execution Management System (EMS). Core focus: In-memory Process Query Language (PQL) columnar engine, transactional event log extraction (SAP, Oracle, Salesforce), directed acyclic graph (DAG) topological sorting and cycle detection, object-centric process mining (OCPM), high-throughput event buffer architectures, and scalable enterprise SaaS backends.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('celonis-points', 'celonis-arrow')">
+            <span class="points-title">💡 Main Points Taught for Celonis</span>
+            <span class="toggle-arrow" id="celonis-arrow">▼</span>
+          </div>
+          <div class="points-content" id="celonis-points">
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>The Anatomy of Process Mining:</strong> Event log structure (<code>case_id</code>, <code>activity</code>, <code>timestamp</code>), transforming unstructured enterprise transaction logs into real-time directed process graphs and Petri nets.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Signature OA Graph Mastery:</strong> Kahn's topological sort with min-heap for cycle detection & lexicographically smallest execution ordering; $\mathcal{O}(V+E)$ optimal traversal.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Sliding Window Event Burst Detection:</strong> Optimal two-pointer technique to calculate peak event volume across dynamic time intervals $\Delta T$.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Signature SQL Window Analytics:</strong> Multi-partition event trace analysis with <code>LEAD()</code> and <code>PARTITION BY case_id</code> to isolate transitions exceeding 48 hours.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>High-Throughput Concurrency & Core Systems:</strong> Thread-safe queues with condition variables, mutexes vs atomic CAS, thread pool sizing formula, and PostgreSQL MVCC / indexing internals.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Object-Centric Process Mining (OCPM) & PQL:</strong> Eliminating 2D single Case ID convergence/divergence flaws; relational multi-entity modeling and in-memory columnar vector calculations.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Production Event Ingestion Engine LLD:</strong> SOLID-compliant event validator, concurrent batching buffer, timer-based worker flushing, and backpressure handling.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Adarsh's Candidate Defense Strategy:</strong> Bridging Warehouse PathMapper spatial heuristic routing ($10,000 \times 10,000$ in &lt;0.5s) to Celonis graph mining; defending multi-tenant SaaS (Apna Gold) and M.Tech Signal Processing dual background.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="module-list-title">
+          <span>Preparation Modules (Tap to Read)</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);">Check box to mark read</span>
+        </div>
+
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_00" onchange="updateProgress()">
+            <a href="Celonis/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Intel & Role</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_01" onchange="updateProgress()">
+            <a href="Celonis/01_Online_Test.html" style="text-decoration:none; color:inherit;">01: OA Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_02" onchange="updateProgress()">
+            <a href="Celonis/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: Concurrency & OS</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_03" onchange="updateProgress()">
+            <a href="Celonis/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: Process Mining</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_04" onchange="updateProgress()">
+            <a href="Celonis/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_05" onchange="updateProgress()">
+            <a href="Celonis/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: Ingestion LLD</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_06" onchange="updateProgress()">
+            <a href="Celonis/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Culture & Values</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_07" onchange="updateProgress()">
+            <a href="Celonis/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="celonis_readme" onchange="updateProgress()">
+            <a href="Celonis/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Celonis/index.html" class="btn-open btn-celonis-theme">
+            <span>Launch Celonis Portal</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- COMPANY: PACE STOCK BROKING -->
+      <article class="card" data-company="pace" data-date="2026-09-19" data-category="software" data-search="pace stock broking hft low latency quant quantitative software developer c++ cache order book kernel bypass solarflare openonload dpdk 41 lpa earlier">
         <div class="card-top">
           <div class="company-id">
             <div class="avatar avatar-pace">P</div>
             <div class="company-title">
               <h3>Pace Stock Broking</h3>
               <div class="date-badge">
-                <span class="badge-recent">Recent</span>
+                <span class="badge-earlier">Earlier</span>
                 <span>Created: 19 Sep 2026</span>
               </div>
             </div>
