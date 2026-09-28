@@ -429,6 +429,19 @@ main {
 
 
 
+.avatar-nokia {
+  background: linear-gradient(135deg, #124191, #005aff);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.btn-nokia-theme {
+  background: linear-gradient(135deg, #124191, #005aff);
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
 .avatar-celonis {
   background: linear-gradient(135deg, #2563eb, #06b6d4);
   color: #ffffff;
@@ -808,11 +821,11 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">8</div>
+        <div class="stat-val" id="stat-companies">9</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">74</div>
+        <div class="stat-val">84</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
@@ -842,6 +855,111 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+      <!-- COMPANY: NOKIA (RECENT) -->
+      <article class="card" data-company="nokia" data-date="2026-09-28" data-category="hardware" data-search="nokia optical networking optics dwdm roadm otn coherent pse-6s associate engineer c++ linux multithreading dsp 18 lpa recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-nokia">N</div>
+            <div class="company-title">
+              <h3>Nokia</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 28 Sep 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(18,65,145,0.16); border:1px solid #124191; color:#124191;">
+            18.00 LPA · 6M + PPO
+          </span>
+        </div>
+
+        <div class="card-role">Associate Engineer — Optical Networking</div>
+        <p class="card-desc">
+          Nokia Corporation (Network Infrastructure — Optical Networks). Global leader in optical transport powering the AI super cycle. Core focus: High-capacity DWDM, 1830 PSS transport platforms, PSE-6s coherent digital signal processors (DSP), OTN ITU-T G.709 framing, low-level C++ systems programming, multi-threaded Linux control plane, sub-50ms optical protection switching, and modern AI automation pipelines.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('nokia-points', 'nokia-arrow')">
+            <span class="points-title">⚡ Main Points Taught for Nokia</span>
+            <span class="toggle-arrow" id="nokia-arrow">▼</span>
+          </div>
+          <div class="points-content" id="nokia-points">
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>The Physics & Architecture of Optical Networks:</strong> Single-Mode Fiber (SMF) propagation, total internal reflection, chromatic dispersion, Polarization Mode Dispersion (PMD), and DWDM C+L band ITU flex-grid scaling.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Coherent Detection & The PSE-6s DSP:</strong> Transition from Direct Detection (OOK) to Dual-Polarization coherent detection (DP-QPSK, DP-16QAM, DP-64QAM); mathematical digital dispersion compensation and carrier recovery.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Systems C++ & Linux Concurrency:</strong> Virtual tables (<code>vtable</code>/<code>vptr</code>), object slicing, memory alignment, cache line false sharing (<code>alignas(64)</code>), non-blocking POSIX sockets, and <code>epoll()</code> telemetry multiplexing.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>4 Signature Coding Problems Implemented:</strong> High-throughput circular telemetry ring buffer, Routing and Wavelength Assignment (RWA) with continuity constraints, out-of-order frame reassembly, and bitwise transceiver register packing.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Low-Level System Design (LLD):</strong> Real-time optical link telemetry and autonomous sub-50ms protection switching engine with sliding window Pre-FEC BER degradation analysis.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Adarsh's Candidate Defense Strategy:</strong> Translating Warehouse PathMapper spatial heuristic routing to Optical RWA; defending K-HUKI real-time low-compute feature extraction; defending Uplan AI verification; leveraging M.Tech Signal Processing + B.Tech CSE dual background.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_00" onchange="updateProgress()">
+            <a href="Nokia/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Intel & Role</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_01" onchange="updateProgress()">
+            <a href="Nokia/01_Online_Test.html" style="text-decoration:none; color:inherit;">01: OA Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_02" onchange="updateProgress()">
+            <a href="Nokia/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: C++ & OS</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_03" onchange="updateProgress()">
+            <a href="Nokia/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: Optical & DWDM</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_04" onchange="updateProgress()">
+            <a href="Nokia/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_05" onchange="updateProgress()">
+            <a href="Nokia/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: Telemetry LLD</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_06" onchange="updateProgress()">
+            <a href="Nokia/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Culture & Values</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_07" onchange="updateProgress()">
+            <a href="Nokia/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="nokia_readme" onchange="updateProgress()">
+            <a href="Nokia/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Nokia/index.html" class="btn-open btn-nokia-theme">
+            <span>Launch Nokia Portal</span>
+            <span>➔</span>
+          </a>
+        </div>
+      </article>
 
       <!-- COMPANY: CELONIS (RECENT) -->
       <article class="card" data-company="celonis" data-date="2026-09-20" data-category="software" data-search="celonis process mining ems execution management pql associate engineer graph dag topological sort concurrency event log 22 lpa recent">
