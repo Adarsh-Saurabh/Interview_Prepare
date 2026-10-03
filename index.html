@@ -429,6 +429,31 @@ main {
 
 
 
+.avatar-citi {
+  background: linear-gradient(135deg, #003b70, #0072ce);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 900;
+  position: relative;
+}
+
+.avatar-citi::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 7px;
+  height: 7px;
+  background: #ee1c25;
+  border-radius: 50%;
+}
+
+.btn-citi-theme {
+  background: linear-gradient(135deg, #003b70, #0072ce);
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
 .avatar-nokia {
   background: linear-gradient(135deg, #124191, #005aff);
   color: #ffffff;
@@ -821,11 +846,11 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">9</div>
+        <div class="stat-val" id="stat-companies">10</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">84</div>
+        <div class="stat-val">94</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
@@ -842,7 +867,7 @@ footer {
     <div class="controls-bar">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="search-input" placeholder="Search by company, role, tech stack (e.g., Process Mining, C++, Graph, FPGA, Python)..." autocomplete="off">
+        <input type="text" id="search-input" placeholder="Search by company, role, tech stack (e.g., Process Mining, C++, Graph, FPGA, Python, React, FinTech)..." autocomplete="off">
       </div>
 
       <div class="filter-sort-group">
@@ -855,6 +880,120 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+      <!-- COMPANY: CITI (RECENT) -->
+      <article class="card" data-company="citi" data-date="2026-10-03" data-category="software" data-search="citi citigroup swe apprenticeship technology analyst c00 c09 fintech payments react python mongodb aws serverless terraform 18 lpa 50k stipend recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-citi">C</div>
+            <div class="company-title">
+              <h3>Citigroup (Citi)</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 03 Oct 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(0,59,112,0.16); border:1px solid #003b70; color:#0072ce;">
+            ₹50k/mo · ₹14–18 LPA FTE
+          </span>
+        </div>
+
+        <div class="card-role">SWE Apprenticeship · Full-Stack & Payment Rails</div>
+        <p class="card-desc">
+          Citigroup Inc. (Global Banking Titan, 230,000+ Employees). 12-Month full-time SWE Apprenticeship (Grade C00) in Pune/Chennai GCCs transitioning into Technology Analyst (Grade C09). Core focus: Treasury and Trade Solutions (TTS) payments infrastructure, React.js with Material UI components, asynchronous Python microservices, MongoDB document aggregation & ACID transactions, and AWS Serverless with Terraform IaC.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('citi-points', 'citi-arrow')">
+            <span class="points-title">💡 Main Points Taught for Citi</span>
+            <span class="toggle-arrow" id="citi-arrow">▼</span>
+          </div>
+          <div class="points-content" id="citi-points">
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Corporate FinTech Architecture:</strong> Treasury and Trade Solutions (TTS) handling $4T+ daily, SWIFT messaging to ISO 20022 (<code>pacs.008</code>), RTGS real-time gross settlement vs batch ACH.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Signature OA Streaming Algorithms:</strong> Two-pointer sliding window with monotonic deque for transaction burst anomaly detection; $\mathcal{O}(V \cdot E)$ Bellman-Ford negative cycle currency arbitrage on $-\ln(\text{rate})$ graph.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Modern Full-Stack Mastery:</strong> React.js Fiber reconciliation and hooks (<code>useEffect</code>, <code>useCallback</code>, <code>useMemo</code>), Material UI responsive tables, and Python <code>asyncio</code> non-blocking event loops vs GIL.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Database Engineering (MongoDB & SQL):</strong> ESR rule compound indexing (Equality, Sort, Range), multi-document ACID transactions across replica sets, and aggregation pipelines.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Cloud & Infrastructure as Code:</strong> AWS Serverless architecture (Lambda cold-start optimization, DocumentDB, S3/CloudFront) and Terraform state locking with DynamoDB.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Banking Ledger LLD:</strong> Thread-safe double-entry bookkeeping engine ($\sum \text{Debits} = \sum \text{Credits}$), idempotency key filtering, ordered lock acquisition for deadlock avoidance, and HMAC-SHA256 signed webhooks.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">▸</span>
+              <span><strong>Candidate Defense Strategy:</strong> Bridging NIT Rourkela M.Tech Signal Processing & B.Tech CSE; defending Warehouse PathMapper A* heuristic spatial routing ($10,000 \times 10,000$ in &lt;0.5s) and Uplan LangGraph adversarial multi-agent pipeline.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="module-list-title">
+          <span>Preparation Modules (Tap to Read)</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);">Check box to mark read</span>
+        </div>
+
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_00" onchange="updateProgress()">
+            <a href="Citi/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Intel & Role</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_01" onchange="updateProgress()">
+            <a href="Citi/01_Online_Test.html" style="text-decoration:none; color:inherit;">01: OA Coding</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_02" onchange="updateProgress()">
+            <a href="Citi/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: Full-Stack & OS</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_03" onchange="updateProgress()">
+            <a href="Citi/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: FinTech & Rails</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_04" onchange="updateProgress()">
+            <a href="Citi/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_05" onchange="updateProgress()">
+            <a href="Citi/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: Banking Ledger</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_06" onchange="updateProgress()">
+            <a href="Citi/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Culture & Values</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_07" onchange="updateProgress()">
+            <a href="Citi/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="citi_readme" onchange="updateProgress()">
+            <a href="Citi/README.html" style="text-decoration:none; color:inherit;">Roadmap (3-Day)</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Citi/index.html" class="btn-open btn-citi-theme">
+            <span>Launch Citi Study Portal</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
 
       <!-- COMPANY: NOKIA (RECENT) -->
       <article class="card" data-company="nokia" data-date="2026-09-28" data-category="hardware" data-search="nokia optical networking optics dwdm roadm otn coherent pse-6s associate engineer c++ linux multithreading dsp 18 lpa recent">
