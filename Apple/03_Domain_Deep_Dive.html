@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>03: Apple AI Architecture & SDET Quality Engineering</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f5f5f7;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #fbfbfd;
+  --bg-code-header: #e8e8ed;
+  --bg-inline-code: #e8e8ed;
+  
+  --text-primary: #1d1d1f;
+  --text-secondary: #424245;
+  --text-muted: #86868b;
+  
+  --border-color: #d2d2d7;
+  --border-subtle: #e5e5ea;
+  --border-focus: #0071e3;
+  
+  --accent-primary: #0071e3;
+  --accent-primary-hover: #0077ed;
+  --accent-light: rgba(0, 113, 227, 0.08);
+  
+  --tag-bg: #eef7ff;
+  --tag-border: #0071e3;
+  --tag-text: #0071e3;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #000000;
+  --bg-surface: #121214;
+  --bg-card: #18181b;
+  --bg-sidebar: #09090b;
+  --bg-code-header: #202024;
+  --bg-inline-code: #202024;
+  
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --text-muted: #6e6e73;
+  
+  --border-color: #27272a;
+  --border-subtle: #3f3f46;
+  --border-focus: #2997ff;
+  
+  --accent-primary: #2997ff;
+  --accent-primary-hover: #64b5f6;
+  --accent-light: rgba(41, 151, 255, 0.14);
+  
+  --tag-bg: rgba(41, 151, 255, 0.12);
+  --tag-border: #2997ff;
+  --tag-text: #64b5f6;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0071e3, #2997ff, #a855f7);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #1d1d1f, #333336);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 10px 8px 8px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.nav-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 14px;
+}
+
+.theme-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-primary);
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 58px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent-primary);
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hub-return-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.hub-return-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.content-container {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 32px 100px;
+  flex: 1;
+}
+
+/* Typography & Markdown Render Styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin-top: 0;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--border-color);
+}
+
+h2 {
+  font-size: 1.55rem;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin-bottom: 1.2em;
+  color: var(--text-secondary);
+}
+
+ul, ol {
+  margin-bottom: 1.3em;
+  padding-left: 1.5em;
+  color: var(--text-secondary);
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent-primary);
+}
+
+/* Code Blocks Container */
+pre {
+  position: relative;
+  background-color: #0d1117 !important;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 1.3em 0 1.6em;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre code {
+  background-color: transparent !important;
+  padding: 0;
+  border-radius: 0;
+  color: #e6edf3;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Tables Responsive Wrapper */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.4em 0;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--bg-surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: left;
+  min-width: 580px;
+}
+
+th {
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: var(--accent-light);
+}
+
+/* Blockquotes & Callouts */
+blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 12px 18px;
+  margin: 1.3em 0;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-primary);
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2.2em 0;
+}
+
+/* Footer Navigation Buttons */
+.module-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  gap: 16px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+/* Fixed Mobile Bottom Navigation Bar */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  padding: 0 8px;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+  height: 100%;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-icon {
+  font-size: 16px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .drawer-close-btn {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .content-container {
+    padding: 24px 18px 80px;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon"></div>
+          <div class="brand-text">
+            <h2>Apple Prep Suite</h2>
+            <span>AI/ML SDE & SDET • 80 LPA</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="nav-section-title">Navigation Modules</div>
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Signature OA Problems</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: Systems, Memory & OS</span>
+            <span class="nav-badge">Engineering</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Domain_Deep_Dive.html" class="nav-link active">
+            <span>03: Apple AI & SDET Infra</span>
+            <span class="nav-badge">Domain</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_System_Design_or_HIL.html" class="nav-link">
+            <span>05: LLD & Test Architecture</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Apple Culture & Values</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Rapid Recall CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <div class="breadcrumb">
+            <a href="../index.html">← All Companies</a>
+            <span>/</span>
+            <a href="index.html">Apple</a>
+          </div>
+        </div>
+        
+        <div class="top-bar-right">
+          <a href="index.html" class="hub-return-btn">
+            <span>🏠 Hub</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1>03: Apple AI Architecture &amp; SDET Quality Engineering</h1>
+<p>This module breaks down the domain intelligence for both hiring tracks: <strong>Apple Intelligence On-Device AI Pipelines</strong> and <strong>Industrial SDET Automation Architecture</strong>.</p>
+<hr />
+<h2>PART I: Apple Intelligence &amp; Core ML Architecture</h2>
+<pre><code>┌────────────────────────────────────────────────────────────────────────┐
+│                        Apple Intelligence Engine                       │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │
+                 ┌──────────────────┴──────────────────┐
+                 ▼                                     ▼
+   ┌───────────────────────────┐         ┌───────────────────────────┐
+   │    On-Device AI (~3B)     │         │ Private Cloud Compute     │
+   │  • Apple Neural Engine    │         │ • Stateless Apple Silicon │
+   │  • LoRA Adapters          │         │ • Cryptographic auditing  │
+   │  • 4-bit/8-bit Quantized  │         │ • Non-retention guarantee │
+   └───────────────────────────┘         └───────────────────────────┘
+</code></pre>
+<h3>1. The Dual-Tier Execution Model</h3>
+<ul>
+<li><strong>On-Device Foundation Model (~3B Parameters)</strong>:</li>
+<li>Designed to run directly on Apple Silicon (iPhone 15 Pro+, M1+ Macs/iPads).</li>
+<li>Consumes under 4GB RAM to prevent evicting active user applications.</li>
+<li>Optimized using <strong>Post-Training Quantization (PTQ)</strong> and <strong>Quantization-Aware Training (QAT)</strong> down to 4-bit and mixed 2-bit/4-bit weights.</li>
+<li><strong>Private Cloud Compute (PCC)</strong>:</li>
+<li>Used for complex reasoning tasks that exceed on-device compute limits.</li>
+<li>Runs on custom Apple Silicon servers with hardware-enforced Secure Enclave.</li>
+<li><strong>Zero Retention</strong>: User data is processed strictly in volatile RAM and instantly destroyed. Independent security researchers can cryptographically inspect the exact OS image running on PCC.</li>
+</ul>
+<h3>2. LoRA (Low-Rank Adaptation) Dynamic Adapter Swapping</h3>
+<p>Instead of maintaining separate multi-gigabyte models for writing, proofreading, notification summaries, and code completion:<br />
+* A single, frozen on-device base model is shared across all features.<br />
+* Task-specific capabilities are injected on the fly via tiny <strong>LoRA adapters</strong> (typically tens of megabytes):<br />
+$$W_{\text{adapted}} = W_0 + \Delta W = W_0 + B \cdot A$$<br />
+where $W_0 \in \mathbb{R}^{d \times k}$ is the frozen weight matrix, and $B \in \mathbb{R}^{d \times r}, A \in \mathbb{R}^{r \times k}$ with rank $r \ll \min(d, k)$.<br />
+* Adapters are memory-mapped (<code>mmap</code>) into RAM in milliseconds as user intent shifts.</p>
+<h3>3. Core ML Compilation Pipeline</h3>
+<pre><code>[PyTorch / HuggingFace Model]
+              │
+              ▼  (coremltools.convert)
+[.mlpackage / MIL Intermediate Representation]
+              │
+              ▼  (Static Analysis &amp; Graph Optimization)
+[Partitioned Subgraphs]
+   ├── Subgraph 1 ──► Apple Neural Engine (ANE) - Fixed matrix ops
+   ├── Subgraph 2 ──► Metal Performance Shaders (MPS) - GPU compute
+   └── Subgraph 3 ──► CPU / AMX (Apple Matrix Coprocessor)
+</code></pre>
+<hr />
+<h2>PART II: SDET Quality Engineering &amp; Industrial Automation</h2>
+<pre><code>                          ┌─────────────────────────┐
+                          │   UI / End-to-End       │  ▲  Slowest,
+                          │   (XCUITest, Appium)    │  │  High Maintenance
+                          ├─────────────────────────┤  │
+                          │   Service &amp; API Layer   │  │
+                          │   (REST, gRPC, Mocks)   │  │
+                          ├─────────────────────────┤  │
+                          │   Unit &amp; Logic Tests    │  ▼  Fastest,
+                          │   (pytest, XCTest)      │     High Reliability
+                          └─────────────────────────┘
+</code></pre>
+<h3>1. Page Object Model (POM) Design Pattern</h3>
+<ul>
+<li><strong>Rule</strong>: Test scripts must <strong>never</strong> hardcode UI element locators (accessibility IDs, XPaths) or UI gestures directly in test assertions.</li>
+<li><strong>Separation of Concerns</strong>:</li>
+<li><strong>Page Class</strong>: Encapsulates the UI structure, element locators, and user interactions (e.g., <code>login_page.enter_credentials()</code>).</li>
+<li><strong>Test Script</strong>: Implements business assertions and test logic (e.g., <code>assert profile_page.is_displayed()</code>).</li>
+<li><strong>Benefit</strong>: If Apple redesigns a UI button or alters an accessibility identifier, only one line in the Page Class changes, leaving hundreds of automated tests intact.</li>
+</ul>
+<h3>2. Modern Python SDET Automation Framework Structure</h3>
+<pre><code class="language-python"># test_framework/pages/base_page.py
+from abc import ABC, abstractmethod
+import time
+
+class BasePage(ABC):
+    def __init__(self, driver):
+        self.driver = driver
+
+    def wait_for_element(self, locator: tuple, timeout: int = 10):
+        # Polls for element presence with explicit wait
+        start = time.time()
+        while time.time() - start &lt; timeout:
+            el = self.driver.find_element(*locator)
+            if el and el.is_visible():
+                return el
+            time.sleep(0.2)
+        raise TimeoutError(f&quot;Element {locator} not found within {timeout}s&quot;)
+
+# test_framework/tests/test_authentication.py
+import pytest
+
+class TestAuthentication:
+    @pytest.fixture(autouse=True)
+    def setup_teardown(self, app_driver):
+        # Fixture sets up clean isolated state per test
+        self.driver = app_driver
+        yield
+        self.driver.reset_app_state()
+
+    @pytest.mark.smoke
+    @pytest.mark.parametrize(&quot;username,password,expected_status&quot;, [
+        (&quot;valid_user@apple.com&quot;, &quot;CorrectPass123!&quot;, True),
+        (&quot;invalid_user@apple.com&quot;, &quot;WrongPass!&quot;, False),
+        (&quot;&quot;, &quot;EmptyUserPass!&quot;, False)
+    ])
+    def test_login_flow(self, username, password, expected_status):
+        login_page = LoginPage(self.driver)
+        login_page.login(username, password)
+        assert login_page.is_logged_in() == expected_status
+</code></pre>
+<h3>3. Flaky Test Mitigation Strategies</h3>
+<p>In large-scale continuous integration systems at Apple (running millions of tests per day):<br />
+1. <strong>Quarantine Pipeline</strong>: Any test that exhibits non-deterministic pass/fail behavior on the identical commit is automatically quarantined from the blocking merge queue to unblock developers.<br />
+2. <strong>Deterministic Timeouts</strong>: Replace arbitrary <code>sleep(5)</code> statements with <strong>Explicit Polling Waits</strong> that check for condition satisfaction.<br />
+3. <strong>Hermetic Test Environments</strong>: Every test execution runs with fresh mock data, ephemeral test accounts, and mocked network stubs to prevent shared-state corruption.<br />
+4. <strong>Statistical Root-Cause Analysis</strong>: Track failure variance across device types, OS build numbers, and network latencies to isolate environmental bugs from true regressions.</p>
+
+        <div class="module-footer-nav">
+          <a href="02_Technical_Rounds.html" class="footer-btn">← 02: Systems, Memory & OS</a><a href="04_Candidate_Resume_Grilling.html" class="footer-btn">04: Resume Defense & Traps →</a>
+        </div>
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- Fixed Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-modules">
+      <span class="bottom-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-theme">
+      <span class="bottom-nav-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="bottom-nav-item" id="b-nav-top">
+      <span class="bottom-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('apple_theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('apple_theme', 'light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('apple_theme') || 'dark';
+    setTheme(savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    if (bNavTheme) bNavTheme.addEventListener('click', toggleTheme);
+
+    // Mobile Drawer Navigation
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      sidebarBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      sidebarBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top Button
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Indicator
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.scrollY / totalHeight) * 100;
+        document.getElementById('reading-progress').style.width = progress + '%';
+      }
+    });
+
+    // Add Copy Buttons to Code Blocks
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('pre').forEach(pre => {
+        const code = pre.querySelector('code');
+        if (!code) return;
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = 'Copy';
+        btn.onclick = () => {
+          navigator.clipboard.writeText(code.innerText).then(() => {
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+          });
+        };
+        pre.appendChild(btn);
+      });
+    });
+  </script>
+</body>
+</html>
