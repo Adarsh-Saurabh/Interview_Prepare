@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#080e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>01: Signature OA & Live Coding Problems</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #e2e8f0;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-primary: #0284c7;
+  --accent-primary-hover: #0369a1;
+  --accent-light: rgba(2, 132, 199, 0.08);
+  
+  --tag-bg: #e0f2fe;
+  --tag-border: #0284c7;
+  --tag-text: #0284c7;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #080e1a;
+  --bg-surface: #0f172a;
+  --bg-card: #131d31;
+  --bg-sidebar: #0b1324;
+  --bg-code-header: #1e293b;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(56, 189, 248, 0.12);
+  --tag-border: #38bdf8;
+  --tag-text: #38bdf8;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #06b6d4);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 10px 8px 8px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.nav-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 14px;
+}
+
+.theme-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-primary);
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 58px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent-primary);
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hub-return-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.hub-return-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.content-container {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 32px 100px;
+  flex: 1;
+}
+
+/* Typography & Markdown Render Styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin-top: 0;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--border-color);
+}
+
+h2 {
+  font-size: 1.55rem;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin-bottom: 1.2em;
+  color: var(--text-secondary);
+}
+
+ul, ol {
+  margin-bottom: 1.3em;
+  padding-left: 1.5em;
+  color: var(--text-secondary);
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent-primary);
+}
+
+/* Code Blocks Container */
+pre {
+  position: relative;
+  background-color: #0d1117 !important;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 1.3em 0 1.6em;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre code {
+  background-color: transparent !important;
+  padding: 0;
+  border-radius: 0;
+  color: #e6edf3;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Tables Responsive Wrapper */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.4em 0;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--bg-surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: left;
+  min-width: 580px;
+}
+
+th {
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: var(--accent-light);
+}
+
+/* Blockquotes & Callouts */
+blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 12px 18px;
+  margin: 1.3em 0;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-primary);
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2.2em 0;
+}
+
+/* Footer Navigation Buttons */
+.module-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  gap: 16px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+/* Fixed Mobile Bottom Navigation Bar */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  padding: 0 8px;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+  height: 100%;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-icon {
+  font-size: 16px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .drawer-close-btn {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .content-container {
+    padding: 24px 18px 80px;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">M</div>
+          <div class="brand-text">
+            <h2>Media.net Prep</h2>
+            <span>SDE Intern &bull; 1 LPM + PPO</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="nav-section-title">Navigation Modules</div>
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test.html" class="nav-link active">
+            <span>01: Signature OA Problems</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: OS, Networks & DBMS</span>
+            <span class="nav-badge">CS Core</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Domain_Deep_Dive.html" class="nav-link">
+            <span>03: Ad-Tech & RTB Systems</span>
+            <span class="nav-badge">Domain</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_System_Design_or_HIL.html" class="nav-link">
+            <span>05: LLD & Low-Latency HLD</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Culture & Ownership</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Rapid Recall CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <div class="breadcrumb">
+            <a href="../index.html">← All Companies</a>
+            <span>/</span>
+            <a href="index.html">Media.net</a>
+          </div>
+        </div>
+        
+        <div class="top-bar-right">
+          <a href="index.html" class="hub-return-btn">
+            <span>🏠 Hub</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1>01: Signature OA &amp; Live Coding Problems</h1>
+<p>Media.net's Online Assessment (InterviewBit) and Technical Round 1 demand unassisted, bug-free implementations of non-trivial algorithmic problems under strict time constraints. Below are 5 signature algorithmic problems derived from real Media.net recruitment drives, complete with optimal Python and C++ implementations, complexity proofs, and edge-case test suites.</p>
+<hr />
+<h2>Problem 1: Real-Time Bidding Top-K Vickrey Second-Price Auction</h2>
+<h3>Problem Statement</h3>
+<p>In an ad exchange auction, $N$ DSPs submit bids for $K$ available ad placements ($1 \le K \le N$). Each bid contains:<br />
+* <code>dsp_id</code> (string)<br />
+* <code>bid_price</code> (float in USD CPM)<br />
+* <code>timestamp_ms</code> (integer timestamp)</p>
+<p>An ad unit is cleared using a <strong>Generalized Second-Price (GSP) Auction</strong>:<br />
+1. The top $K$ highest bidders win the slots.<br />
+2. Ties in bid price are broken by earliest <code>timestamp_ms</code>. If timestamps match, alphabetical order of <code>dsp_id</code>.<br />
+3. The $i$-th winner ($1 \le i &lt; K$) pays the bid price of the $(i+1)$-th bidder (second price).<br />
+4. The $K$-th winner pays the reserve price $R$ (or $(K+1)$-th bid if available, whichever is higher).</p>
+<p>Return the list of winning DSPs with their assigned clearing prices.</p>
+<h3>Algorithmic Approach</h3>
+<ul>
+<li><strong>Brute Force</strong>: Full sorting of $N$ bids takes $O(N \log N)$. When $N = 10^6$ and $K \ll N$ (e.g. $K=5$), sorting the entire stream wastes memory and CPU cache.</li>
+<li><strong>Optimal Approach</strong>: Maintain a Min-Heap of size $K+1$. For each incoming bid, push into heap; if size exceeds $K+1$, pop the smallest.</li>
+<li><strong>Complexity</strong>:</li>
+<li><strong>Time</strong>: $O(N \log K)$ time.</li>
+<li><strong>Space</strong>: $O(K)$ space.</li>
+</ul>
+<h3>Python 3 Production Solution</h3>
+<pre><code class="language-python">import heapq
+from typing import List, Tuple, Dict, Any
+
+class Bid:
+    def __init__(self, dsp_id: str, price: float, timestamp_ms: int):
+        self.dsp_id = dsp_id
+        self.price = price
+        self.timestamp_ms = timestamp_ms
+
+    def __lt__(self, other: 'Bid') -&gt; bool:
+        # Min-heap comparison: lower price is evicted first.
+        # Tie breaker: later timestamp evicted first.
+        if abs(self.price - other.price) &gt; 1e-6:
+            return self.price &lt; other.price
+        if self.timestamp_ms != other.timestamp_ms:
+            return self.timestamp_ms &gt; other.timestamp_ms
+        return self.dsp_id &gt; other.dsp_id
+
+def resolve_gsp_auction(bids_data: List[Tuple[str, float, int]], K: int, reserve_price: float) -&gt; List[Dict[str, Any]]:
+    &quot;&quot;&quot;
+    Resolves Generalized Second-Price (GSP) auction for K slots.
+    Time Complexity: O(N log K)
+    Space Complexity: O(K)
+    &quot;&quot;&quot;
+    if not bids_data or K &lt;= 0:
+        return []
+
+    # Filter bids below reserve price
+    valid_bids = [Bid(dsp, price, ts) for dsp, price, ts in bids_data if price &gt;= reserve_price]
+    if not valid_bids:
+        return []
+
+    # Maintain top K + 1 bids in min-heap to determine K-th slot clearing price
+    heap = []
+    for bid in valid_bids:
+        heapq.heappush(heap, bid)
+        if len(heap) &gt; K + 1:
+            heapq.heappop(heap)
+
+    # Extract all elements from heap (ascending order)
+    top_candidates = []
+    while heap:
+        top_candidates.append(heapq.heappop(heap))
+
+    # Reverse to get descending order: index 0 is 1st place
+    top_candidates.reverse()
+
+    winners_count = min(K, len(top_candidates))
+    results = []
+
+    for i in range(winners_count):
+        winner = top_candidates[i]
+        if i + 1 &lt; len(top_candidates):
+            clearing_price = max(top_candidates[i + 1].price, reserve_price)
+        else:
+            clearing_price = reserve_price
+
+        results.append({
+            &quot;rank&quot;: i + 1,
+            &quot;dsp_id&quot;: winner.dsp_id,
+            &quot;bid_price&quot;: winner.price,
+            &quot;clearing_price&quot;: round(clearing_price, 4)
+        })
+
+    return results
+
+if __name__ == '__main__':
+    sample_bids = [
+        (&quot;DSP_Alpha&quot;, 4.50, 100),
+        (&quot;DSP_Beta&quot;, 6.20, 105),
+        (&quot;DSP_Gamma&quot;, 6.20, 95),   # Same price as Beta, earlier timestamp
+        (&quot;DSP_Delta&quot;, 2.10, 110),
+        (&quot;DSP_Epsilon&quot;, 5.80, 102)
+    ]
+    winners = resolve_gsp_auction(sample_bids, K=2, reserve_price=3.00)
+    for w in winners:
+        print(w)
+</code></pre>
+<h3>C++20 Optimal Implementation</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+#include &lt;iomanip&gt;
+
+struct Bid {
+    std::string dsp_id;
+    double price;
+    int64_t timestamp_ms;
+
+    // Strict weak ordering for Min-Heap (lowest priority on top)
+    bool operator&gt;(const Bid&amp; other) const {
+        if (std::abs(price - other.price) &gt; 1e-6)
+            return price &gt; other.price;
+        if (timestamp_ms != other.timestamp_ms)
+            return timestamp_ms &lt; other.timestamp_ms; // earlier timestamp is higher priority
+        return dsp_id &lt; other.dsp_id;
+    }
+};
+
+struct AuctionResult {
+    int rank;
+    std::string dsp_id;
+    double bid_price;
+    double clearing_price;
+};
+
+std::vector&lt;AuctionResult&gt; resolveGSPAuction(
+    const std::vector&lt;Bid&gt;&amp; bids, int K, double reserve_price) {
+
+    std::priority_queue&lt;Bid, std::vector&lt;Bid&gt;, std::greater&lt;Bid&gt;&gt; min_heap;
+
+    for (const auto&amp; bid : bids) {
+        if (bid.price &lt; reserve_price) continue;
+        min_heap.push(bid);
+        if (min_heap.size() &gt; static_cast&lt;size_t&gt;(K + 1)) {
+            min_heap.pop();
+        }
+    }
+
+    std::vector&lt;Bid&gt; sorted_bids;
+    while (!min_heap.empty()) {
+        sorted_bids.push_back(min_heap.top());
+        min_heap.pop();
+    }
+    std::reverse(sorted_bids.begin(), sorted_bids.end());
+
+    std::vector&lt;AuctionResult&gt; results;
+    int winners_count = std::min(K, static_cast&lt;int&gt;(sorted_bids.size()));
+
+    for (int i = 0; i &lt; winners_count; ++i) {
+        double clearing = (i + 1 &lt; static_cast&lt;int&gt;(sorted_bids.size())) 
+                          ? std::max(sorted_bids[i + 1].price, reserve_price)
+                          : reserve_price;
+        results.push_back({i + 1, sorted_bids[i].dsp_id, sorted_bids[i].price, clearing});
+    }
+    return results;
+}
+</code></pre>
+<hr />
+<h2>Problem 2: Contextual Keyword Matching with Inverted Index &amp; Wildcard Trie</h2>
+<h3>Problem Statement</h3>
+<p>Media.net processes millions of publisher articles and extracts key phrases. Advertisers bid on keyword patterns which may contain wildcard operators:<br />
+* <code>?</code>: Matches exactly one arbitrary character.<br />
+* <code>*</code>: Matches zero or more arbitrary characters.</p>
+<p>Given a dictionary of advertiser target patterns and article tokens, design a high-throughput matching engine returning all campaign IDs matching a given article keyword.</p>
+<h3>Algorithmic Approach</h3>
+<ul>
+<li><strong>Data Structure</strong>: Prefix Trie with wildcard branch resolution.</li>
+<li><strong>Time Complexity</strong>:</li>
+<li>Pattern insertion: $O(L)$ where $L$ is pattern length.</li>
+<li>Search: $O(2^L)$ worst case for degenerate <code>*</code>, but $O(L)$ average case with pruning.</li>
+</ul>
+<h3>Python 3 Production Solution</h3>
+<pre><code class="language-python">from typing import Dict, List, Set
+
+class TrieNode:
+    def __init__(self):
+        self.children: Dict[str, 'TrieNode'] = {}
+        self.campaign_ids: List[int] = []
+
+class ContextualPatternMatcher:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert_pattern(self, pattern: str, campaign_id: int):
+        node = self.root
+        for char in pattern:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.campaign_ids.append(campaign_id)
+
+    def search_matches(self, word: str) -&gt; List[int]:
+        results: Set[int] = set()
+
+        def dfs(node: TrieNode, word_idx: int):
+            if word_idx == len(word):
+                for cid in node.campaign_ids:
+                    results.add(cid)
+                if '*' in node.children:
+                    dfs(node.children['*'], word_idx)
+                return
+
+            char = word[word_idx]
+
+            # 1. Exact match
+            if char in node.children:
+                dfs(node.children[char], word_idx + 1)
+
+            # 2. '?' single character wildcard
+            if '?' in node.children:
+                dfs(node.children['?'], word_idx + 1)
+
+            # 3. '*' multi-character wildcard
+            if '*' in node.children:
+                star_node = node.children['*']
+                # Case A: match 0 characters
+                dfs(star_node, word_idx)
+                # Case B: match 1+ characters
+                dfs(star_node, word_idx + 1)
+
+        dfs(self.root, 0)
+        return sorted(list(results))
+
+if __name__ == '__main__':
+    matcher = ContextualPatternMatcher()
+    matcher.insert_pattern(&quot;cloud*&quot;, 101)
+    matcher.insert_pattern(&quot;cl?ud&quot;, 102)
+    matcher.insert_pattern(&quot;hosting&quot;, 103)
+    matcher.insert_pattern(&quot;*server*&quot;, 104)
+
+    print(&quot;Matches for 'cloud':&quot;, matcher.search_matches(&quot;cloud&quot;))   # [101, 102]
+    print(&quot;Matches for 'cloudy':&quot;, matcher.search_matches(&quot;cloudy&quot;)) # [101]
+</code></pre>
+<hr />
+<h2>Problem 3: Sliding Window Rate Limiter &amp; Frequency Capper</h2>
+<h3>Problem Statement</h3>
+<p>In digital ad delivery, <strong>Frequency Capping</strong> limits how often a specific advertisement is shown to the same user within a rolling time window $W$ (e.g., at most $M$ impressions per 60 seconds). Implement an in-memory frequency capper supporting:<br />
+<code>record_and_check(user_id: str, campaign_id: str, timestamp_sec: int) -&gt; bool</code></p>
+<h3>Algorithmic Approach</h3>
+<ul>
+<li><strong>Data Structure</strong>: Hash Map mapping <code>(user_id, campaign_id)</code> to a double-ended queue storing timestamps.</li>
+<li><strong>Complexity</strong>:</li>
+<li>Evict timestamps $&lt; (timestamp - W)$.</li>
+<li>If queue size $&lt; M$: append timestamp, return <code>True</code>.</li>
+<li>Amortized Time: $O(1)$ per query.</li>
+<li>Space: $O(U \times M)$.</li>
+</ul>
+<h3>C++20 Thread-Safe Implementation</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
+#include &lt;deque&gt;
+#include &lt;mutex&gt;
+
+class FrequencyCapper {
+private:
+    const int max_impressions_;
+    const int window_seconds_;
+    std::unordered_map&lt;std::string, std::deque&lt;int64_t&gt;&gt; records_;
+    mutable std::mutex mtx_;
+
+public:
+    FrequencyCapper(int max_impressions, int window_seconds)
+        : max_impressions_(max_impressions), window_seconds_(window_seconds) {}
+
+    bool recordAndCheck(const std::string&amp; user_id, const std::string&amp; campaign_id, int64_t current_time) {
+        std::lock_guard&lt;std::mutex&gt; lock(mtx_);
+        std::string key = user_id + &quot;#&quot; + campaign_id;
+        auto&amp; dq = records_[key];
+
+        int64_t window_start = current_time - window_seconds_;
+
+        while (!dq.empty() &amp;&amp; dq.front() &lt;= window_start) {
+            dq.pop_front();
+        }
+
+        if (static_cast&lt;int&gt;(dq.size()) &lt; max_impressions_) {
+            dq.push_back(current_time);
+            return true;
+        }
+        return false;
+    }
+};
+</code></pre>
+<hr />
+<h2>Problem 4: Maximum Revenue Non-Overlapping Ad Slot Scheduling</h2>
+<h3>Problem Statement</h3>
+<p>An online publisher has $N$ advertiser campaigns bidding for exclusive display on their homepage banner. Each campaign $i$ specifies:<br />
+* <code>start_time</code> $S_i$, <code>end_time</code> $E_i$, <code>revenue</code> $V_i$.<br />
+Maximize total non-overlapping revenue.</p>
+<h3>Mathematical Formulation</h3>
+<p><strong>Weighted Interval Scheduling</strong>:<br />
+1. Sort campaigns by <code>end_time</code> ascending.<br />
+2. For each campaign $i$, binary search for latest compatible campaign $p(i)$ where $E_{p(i)} \le S_i$.<br />
+3. Recurrence:<br />
+   $$DP[i] = \max\left(DP[i-1], V_i + DP[p(i)]\right)$$<br />
+4. Complexity: Time $O(N \log N)$, Space $O(N)$.</p>
+<h3>Python 3 Solution</h3>
+<pre><code class="language-python">import bisect
+from typing import List, Tuple
+
+def max_ad_campaign_revenue(campaigns: List[Tuple[int, int, int]]) -&gt; int:
+    if not campaigns:
+        return 0
+
+    sorted_campaigns = sorted(campaigns, key=lambda x: x[1])
+    n = len(sorted_campaigns)
+    end_times = [c[1] for c in sorted_campaigns]
+    dp = [0] * (n + 1)
+
+    for i in range(1, n + 1):
+        curr_start, curr_end, curr_val = sorted_campaigns[i - 1]
+        idx = bisect.bisect_right(end_times, curr_start)
+        dp[i] = max(dp[i - 1], curr_val + dp[idx])
+
+    return dp[n]
+</code></pre>
+<hr />
+<h2>Problem 5: Ad Delivery DAG Cycle Detection &amp; Critical Path Latency</h2>
+<h3>Problem Statement</h3>
+<p>In an ad-rendering pipeline, $N$ enrichment tasks form a directed acyclic graph. Each task has latency $L_i$ ms. Detect cycles and find the maximum latency path (Critical Path).</p>
+<h3>C++20 Optimal Implementation</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+
+struct PipelineAnalysis {
+    bool has_cycle;
+    int critical_path_latency_ms;
+    std::vector&lt;int&gt; topo_order;
+};
+
+PipelineAnalysis analyzeAdPipeline(int n, const std::vector&lt;int&gt;&amp; latencies, const std::vector&lt;std::pair&lt;int, int&gt;&gt;&amp; dependencies) {
+    std::vector&lt;std::vector&lt;int&gt;&gt; adj(n);
+    std::vector&lt;int&gt; in_degree(n, 0);
+
+    for (const auto&amp; [u, v] : dependencies) {
+        adj[u].push_back(v);
+        in_degree[v]++;
+    }
+
+    std::queue&lt;int&gt; q;
+    std::vector&lt;int&gt; completion_time = latencies;
+
+    for (int i = 0; i &lt; n; ++i) {
+        if (in_degree[i] == 0) q.push(i);
+    }
+
+    std::vector&lt;int&gt; topo_order;
+    while (!q.empty()) {
+        int curr = q.front();
+        q.pop();
+        topo_order.push_back(curr);
+
+        for (int neighbor : adj[curr]) {
+            completion_time[neighbor] = std::max(
+                completion_time[neighbor], 
+                completion_time[curr] + latencies[neighbor]
+            );
+            if (--in_degree[neighbor] == 0) {
+                q.push(neighbor);
+            }
+        }
+    }
+
+    if (static_cast&lt;int&gt;(topo_order.size()) &lt; n) {
+        return {true, -1, {}}; // Cycle detected
+    }
+
+    int max_latency = 0;
+    for (int t : completion_time) max_latency = std::max(max_latency, t);
+
+    return {false, max_latency, topo_order};
+}
+</code></pre>
+
+        <nav class="module-footer-nav">
+          <a href="00_START_HERE.html" class="footer-btn">← 00: Company & Role Intel</a><a href="02_Technical_Rounds.html" class="footer-btn">02: Systems, Memory, OS & Networks →</a>
+        </nav>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-modules">
+      <span class="bottom-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-theme">
+      <span class="bottom-nav-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="bottom-nav-item" id="b-nav-top">
+      <span class="bottom-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+    if (bNavTheme) {
+      bNavTheme.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+
+    // Mobile Drawer Management
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      sidebarBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      sidebarBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Indicator
+    const progressBar = document.getElementById('reading-progress');
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.pageYOffset / totalHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+    });
+
+    // Code Copy Buttons
+    document.querySelectorAll('pre').forEach(block => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = block.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.innerText).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.style.background = '';
+            }, 2000);
+          });
+        }
+      });
+      block.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

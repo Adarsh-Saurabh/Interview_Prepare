@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#080e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>03: Ad-Tech & RTB Systems Architecture</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #e2e8f0;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-primary: #0284c7;
+  --accent-primary-hover: #0369a1;
+  --accent-light: rgba(2, 132, 199, 0.08);
+  
+  --tag-bg: #e0f2fe;
+  --tag-border: #0284c7;
+  --tag-text: #0284c7;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #080e1a;
+  --bg-surface: #0f172a;
+  --bg-card: #131d31;
+  --bg-sidebar: #0b1324;
+  --bg-code-header: #1e293b;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(56, 189, 248, 0.12);
+  --tag-border: #38bdf8;
+  --tag-text: #38bdf8;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #06b6d4);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 10px 8px 8px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.nav-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 14px;
+}
+
+.theme-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-primary);
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 58px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent-primary);
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hub-return-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.hub-return-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.content-container {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 32px 100px;
+  flex: 1;
+}
+
+/* Typography & Markdown Render Styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin-top: 0;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--border-color);
+}
+
+h2 {
+  font-size: 1.55rem;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin-bottom: 1.2em;
+  color: var(--text-secondary);
+}
+
+ul, ol {
+  margin-bottom: 1.3em;
+  padding-left: 1.5em;
+  color: var(--text-secondary);
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent-primary);
+}
+
+/* Code Blocks Container */
+pre {
+  position: relative;
+  background-color: #0d1117 !important;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 1.3em 0 1.6em;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre code {
+  background-color: transparent !important;
+  padding: 0;
+  border-radius: 0;
+  color: #e6edf3;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Tables Responsive Wrapper */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.4em 0;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--bg-surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: left;
+  min-width: 580px;
+}
+
+th {
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: var(--accent-light);
+}
+
+/* Blockquotes & Callouts */
+blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 12px 18px;
+  margin: 1.3em 0;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-primary);
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2.2em 0;
+}
+
+/* Footer Navigation Buttons */
+.module-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  gap: 16px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+/* Fixed Mobile Bottom Navigation Bar */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  padding: 0 8px;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+  height: 100%;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-icon {
+  font-size: 16px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .drawer-close-btn {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .content-container {
+    padding: 24px 18px 80px;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">M</div>
+          <div class="brand-text">
+            <h2>Media.net Prep</h2>
+            <span>SDE Intern &bull; 1 LPM + PPO</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="nav-section-title">Navigation Modules</div>
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Signature OA Problems</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: OS, Networks & DBMS</span>
+            <span class="nav-badge">CS Core</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Domain_Deep_Dive.html" class="nav-link active">
+            <span>03: Ad-Tech & RTB Systems</span>
+            <span class="nav-badge">Domain</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_System_Design_or_HIL.html" class="nav-link">
+            <span>05: LLD & Low-Latency HLD</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Culture & Ownership</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Rapid Recall CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <div class="breadcrumb">
+            <a href="../index.html">← All Companies</a>
+            <span>/</span>
+            <a href="index.html">Media.net</a>
+          </div>
+        </div>
+        
+        <div class="top-bar-right">
+          <a href="index.html" class="hub-return-btn">
+            <span>🏠 Hub</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1>03: Ad-Tech &amp; RTB Systems Architecture</h1>
+<p>Media.net is an industry pioneer in <strong>Sell-Side Platforms (SSP)</strong> and <strong>Contextual Advertising</strong>. To excel in technical and managerial interviews, you must understand how billions of dollars flow through programmatic ad pipelines within millisecond latency budgets.</p>
+<hr />
+<h2>1. The Programmatic Advertising Ecosystem</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────────┐
+│                          Digital Ad Supply Chain                                │
+├─────────────────┬──────────────────────┬──────────────────────┬─────────────────┤
+│   Publishers    │   Supply-Side (SSP)  │   Ad Exchange / RTB  │ Demand-Side(DSP)│
+│ Forbes, CNN, NYT│   Media.net Engine   │   OpenRTB Auction    │ Trade Desk, DV36│
+│ Generates Supply│ Aggregates Inventory │ Matches Buyers &amp; Sell│ Buys on Target  │
+└─────────────────┴──────────────────────┴──────────────────────┴─────────────────┘
+</code></pre>
+<ol>
+<li><strong>Publisher (Supply)</strong>: Websites and mobile apps providing ad real estate (banners, native widgets, video players).</li>
+<li><strong>Supply-Side Platform (SSP) — Media.net's Core Business</strong>: Software used by publishers to automate the selling of their advertising impressions to maximize yield.</li>
+<li><strong>Demand-Side Platform (DSP)</strong>: Software used by advertisers and agencies (Nike, Uber, Samsung) to automatically purchase inventory across multiple ad exchanges based on audience targeting and bidding algorithms.</li>
+<li><strong>Data Management Platform (DMP)</strong>: Warehouses audience demographic, behavioral, and intent data to enrich bid requests.</li>
+<li><strong>Ad Server</strong>: The final decision authority on the publisher page that renders the winning ad creative.</li>
+</ol>
+<hr />
+<h2>2. Real-Time Bidding (RTB) Protocol &amp; The 50ms Latency Budget</h2>
+<p>When a user opens an article on a publisher website, an RTB auction executes before the browser paints the viewport. The entire pipeline operates under a <strong>hard 50ms SLA</strong>:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align: center;">Step</th>
+<th style="text-align: left;">Operation</th>
+<th style="text-align: center;">Latency Budget</th>
+<th style="text-align: left;">Technology / Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: left;">Client Browser $\to$ Edge SSP Request</td>
+<td style="text-align: center;">10 ms</td>
+<td style="text-align: left;">HTTP/2, Anycast DNS routing to closest edge PoP</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: left;">Contextual NLP &amp; Keyword Extraction</td>
+<td style="text-align: center;">5 ms</td>
+<td style="text-align: left;">In-memory Trie matcher, cached page semantic vector</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: left;">OpenRTB Bid Request Serialization &amp; DSP Dispatch</td>
+<td style="text-align: center;">2 ms</td>
+<td style="text-align: left;">Protocol Buffers / zero-copy JSON serializer</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: left;">DSP Bid Computation (Parallel Wait)</td>
+<td style="text-align: center;">25 ms</td>
+<td style="text-align: left;">Hard timeout timer; DSPs failing to respond are dropped</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: left;">Auction Resolution (Second-Price Vickrey)</td>
+<td style="text-align: center;">3 ms</td>
+<td style="text-align: left;">Min-Heap / QuickSelect top-K selection &amp; pricing</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>6</strong></td>
+<td style="text-align: left;">Winning Ad Creative Serialization &amp; Response</td>
+<td style="text-align: center;">5 ms</td>
+<td style="text-align: left;">Asynchronous event logging to Kafka; return HTML/JS</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Total</strong></td>
+<td style="text-align: left;"><strong>End-to-End Auction Pipeline</strong></td>
+<td style="text-align: center;"><strong>50 ms</strong></td>
+<td style="text-align: left;"><strong>Sub-50ms SLA Guaranteed</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3>The OpenRTB 2.5 Bid Request Spec (Simplified JSON)</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;auction-83921-prod-mumbai&quot;,
+  &quot;imp&quot;: [
+    {
+      &quot;id&quot;: &quot;1&quot;,
+      &quot;banner&quot;: { &quot;w&quot;: 300, &quot;h&quot;: 250, &quot;pos&quot;: 1 },
+      &quot;bidfloor&quot;: 1.25,
+      &quot;bidfloorcur&quot;: &quot;USD&quot;
+    }
+  ],
+  &quot;site&quot;: {
+    &quot;id&quot;: &quot;forbes-tech-102&quot;,
+    &quot;domain&quot;: &quot;forbes.com&quot;,
+    &quot;cat&quot;: [&quot;IAB19-1&quot;, &quot;IAB19-18&quot;],
+    &quot;keywords&quot;: &quot;cloud computing, enterprise security, kubernetes&quot;
+  },
+  &quot;device&quot;: {
+    &quot;ip&quot;: &quot;203.0.113.195&quot;,
+    &quot;geo&quot;: { &quot;country&quot;: &quot;IND&quot;, &quot;region&quot;: &quot;MH&quot;, &quot;city&quot;: &quot;Mumbai&quot; }
+  },
+  &quot;tmax&quot;: 35
+}
+</code></pre>
+<hr />
+<h2>3. Header Bidding (Prebid.js) vs. Traditional Waterfall</h2>
+<p>Historically, publishers used the <strong>Waterfall (Daisy-Chaining)</strong> model:</p>
+<pre><code>Publisher Ad Server ──► SSP 1 ($5 Floor) [Passback] ──► SSP 2 ($3 Floor) [Passback] ──► AdSense ($1)
+</code></pre>
+<ul>
+<li><strong>Problems with Waterfall</strong>:</li>
+<li>High latency (sequential network hops accumulating 500ms–1500ms).</li>
+<li>Inefficient yield (SSP 2 might have a $6 buyer, but SSP 1 passes it back because its own floor was unmet).</li>
+</ul>
+<pre><code>                      ┌─────────────────────────────────┐
+                      │    Client Browser (Prebid.js)   │
+                      └────────────────┬────────────────┘
+                                       │ (Parallel Requests)
+               ┌───────────────────────┼───────────────────────┐
+               ▼                       ▼                       ▼
+      ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+      │ Media.net (SSP) │     │   AppNexus/Xandr│     │   Rubicon/Magnite
+      │   Bids: $4.50   │     │   Bids: $3.80   │     │   Bids: $4.10   │
+      └────────┬────────┘     └────────┬────────┘     └────────┬────────┘
+               │                       │                       │
+               └───────────────────────┼───────────────────────┘
+                                       ▼
+                      ┌─────────────────────────────────┐
+                      │ Media.net Wins ($4.50 Clearing) │
+                      └─────────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>Header Bidding Revolution</strong>: Media.net embeds a lightweight JavaScript adapter (<code>Prebid.js</code>) in the publisher's page <code>&lt;head&gt;</code>. Before the ad server is called, the script dispatches <strong>concurrent asynchronous requests</strong> to multiple SSPs. All bids arrive within 200ms and compete in a unified, transparent auction, maximizing publisher revenue by 30–50%.</li>
+</ul>
+<hr />
+<h2>4. High-Scale Data Structures in Ad-Tech</h2>
+<h3>A. Frequency Capping via Redis Bitmaps &amp; Sliding Windows</h3>
+<ul>
+<li>Advertisers cap user exposure to avoid banner blindness.</li>
+<li><strong>Storage Optimization</strong>: Storing timestamps naively consumes gigabytes of memory.</li>
+<li><strong>Bitmaps Solution</strong>: For daily frequency caps, maintain a Redis Bitmap per user where bit index represents hour or time slot. <code>BITCOUNT</code> checks impressions in $O(1)$ operations with only a few bytes of storage per user.</li>
+</ul>
+<h3>B. HyperLogLog for Unique Daily Audience Counting</h3>
+<ul>
+<li>An ad campaign reports "How many unique users viewed this Nike ad today?"</li>
+<li>Across 100 million impressions, storing user IDs in a hash set would require gigabytes of RAM.</li>
+<li><strong>HyperLogLog (HLL)</strong> estimates the cardinality of billions of items using <strong>only 1.5 KB of memory</strong> with a standard error of $\approx 0.81\%$. It analyzes the distribution of leading zeros in the hash values of elements.</li>
+</ul>
+<h3>C. Bloom Filters for Click Fraud Prevention</h3>
+<ul>
+<li>Malicious bots generate automated click fraud to drain advertiser budgets.</li>
+<li>Edge proxies check incoming click signatures against a <strong>Bloom Filter</strong> of known malicious IP ranges and bot user-agents in $&lt; 10$ microseconds before passing the request to the billing engine.</li>
+</ul>
+
+        <nav class="module-footer-nav">
+          <a href="02_Technical_Rounds.html" class="footer-btn">← 02: Systems, Memory, OS & Networks</a><a href="04_Candidate_Resume_Grilling.html" class="footer-btn">04: Candidate Resume Grilling →</a>
+        </nav>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-modules">
+      <span class="bottom-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-theme">
+      <span class="bottom-nav-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="bottom-nav-item" id="b-nav-top">
+      <span class="bottom-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+    if (bNavTheme) {
+      bNavTheme.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+
+    // Mobile Drawer Management
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      sidebarBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      sidebarBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Indicator
+    const progressBar = document.getElementById('reading-progress');
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.pageYOffset / totalHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+    });
+
+    // Code Copy Buttons
+    document.querySelectorAll('pre').forEach(block => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = block.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.innerText).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.style.background = '';
+            }, 2000);
+          });
+        }
+      });
+      block.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

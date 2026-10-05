@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#080e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>04: Candidate Resume Grilling & Traps</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-code-header: #e2e8f0;
+  --bg-inline-code: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-primary: #0284c7;
+  --accent-primary-hover: #0369a1;
+  --accent-light: rgba(2, 132, 199, 0.08);
+  
+  --tag-bg: #e0f2fe;
+  --tag-border: #0284c7;
+  --tag-text: #0284c7;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #080e1a;
+  --bg-surface: #0f172a;
+  --bg-card: #131d31;
+  --bg-sidebar: #0b1324;
+  --bg-code-header: #1e293b;
+  --bg-inline-code: #1e293b;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #334155;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(56, 189, 248, 0.12);
+  --tag-border: #38bdf8;
+  --tag-text: #38bdf8;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #06b6d4);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 10px 8px 8px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.nav-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 14px;
+}
+
+.theme-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-primary);
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 58px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent-primary);
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hub-return-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.hub-return-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.content-container {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 32px 100px;
+  flex: 1;
+}
+
+/* Typography & Markdown Render Styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin-top: 0;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--border-color);
+}
+
+h2 {
+  font-size: 1.55rem;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin-bottom: 1.2em;
+  color: var(--text-secondary);
+}
+
+ul, ol {
+  margin-bottom: 1.3em;
+  padding-left: 1.5em;
+  color: var(--text-secondary);
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background-color: var(--bg-inline-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent-primary);
+}
+
+/* Code Blocks Container */
+pre {
+  position: relative;
+  background-color: #0d1117 !important;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 1.3em 0 1.6em;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre code {
+  background-color: transparent !important;
+  padding: 0;
+  border-radius: 0;
+  color: #e6edf3;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Tables Responsive Wrapper */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.4em 0;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--bg-surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: left;
+  min-width: 580px;
+}
+
+th {
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: var(--accent-light);
+}
+
+/* Blockquotes & Callouts */
+blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 12px 18px;
+  margin: 1.3em 0;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-primary);
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2.2em 0;
+}
+
+/* Footer Navigation Buttons */
+.module-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  gap: 16px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+/* Fixed Mobile Bottom Navigation Bar */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  padding: 0 8px;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+  height: 100%;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-icon {
+  font-size: 16px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .drawer-close-btn {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .content-container {
+    padding: 24px 18px 80px;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">M</div>
+          <div class="brand-text">
+            <h2>Media.net Prep</h2>
+            <span>SDE Intern &bull; 1 LPM + PPO</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="nav-section-title">Navigation Modules</div>
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test.html" class="nav-link">
+            <span>01: Signature OA Problems</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds.html" class="nav-link">
+            <span>02: OS, Networks & DBMS</span>
+            <span class="nav-badge">CS Core</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Domain_Deep_Dive.html" class="nav-link">
+            <span>03: Ad-Tech & RTB Systems</span>
+            <span class="nav-badge">Domain</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Candidate_Resume_Grilling.html" class="nav-link active">
+            <span>04: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_System_Design_or_HIL.html" class="nav-link">
+            <span>05: LLD & Low-Latency HLD</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR.html" class="nav-link">
+            <span>06: Culture & Ownership</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference.html" class="nav-link">
+            <span>07: Rapid Recall CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <div class="breadcrumb">
+            <a href="../index.html">← All Companies</a>
+            <span>/</span>
+            <a href="index.html">Media.net</a>
+          </div>
+        </div>
+        
+        <div class="top-bar-right">
+          <a href="index.html" class="hub-return-btn">
+            <span>🏠 Hub</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1>04: Candidate Resume Grilling &amp; Traps</h1>
+<p>Media.net interviewers conduct surgical deep dives into your resume projects. They specifically verify that you possess <strong>first-principles understanding</strong> and did not simply rely on AI coding assistants or surface-level tutorials.</p>
+<hr />
+<h2>1. Candidate Baseline Profile Summary</h2>
+<ul>
+<li><strong>Candidate</strong>: Adarsh Saurabh (Roll Number: <code>225EC6021</code>)</li>
+<li><strong>Education</strong>:</li>
+<li><strong>M.Tech in Signal and Image Processing</strong>, NIT Rourkela (CGPA: <strong>8.28</strong>)</li>
+<li><strong>B.Tech in Computer Science and Engineering</strong>, Guru Ghasidas University (CGPA: <strong>8.5</strong>)</li>
+<li><strong>Core Projects on Tailored Resume</strong>:</li>
+<li><code>Uplan — Adversarial Document Intelligence Pipeline</code> (LangGraph, Gemini 2.5 Pro, Streamlit, 2025)</li>
+<li><code>Alternative Data Radar</code> (Python, Next.js, SQL, REST APIs, Bright Data, LLM APIs, 2026)</li>
+<li><code>IBYD Technology — Warehouse PathMapper</code> (Python, Algorithms, Data Structures, 2023)</li>
+</ul>
+<hr />
+<h2>2. Deep Project Defense &amp; Trap Scenarios</h2>
+<h3>Project 1: Warehouse PathMapper (IBYD Technology)</h3>
+<blockquote>
+<p><em>"You built a heuristic pathfinding engine on a 10,000 x 10,000 grid running in under 0.5s. How does this relate to Media.net's engineering?"</em></p>
+</blockquote>
+<h4>The Interview Trap</h4>
+<ul>
+<li>If you say: <em>"It was just Dijkstra / A</em> algorithm on a grid,"<em> the interviewer will ask: </em>"On a $10,000 \times 10,000$ grid ($10^8$ nodes), Dijkstra will timeout or run out of memory. How did it finish in $&lt; 0.5$ seconds?"*</li>
+</ul>
+<h4>The Master Defense</h4>
+<blockquote>
+<p><em>"In a raw $10^8$ state-space, standard Dijkstra is unusable due to $O(V \log V + E)$ overhead. In real industrial warehouses, 95% of space consists of fixed rack aisles and transit corridors.<br />
+1. </em><em>Topological Graph Abstraction</em><em>: Instead of searching pixel-by-pixel, I precomputed a hierarchical topological waypoint graph connecting aisle intersections and picking bays (~1,500 nodes).<br />
+2. </em><em>Bidirectional A</em> with Manhattan Distance Heuristic<strong>: I used an admissible heuristic $h(n) = |x_1 - x_2| + |y_1 - y_2|$ running from both start and target simultaneously, terminating when search frontiers met.<br />
+3. </strong>Spatial Memory Locality<strong>: I stored waypoint coordinates in contiguous array buffers (cache-line friendly) rather than linked node pointers, eliminating pointer chasing and CPU L1/L2 cache misses.<br />
+4. </strong>Relevance to Media.net*<em>: This is directly analogous to ad routing in an SSP—rather than evaluating every DSP linearly, we use hierarchical clustering and topological pruning to evaluate target criteria in microseconds."</em></p>
+</blockquote>
+<hr />
+<h3>Project 2: Uplan — Adversarial Document Intelligence Pipeline</h3>
+<blockquote>
+<p><em>"You used LangGraph and Gemini 2.5 Pro for adversarial document validation. The Media.net JD states: 'Interviews evaluate unassisted problem-solving. Fluency with AI tools is assessed separately.' Did you write the core logic, or did LLMs do the thinking?"</em></p>
+</blockquote>
+<h4>The Interview Trap</h4>
+<ul>
+<li>If you say: <em>"The LLM figured out if the document had errors,"</em> you will be rejected for lack of engineering ownership and deterministic reasoning.</li>
+</ul>
+<h4>The Master Defense</h4>
+<blockquote>
+<p><em>"I designed Uplan around the principle that </em><em>LLMs must never be trusted with deterministic mathematical validation</em><em>.<br />
+1. </em><em>Deterministic Rule Engine First</em><em>: LLMs suffer from stochastic hallucination when comparing numerical financial data. I engineered a zero-hallucination mathematical verification engine in Python that validates bank statements, salary credits, and tax amounts against hard Boolean rules.<br />
+2. </em><em>Structural Encoding &amp; 98% Token Compression</em><em>: Sending raw multi-page PDFs to an LLM introduces unacceptable latency and token cost. I used Gemini Flash as an extraction compiler to distill page metadata into a typed semantic JSON graph, cutting prompt tokens by 98%.<br />
+3. </em><em>Adversarial LangGraph Topology</em><em>: I created two specialized roles: a Proposer agent that checks visa compliance, and an Adversary agent tasked with actively finding edge-case contradictions. Their state was orchestrated via a deterministic Directed Acyclic Graph in LangGraph.<br />
+4. </em><em>AI as an Accelerator</em><em>: I wrote the state graphs, type definitions, and rule engines myself. I used AI developer tools to rapidly generate edge-case validation test suites and fuzzing fixtures."</em></p>
+</blockquote>
+<hr />
+<h3>Project 3: Alternative Data Radar</h3>
+<blockquote>
+<p><em>"You scraped web signals and calculated corporate health scores stored in a SQL database. How did you handle anti-scraping, rate limits, and SQL concurrency?"</em></p>
+</blockquote>
+<h4>The Interview Trap</h4>
+<ul>
+<li><em>"How did you prevent database lock contention when scraping multiple corporate data sources concurrently?"</em></li>
+</ul>
+<h4>The Master Defense</h4>
+<blockquote>
+<p><em>"1. </em><em>Proxy Rotation &amp; Fingerprint Emulation</em><em>: Target corporate websites use Cloudflare and Akamai bot protection. I routed traffic via Bright Data Web Unlocker, managing HTTP/2 TLS fingerprint rotation and automated exponential backoff with jitter on HTTP 429/503 responses.<br />
+2. </em><em>Asynchronous Scraping Worker Pool</em><em>: Instead of synchronous blocking HTTP requests, I used an asynchronous worker architecture (<code>asyncio</code> and worker queues), streaming parsed signals directly into an ingestion pipeline.<br />
+3. </em><em>SQL Indexing &amp; Concurrency</em><em>: Corporate scoring metrics required frequent inserts and analytical queries. I isolated analytical aggregation queries using Read Committed isolation, created composite indexes on <code>(company_id, metric_date DESC)</code> for fast dashboard lookups, and batched inserts inside database transactions to eliminate row lock contention."</em></p>
+</blockquote>
+<hr />
+<h2>3. Defending Your Dual Background: M.Tech Signal Processing + B.Tech CSE</h2>
+<blockquote>
+<p><em>"Your undergraduate degree is CSE, but your Master's is Signal and Image Processing. Why are you applying for a Core SDE role at Media.net?"</em></p>
+</blockquote>
+<h4>The Winning Narrative</h4>
+<blockquote>
+<p><em>"My dual background is a deliberate technical advantage for high-scale systems:<br />
+1. </em><em>B.Tech in CSE</em><em>: Gave me foundational mastery in Data Structures, Algorithms, Operating Systems, Database Internals, and Computer Networks.<br />
+2. </em><em>M.Tech in Signal Processing at NIT Rourkela</em><em>: Trained me in high-dimensional linear algebra, Fourier analysis, statistical signal filtering, and real-time streaming pipelines.<br />
+3. </em><em>Application to Ad-Tech</em><em>: Real-time ad bidding is fundamentally a high-frequency digital signal stream:<br />
+   * Click fraud detection uses statistical anomaly filtering (Kalman filtering and noise cancellation).<br />
+   * Contextual ad semantic matching relies on high-dimensional vector embeddings and cosine projections.<br />
+   * Low-latency RTB requires microsecond timing budgeting, which mirrors real-time digital signal processing constraints."</em></p>
+</blockquote>
+
+        <nav class="module-footer-nav">
+          <a href="03_Domain_Deep_Dive.html" class="footer-btn">← 03: Ad-Tech & RTB Systems</a><a href="05_System_Design_or_HIL.html" class="footer-btn">05: LLD & Low-Latency System Design →</a>
+        </nav>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-modules">
+      <span class="bottom-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-theme">
+      <span class="bottom-nav-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="bottom-nav-item" id="b-nav-top">
+      <span class="bottom-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+    if (bNavTheme) {
+      bNavTheme.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+
+    // Mobile Drawer Management
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      sidebarBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      sidebarBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Indicator
+    const progressBar = document.getElementById('reading-progress');
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.pageYOffset / totalHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+    });
+
+    // Code Copy Buttons
+    document.querySelectorAll('pre').forEach(block => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = block.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.innerText).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.style.background = '';
+            }, 2000);
+          });
+        }
+      });
+      block.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

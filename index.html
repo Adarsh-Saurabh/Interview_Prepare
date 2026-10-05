@@ -429,6 +429,24 @@ main {
 
 
 
+  .avatar-medianet {
+    background: linear-gradient(135deg, #0284c7, #06b6d4);
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+  
+  .btn-medianet-theme {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #ffffff !important;
+    font-weight: 800;
+  }
+
+  .btn-medianet-theme:hover {
+    background: linear-gradient(135deg, #0369a1, #0284c7);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+  }
+
   .avatar-apple {
     background: linear-gradient(135deg, #1d1d1f, #434344);
     color: #ffffff;
@@ -854,7 +872,7 @@ footer {
     <div class="progress-card">
       <div class="progress-header">
         <span>Overall Preparation Progress</span>
-        <span id="progress-text">0 / 98 Modules Completed (0%)</span>
+        <span id="progress-text">0 / 107 Modules Completed (0%)</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progress-fill"></div>
@@ -864,11 +882,11 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">11</div>
+        <div class="stat-val" id="stat-companies">12</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">94</div>
+        <div class="stat-val">103</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
@@ -898,6 +916,107 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+      <!-- COMPANY: MEDIA.NET (RECENT) -->
+      <article class="card" data-company="medianet" data-date="2026-10-05" data-category="software" data-search="media.net medianet sde intern directi ad tech rtb real time bidding openrtb 1 lpm 38 lpa ppo c++ python kafka contextual advertising 50ms recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-medianet">M</div>
+            <div class="company-title">
+              <h3>Media.net</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 05 Oct 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(2,132,199,0.16); border:1px solid #0284c7; color:#0284c7;">
+            1 LPM &bull; 38 LPA CTC (18L+4L+16L)
+          </span>
+        </div>
+
+        <div class="card-role">Software Development Engineer (SDE) Intern (6M + PPO)</div>
+        <p class="card-desc">
+          Media.net (Directiplex, Mumbai / Bengaluru &amp; Dubai). Global contextual ad-tech powerhouse &amp; sell-side platform (SSP) powering Yahoo! Bing Network. Manages ad supply on 500,000+ publisher websites. High-throughput distributed systems with sub-50ms RTB auction SLAs, OpenRTB 2.5 protocol, low-latency C++/Java/Python microservices, Kafka streaming, Redis bitset frequency capping, and rigorous unassisted competitive-programming problem solving.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('medianet-points', 'medianet-arrow')">
+            <span class="points-title">&#9889; Main Points Taught for Media.net</span>
+            <span class="toggle-arrow" id="medianet-arrow">&#9660;</span>
+          </div>
+          <div class="points-content" id="medianet-points">
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Sub-50ms Real-Time Bidding (RTB) Engine:</strong> Generalized Second-Price (GSP) Vickrey Auction, OpenRTB 2.5 spec, hard 25ms DSP timeout budgeting, Header Bidding (Prebid.js) vs legacy Waterfall yield optimization.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>5 Signature OA Problems Implemented:</strong> Top-K Vickrey Second-Price Auction with Min-Heap ($O(N \log K)$), Contextual Keyword Wildcard Trie (<code>*</code> and <code>?</code>), Sliding Window Rate Limiter/Frequency Capper, Weighted Interval Scheduling DP ($O(N \log N)$), and Ad Pipeline DAG Cycle Detection.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Systems, Memory &amp; CS Core:</strong> Process vs Thread memory layouts, context switch TLB invalidation, Mutex vs Spinlock vs Semaphore, Deadlocks (4 Coffman conditions), TCP Keep-Alive and <code>TIME_WAIT</code> socket exhaustion, HTTP/2 multiplexing, B+ Tree indexing mechanics, and ACID transaction isolation.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Machine Coding (LLD) &amp; HLD:</strong> Thread-safe In-Memory Cache with TTL &amp; LRU eviction in C++20 (<code>std::list</code>, <code>std::unordered_map</code>, <code>std::mutex</code>), and Scalable Real-Time Contextual Ad Matching Engine architecture.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Adarsh's Candidate Defense Strategy:</strong> Framing Warehouse PathMapper spatial heuristic routing (10k grid in &lt;0.5s) for low-latency auction routing, Uplan adversarial document intelligence (85% reduction, 98% token compression) with deterministic rule engines, and defending M.Tech Signal Processing + B.Tech CSE dual background for streaming signal data and click fraud anomaly detection.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_00" onchange="updateProgress()">
+            <a href="Media.net/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Intel &amp; Role</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_01" onchange="updateProgress()">
+            <a href="Media.net/01_Online_Test.html" style="text-decoration:none; color:inherit;">01: Signature OA</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_02" onchange="updateProgress()">
+            <a href="Media.net/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: CS Core OS/CN/DB</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_03" onchange="updateProgress()">
+            <a href="Media.net/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: Ad-Tech &amp; RTB</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_04" onchange="updateProgress()">
+            <a href="Media.net/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_05" onchange="updateProgress()">
+            <a href="Media.net/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: LLD &amp; HLD</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_06" onchange="updateProgress()">
+            <a href="Media.net/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Culture &amp; HR</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_07" onchange="updateProgress()">
+            <a href="Media.net/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="medianet_readme" onchange="updateProgress()">
+            <a href="Media.net/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Media.net/index.html" class="btn-open btn-medianet-theme">
+            <span>Launch Media.net Portal</span>
+            <span style="font-size:1.15rem; line-height:1;">&rarr;</span>
+          </a>
+        </div>
+      </article>
 
             <!-- COMPANY: APPLE (RECENT) -->
       <article class="card" data-company="apple" data-date="2026-10-05" data-category="software" data-search="apple ai ml machine learning software development engineering intern sdet quality engineering 80 lpa 1.05 lpm ppo coreml on-device intelligence neural engine recent">
