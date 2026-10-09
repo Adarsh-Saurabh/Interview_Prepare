@@ -429,6 +429,24 @@ main {
 
 
 
+  .avatar-solumn {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+  
+  .btn-solumn-theme {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff !important;
+    font-weight: 800;
+  }
+
+  .btn-solumn-theme:hover {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  }
+
   .avatar-medianet {
     background: linear-gradient(135deg, #0284c7, #06b6d4);
     color: #ffffff;
@@ -872,7 +890,7 @@ footer {
     <div class="progress-card">
       <div class="progress-header">
         <span>Overall Preparation Progress</span>
-        <span id="progress-text">0 / 107 Modules Completed (0%)</span>
+        <span id="progress-text">0 / 116 Modules Completed (0%)</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progress-fill"></div>
@@ -882,11 +900,11 @@ footer {
     <!-- Quick Stats -->
     <div class="stats-row">
       <div class="stat-box">
-        <div class="stat-val" id="stat-companies">12</div>
+        <div class="stat-val" id="stat-companies">13</div>
         <div class="stat-sub">Companies</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val">103</div>
+        <div class="stat-val">113</div>
         <div class="stat-sub">HTML Modules</div>
       </div>
       <div class="stat-box">
@@ -916,6 +934,107 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+      <!-- COMPANY: SOLUMN AI (RECENT) -->
+      <article class="card" data-company="solumn" data-date="2026-10-09" data-category="software" data-search="solumn ai brainbrowser foundations programme ai safety alignment evaluation rle docker deterministic verifier rsp anthropic deepmind 200000 stipend ppo remote dubai recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-solumn">S</div>
+            <div class="company-title">
+              <h3>Solumn AI</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 09 Oct 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(99,102,241,0.18); border:1px solid #6366f1; color:#818cf8;">
+            ₹2,00,000 Stipend &bull; Frontier AI PPO
+          </span>
+        </div>
+
+        <div class="card-role">AI Safety Foundations Fellow / Engineer (6W + PPO)</div>
+        <p class="card-desc">
+          Solumn AI (BrainBrowser, Dubai HQ &amp; Remote). Frontier AI safety assurance and alignment evaluation foundry for leading laboratories (Anthropic, DeepMind, Amazon). Builds empirical audit datasets under Responsible Scaling Policies (RSP v3.2): Dockerized Reinforcement Learning Environments (RLEs), real CVE exploit verifiers, and Model Context Protocol (MCP) adversarial tool-use evaluations with deterministic Python grading harnesses.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('solumn-points', 'solumn-arrow')">
+            <span class="points-title">&#9889; Main Points Taught for Solumn AI</span>
+            <span class="toggle-arrow" id="solumn-arrow">&#9660;</span>
+          </div>
+          <div class="points-content" id="solumn-points">
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Frontier AI Assurance Layer:</strong> Anthropic Responsible Scaling Policy (RSP v3.2), AI Safety Levels (ASL-3 &amp; ASL-4) deployment gates, and DeepMind Frontier Safety Framework. Why RLVR (Reinforcement Learning with Verifiable Rewards) makes deterministic test harnesses the foundational asset in frontier AI.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>21-Hour Practical Selection Task:</strong> Complete RLE package schema (<code>scenario.json</code>, instructions, fixture, reference patch, verifier), deterministic thread-safe LRU cache grading harness, and automated CVE directory traversal exploit verifier.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Systems Sandboxing &amp; Container Security:</strong> Python <code>subprocess</code> isolation with <code>resource.setrlimit</code> (preventing fork-bombs and memory leaks), Docker Engine Python SDK, cgroups quotas (<code>cpu_quota</code>, <code>mem_limit</code>, <code>network_mode="none"</code>), and analyzing agent execution trajectories.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Evaluation Foundry Architecture (System Design):</strong> High-throughput ephemeral container pool (10,000 tasks/day), pre-warmed sandbox recycling, async Python dispatchers, double-blind grading, and AST parsing to prevent agent prompt-injection cheating.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Adarsh's Candidate Defense &amp; PPO Strategy:</strong> Defending Uplan adversarial multi-agent critic loops (LangGraph + Gemini 2.5 Pro) and zero-hallucination math rule engines, Amazon ML 24.2M high-scale pipeline, Warehouse PathMapper deterministic spatial benchmark (&lt;0.5s for 10k grid), and the 4-week sprint to crush the 250 environment quota and pitch an MCP security fellowship.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_00" onchange="updateProgress()">
+            <a href="Solumn_AI/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Intel &amp; Role</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_01" onchange="updateProgress()">
+            <a href="Solumn_AI/01_Practical_Assignment.html" style="text-decoration:none; color:inherit;">01: Practical Task</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_02" onchange="updateProgress()">
+            <a href="Solumn_AI/02_Technical_Rounds.html" style="text-decoration:none; color:inherit;">02: Python &amp; Docker</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_03" onchange="updateProgress()">
+            <a href="Solumn_AI/03_Domain_Deep_Dive.html" style="text-decoration:none; color:inherit;">03: AI Safety &amp; RSPs</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_04" onchange="updateProgress()">
+            <a href="Solumn_AI/04_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">04: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_05" onchange="updateProgress()">
+            <a href="Solumn_AI/05_System_Design_or_HIL.html" style="text-decoration:none; color:inherit;">05: Eval Architecture</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_06" onchange="updateProgress()">
+            <a href="Solumn_AI/06_Managerial_and_HR.html" style="text-decoration:none; color:inherit;">06: Founder Mindset</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_07" onchange="updateProgress()">
+            <a href="Solumn_AI/07_Quick_Reference.html" style="text-decoration:none; color:inherit;">07: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="solumn_readme" onchange="updateProgress()">
+            <a href="Solumn_AI/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Solumn_AI/index.html" class="btn-open btn-solumn-theme">
+            <span>Launch Solumn AI Portal</span>
+            <span style="font-size:1.15rem; line-height:1;">&rarr;</span>
+          </a>
+        </div>
+      </article>
 
       <!-- COMPANY: MEDIA.NET (RECENT) -->
       <article class="card" data-company="medianet" data-date="2026-10-05" data-category="software" data-search="media.net medianet sde intern directi ad tech rtb real time bidding openrtb 1 lpm 38 lpa ppo c++ python kafka contextual advertising 50ms recent">
