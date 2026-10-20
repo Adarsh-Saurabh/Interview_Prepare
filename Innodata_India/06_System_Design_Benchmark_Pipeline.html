@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#0369a1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Module 06: Eval Pipeline Architecture · Innodata India</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f0f9ff;
+  --bg-code-header: #e0f2fe;
+  --bg-inline-code: #e0f2fe;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-primary: #0284c7;
+  --accent-primary-hover: #0369a1;
+  --accent-light: rgba(2, 132, 199, 0.08);
+  
+  --tag-bg: #e0f2fe;
+  --tag-border: #0284c7;
+  --tag-text: #0369a1;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #080f1d;
+  --bg-surface: #0e172a;
+  --bg-card: #132238;
+  --bg-sidebar: #091322;
+  --bg-code-header: #172a45;
+  --bg-inline-code: #172a45;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e3a5f;
+  --border-subtle: #2d4d75;
+  --border-focus: #38bdf8;
+  
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #7dd3fc;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(2, 132, 199, 0.22);
+  --tag-border: #38bdf8;
+  --tag-text: #7dd3fc;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #06b6d4);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 14px 10px 8px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.18);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.nav-link:not(.active) .nav-badge {
+  background-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.theme-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Main Layout */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 58px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.hub-return-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.hub-return-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Content Container */
+.content-container {
+  flex: 1;
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 24px 80px;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+h1 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-top: 0;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.6rem;
+}
+
+h2 {
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.4rem;
+}
+
+h3 { font-size: 1.18rem; }
+h4 { font-size: 1.02rem; }
+
+p {
+  margin-bottom: 1.1rem;
+  color: var(--text-secondary);
+}
+
+ul, ol {
+  margin-bottom: 1.2rem;
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+}
+
+li {
+  margin-bottom: 0.45rem;
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+th, td {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+th {
+  background-color: var(--bg-surface);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Code Blocks */
+pre {
+  position: relative;
+  border-radius: 10px;
+  margin: 1.2rem 0;
+  padding: 18px 20px !important;
+  background: #0f172a !important;
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+code {
+  font-family: var(--font-mono) !important;
+  font-size: 13.5px;
+}
+
+:not(pre) > code {
+  background-color: var(--bg-inline-code);
+  color: var(--accent-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  color: #e2e8f0;
+  font-size: 11px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Callout Boxes */
+.callout {
+  padding: 16px 18px;
+  border-radius: 10px;
+  margin: 1.4rem 0;
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--accent-light);
+}
+
+.callout-title {
+  font-weight: 700;
+  color: var(--accent-primary);
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.callout p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Module Footer Nav */
+.module-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+/* Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1020;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 2px;
+}
+
+.bottom-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-icon {
+  font-size: 17px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .drawer-close-btn {
+    display: block;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+
+  .content-container {
+    padding: 24px 16px 90px;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">I</div>
+          <div class="brand-text">
+            <h2>Innodata AI Prep</h2>
+            <span>Visual Reasoning &bull; ₹70k + PPO</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="nav-section-title">Navigation Modules</div>
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Company & Role Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Benchmark_Creation_Protocol.html" class="nav-link">
+            <span>01: Benchmark & Gold-Sets</span>
+            <span class="nav-badge">Protocol</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Engineering_Artifacts.html" class="nav-link">
+            <span>02: Schematics, P&ID & Layouts</span>
+            <span class="nav-badge">Artifacts</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Multimodal_AI_and_VLM_Foundations.html" class="nav-link">
+            <span>03: VLMs & Visual Reasoning</span>
+            <span class="nav-badge">VLM AI</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_Coding_and_Automated_Verifiers.html" class="nav-link">
+            <span>04: Python & C++ Verifiers</span>
+            <span class="nav-badge">Harnesses</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>05: Candidate Resume Defense</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_System_Design_Benchmark_Pipeline.html" class="nav-link active">
+            <span>06: Benchmark Foundry Pipeline</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Managerial_HR_and_Evaluation_Ethics.html" class="nav-link">
+            <span>07: SOP Compliance & HR</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="08_Quick_Reference.html" class="nav-link">
+            <span>08: Rapid Recall CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>3-Day Selection Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span>☰</span>
+            <span>Modules</span>
+          </button>
+          <div class="breadcrumb">
+            <a href="../index.html">← All Companies</a>
+            <span>/</span>
+            <a href="index.html">Innodata India</a>
+          </div>
+        </div>
+        
+        <div class="top-bar-right">
+          <a href="index.html" class="hub-return-btn">
+            <span>🏠 Hub</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 id="module-06-system-design-scalable-multimodal-benchmark-foundry">Module 06: System Design: Scalable Multimodal Benchmark Foundry</h1>
+<h2 id="1-high-level-architecture-overview">1. High-Level Architecture Overview</h2>
+<p>Frontier AI laboratories require hundreds of verified, high-difficulty benchmark items weekly. Below is the system design for an end-to-end benchmark creation, verification, and certification pipeline.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">flowchart</span><span class="w"> </span><span class="n">TD</span>
+<span class="w">    </span><span class="n">subgraph</span><span class="w"> </span><span class="n">Ingestion</span><span class="w"> </span><span class="n">Layer</span>
+<span class="w">        </span><span class="n">CAD</span><span class="p">[</span><span class="n">Raw</span><span class="w"> </span><span class="n">CAD</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">PDF</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Vector</span><span class="w"> </span><span class="n">Blueprints</span><span class="p">]</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">Rasterizer</span><span class="p">[</span><span class="n">DPI</span><span class="o">-</span><span class="n">Preserving</span><span class="w"> </span><span class="n">Multi</span><span class="o">-</span><span class="n">Scale</span><span class="w"> </span><span class="n">Rasterizer</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Rasterizer</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">Deduplicator</span><span class="p">[</span><span class="n">Perceptual</span><span class="w"> </span><span class="n">Hashing</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">Exact</span><span class="w"> </span><span class="n">Match</span><span class="w"> </span><span class="n">Deduplication</span><span class="p">]</span>
+<span class="w">    </span><span class="kd">end</span>
+
+<span class="w">    </span><span class="n">subgraph</span><span class="w"> </span><span class="n">SME</span><span class="w"> </span><span class="n">Authoring</span><span class="w"> </span><span class="n">Studio</span>
+<span class="w">        </span><span class="n">Deduplicator</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">Canvas</span><span class="p">[</span><span class="n">Interactive</span><span class="w"> </span><span class="n">Annotation</span><span class="w"> </span><span class="n">Canvas</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Canvas</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">AuthorA</span><span class="p">[</span><span class="n">SME</span><span class="w"> </span><span class="n">Author</span><span class="w"> </span><span class="n">A</span><span class="o">:</span><span class="w"> </span><span class="n">Draft</span><span class="w"> </span><span class="n">Item</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Canvas</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">AuthorB</span><span class="p">[</span><span class="n">SME</span><span class="w"> </span><span class="n">Author</span><span class="w"> </span><span class="n">B</span><span class="o">:</span><span class="w"> </span><span class="n">Dual</span><span class="o">-</span><span class="n">Blind</span><span class="w"> </span><span class="n">Peer</span><span class="w"> </span><span class="n">Review</span><span class="p">]</span>
+<span class="w">    </span><span class="kd">end</span>
+
+<span class="w">    </span><span class="n">subgraph</span><span class="w"> </span><span class="n">Automated</span><span class="w"> </span><span class="n">Verification</span><span class="w"> </span><span class="n">Gates</span>
+<span class="w">        </span><span class="n">AuthorA</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">AuthorB</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">SchemaCheck</span><span class="p">[</span><span class="n">JSON</span><span class="w"> </span><span class="n">Schema</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">BBox</span><span class="w"> </span><span class="n">Normalizer</span><span class="p">]</span>
+<span class="w">        </span><span class="n">SchemaCheck</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">SolverCheck</span><span class="p">[</span><span class="n">Deterministic</span><span class="w"> </span><span class="n">Python</span><span class="o">/</span><span class="n">C</span><span class="o">++</span><span class="w"> </span><span class="kt">Rule</span><span class="w"> </span><span class="n">Solver</span><span class="p">]</span>
+<span class="w">        </span><span class="n">SolverCheck</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">LeakCheck</span><span class="p">[</span><span class="n">Text</span><span class="o">-</span><span class="kr">Only</span><span class="w"> </span><span class="n">LLM</span><span class="w"> </span><span class="n">Baseline</span><span class="w"> </span><span class="n">Leakage</span><span class="w"> </span><span class="n">Detector</span><span class="p">]</span>
+<span class="w">    </span><span class="kd">end</span>
+
+<span class="w">    </span><span class="n">subgraph</span><span class="w"> </span><span class="n">Certification</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">Delivery</span>
+<span class="w">        </span><span class="n">LeakCheck</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">IAAMetric</span><span class="p">[</span><span class="n">Inter</span><span class="o">-</span><span class="n">Annotator</span><span class="w"> </span><span class="n">Agreement</span><span class="w"> </span><span class="n">Kappa</span><span class="w"> </span><span class="n">Engine</span><span class="p">]</span>
+<span class="w">        </span><span class="n">IAAMetric</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">GoldSet</span><span class="p">[(</span><span class="n">Certified</span><span class="w"> </span><span class="n">Gold</span><span class="o">-</span><span class="nf">Set</span><span class="w"> </span><span class="n">Benchmark</span><span class="w"> </span><span class="n">DB</span><span class="p">)]</span>
+<span class="w">        </span><span class="n">GoldSet</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">ClientDelivery</span><span class="p">[</span><span class="n">Client</span><span class="w"> </span><span class="n">API</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Evaluation</span><span class="w"> </span><span class="n">Harness</span><span class="p">]</span>
+<span class="w">    </span><span class="kd">end</span>
+</code></pre></div>
+
+<hr />
+<h2 id="2-ingestion-preprocessing-layer">2. Ingestion &amp; Preprocessing Layer</h2>
+<ol>
+<li><strong>DPI-Preserving Vector Rasterization</strong>:</li>
+<li>Industrial drawings (e.g., ANSI E-size, $34 \times 44$ inches) contain text at 6pt to 10pt font. Standard 72 DPI rendering blurs letters into illegible artifacts.</li>
+<li>The pipeline rasterizes vector PDFs at <strong>300 to 600 DPI</strong>, yielding master images of $10,000 \times 13,000$ pixels.</li>
+<li>High-resolution images are then dynamically tiled into high-resolution overlapping patches for vision encoders while preserving a global downscaled reference.</li>
+<li><strong>Perceptual Hashing &amp; Deduplication</strong>:</li>
+<li>To prevent duplicate items from slightly modified drawing revisions, images are hashed using <strong>Difference Hash (dHash)</strong> and <strong>Wavelet Hash (wHash)</strong>. Pairs with Hamming distance $&lt; 4$ are flagged for review.</li>
+</ol>
+<hr />
+<h2 id="3-the-dual-blind-quality-assurance-consensus-protocol">3. The Dual-Blind Quality Assurance &amp; Consensus Protocol</h2>
+<p>To eliminate individual human bias and guarantee gold-standard accuracy:
+1. <strong>Authoring</strong>: SME Author 1 generates the question, selects the visual artifact, identifies the evidence bounding box, and authors the worked proof trace.
+2. <strong>Blind Solving</strong>: SME Author 2 is given <em>only</em> the problem statement and the visual artifact—the ground-truth answer and proof trace are hidden.
+3. <strong>Automated Consensus Verification</strong>:
+   * If Author 2's answer matches Author 1's ground truth within the specified tolerance, the item is approved.
+   * If there is a discrepancy, the item is automatically routed to a Senior Technical Lead for adjudication.</p>
+<hr />
+<h2 id="4-inter-annotator-agreement-iaa-metrics">4. Inter-Annotator Agreement (IAA) Metrics</h2>
+<p>Innodata tracks consensus using statistical agreement metrics:</p>
+<h3 id="cohens-kappa-kappa-for-categorical-questions">Cohen's Kappa ($\kappa$) for Categorical Questions</h3>
+<p>$$\kappa = \frac{p_o - p_e}{1 - p_e}$$
+Where:
+* $p_o$ is the observed proportional agreement among raters.
+* $p_e$ is the hypothetical probability of chance agreement.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">$\kappa$ Score Range</th>
+<th style="text-align: left;">Interpretation</th>
+<th style="text-align: left;">Quality Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>$0.81 - 1.00$</strong></td>
+<td style="text-align: left;">Almost Perfect Agreement</td>
+<td style="text-align: left;">Direct Certification into Gold Set</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>$0.61 - 0.80$</strong></td>
+<td style="text-align: left;">Substantial Agreement</td>
+<td style="text-align: left;">Spot-checked by Lead SME</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>$&lt; 0.60$</strong></td>
+<td style="text-align: left;">Inadequate / Ambiguous</td>
+<td style="text-align: left;">Item Rejected or Prompt Rewritten</td>
+</tr>
+</tbody>
+</table>
+<h3 id="intersection-over-union-iou-for-bounding-boxes">Intersection over Union (IoU) for Bounding Boxes</h3>
+<p>$$\text{IoU} = \frac{\text{Area of Overlap}}{\text{Area of Union}} = \frac{\text{BBox}_A \cap \text{BBox}_B}{\text{BBox}_A \cup \text{BBox}_B}$$
+* Benchmark standard: Evidence bounding boxes must achieve <strong>$\text{IoU} \ge 0.75$</strong> between dual-blind annotators.</p>
+<hr />
+<h2 id="5-adversarial-leakage-difficulty-filtering">5. Adversarial Leakage &amp; Difficulty Filtering</h2>
+<p>Before an item enters the gold set, it undergoes automated red-teaming:
+1. <strong>Text-Only Baseline</strong>: The problem statement is fed to state-of-the-art models (GPT-4o, Claude 3.5 Sonnet, Gemini 2.5 Pro) <em>without the image</em>. If any model answers correctly with confidence $&gt; 80\%$, the item is flagged as <strong>leaked</strong> (answer inferable from common sense, physics priors, or prompt text).
+2. <strong>Multimodal Baseline</strong>: The problem is fed with the image. If all frontier models fail, the item is classified as <strong>High Frontier Difficulty</strong>.</p>
+
+        <nav class="module-footer-nav">
+          <a href="05_Candidate_Resume_Grilling.html" class="footer-btn">← 05: Candidate Resume Defense</a><a href="07_Managerial_HR_and_Evaluation_Ethics.html" class="footer-btn">07: SOP Compliance & HR →</a>
+        </nav>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-modules">
+      <span class="bottom-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="08_Quick_Reference.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-theme">
+      <span class="bottom-nav-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="bottom-nav-item" id="b-nav-top">
+      <span class="bottom-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+    if (bNavTheme) {
+      bNavTheme.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+
+    // Mobile Drawer Management
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      sidebarBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      sidebarBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Indicator
+    const progressBar = document.getElementById('reading-progress');
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.pageYOffset / totalHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+    });
+
+    // Code Copy Buttons
+    document.querySelectorAll('pre').forEach(block => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = block.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.innerText).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#0284c7';
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.style.background = '';
+            }, 2000);
+          });
+        }
+      });
+      block.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

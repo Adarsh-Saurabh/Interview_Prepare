@@ -429,6 +429,24 @@ main {
 
 
 
+  .avatar-innodata {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+  
+  .btn-innodata-theme {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #ffffff !important;
+    font-weight: 800;
+  }
+
+  .btn-innodata-theme:hover {
+    background: linear-gradient(135deg, #0369a1, #0284c7);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+  }
+
   .avatar-solumn {
     background: linear-gradient(135deg, #6366f1, #818cf8);
     color: #ffffff;
@@ -937,6 +955,115 @@ footer {
 
     <!-- Companies Grid -->
     <div class="company-grid" id="company-grid">
+
+            <!-- COMPANY: INNODATA INDIA (RECENT) -->
+      <article class="card" data-company="innodata" data-date="2026-10-21" data-category="software" data-search="innodata india innodata visual reasoning industrial technical specialist sme multimodal benchmarks schematics pid cad engineering drawings gold sets verifiers 70000 stipend 14 lpa ppo noida recent">
+        <div class="card-top">
+          <div class="company-id">
+            <div class="avatar avatar-innodata">I</div>
+            <div class="company-title">
+              <h3>Innodata India</h3>
+              <div class="date-badge">
+                <span class="badge-recent">Recent</span>
+                <span>Created: 21 Oct 2026</span>
+              </div>
+            </div>
+          </div>
+          <span style="font-size:0.78rem; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(2,132,199,0.18); border:1px solid #0284c7; color:#0284c7;">
+            ₹60k – ₹70k / mo Stipend &bull; ₹10.00 – ₹14.00 LPA PPO
+          </span>
+        </div>
+
+        <div class="card-role">Industrial Technical Visual Reasoning Specialist (3M + PPO)</div>
+        <p class="card-desc">
+          Innodata Inc. (NASDAQ: INOD, Noida Delivery Center). Global frontier AI data engineering and evaluation partner to leading hyperscalers (Google, Microsoft, Meta, Amazon). Develops multimodal reasoning benchmarks based on authentic industrial engineering artifacts: IEEE circuit schematics, ISA-5.1 P&amp;ID process diagrams, CAD spatial floorplans, and automated Python/C++ topological verifiers with strict ground-truth proof traces.
+        </p>
+
+        <!-- Main Points Taught Section -->
+        <div class="points-section">
+          <div class="points-header" onclick="togglePoints('innodata-points', 'innodata-arrow')">
+            <span class="points-title">&#9889; Main Points Taught for Innodata India</span>
+            <span class="toggle-arrow" id="innodata-arrow">&#9660;</span>
+          </div>
+          <div class="points-content" id="innodata-points">
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Frontier Multimodal Benchmark Protocol:</strong> The 4-part benchmark schema (problem statement, authentic artifact, objective answer, worked proof trace). The inviolable Visual Essentiality rule (text-only models must fail) and non-Googleable counterfactual problem formulation.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Technical Engineering Artifacts:</strong> Interpreting IEEE/IEC circuit schematics (op-amp stages, filter responses, junction dots vs crossings), ISA-5.1 P&amp;ID tagging standards (instrument functional codes, line styles, fail-safe modes), and CAD floorplan spatial envelopes.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>VLM Foundations &amp; Failure Modes:</strong> Vision Transformer patch tokenization ($W/P \times H/P$), normalized bounding box coordinate grounding ($[0, 1000]$), and the 5 signature failure modes of frontier models (topological inversion, small-text blur, spatial drift).</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Production Verifiers &amp; Harnesses:</strong> Python JSON schema validator, NetworkX topological hydraulic graph verifier, and C++ bounding box IoU / electrical trace connectivity engine.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>Candidate Resume Defense:</strong> Defending Adarsh Saurabh's M.Tech Signal &amp; Image Processing synergy, Uplan typed semantic graphs &amp; zero-hallucination math rule engines, Warehouse PathMapper spatial heuristic routing, and K-HUKI HOG feature extraction.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-bullet">&#9656;</span>
+              <span><strong>System Design &amp; Quality Control:</strong> DPI-preserving vector rasterization (300–600 DPI), dual-blind SME annotation, Cohen's Kappa (\u03ba) and IoU agreement metrics, automated adversarial leakage detection, and 90-day PPO conversion strategy.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules List with Checkboxes -->
+        <div class="modules-scroll">
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_00" onchange="updateProgress()">
+            <a href="Innodata_India/00_START_HERE.html" style="text-decoration:none; color:inherit;">00: Intel &amp; Role</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_01" onchange="updateProgress()">
+            <a href="Innodata_India/01_Benchmark_Creation_Protocol.html" style="text-decoration:none; color:inherit;">01: Benchmark Design</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_02" onchange="updateProgress()">
+            <a href="Innodata_India/02_Technical_Engineering_Artifacts.html" style="text-decoration:none; color:inherit;">02: Schematics &amp; P&amp;ID</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_03" onchange="updateProgress()">
+            <a href="Innodata_India/03_Multimodal_AI_and_VLM_Foundations.html" style="text-decoration:none; color:inherit;">03: VLMs &amp; AI</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_04" onchange="updateProgress()">
+            <a href="Innodata_India/04_Coding_and_Automated_Verifiers.html" style="text-decoration:none; color:inherit;">04: Python &amp; C++</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_05" onchange="updateProgress()">
+            <a href="Innodata_India/05_Candidate_Resume_Grilling.html" style="text-decoration:none; color:inherit;">05: Resume Defense</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_06" onchange="updateProgress()">
+            <a href="Innodata_India/06_System_Design_Benchmark_Pipeline.html" style="text-decoration:none; color:inherit;">06: Eval Pipeline</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_07" onchange="updateProgress()">
+            <a href="Innodata_India/07_Managerial_HR_and_Evaluation_Ethics.html" style="text-decoration:none; color:inherit;">07: SOP &amp; HR</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_08" onchange="updateProgress()">
+            <a href="Innodata_India/08_Quick_Reference.html" style="text-decoration:none; color:inherit;">08: CheatSheet</a>
+          </label>
+          <label class="module-chip">
+            <input type="checkbox" class="module-check" data-mod="innodata_readme" onchange="updateProgress()">
+            <a href="Innodata_India/README.html" style="text-decoration:none; color:inherit;">Study Roadmap</a>
+          </label>
+        </div>
+
+        <div class="card-actions">
+          <a href="Innodata_India/index.html" class="btn-open btn-innodata-theme">
+            <span>Launch Innodata India Portal</span>
+            <span style="font-size:1.15rem; line-height:1;">&rarr;</span>
+          </a>
+        </div>
+      </article>
 
       <!-- COMPANY: SOLUMN AI (RECENT) -->
       <article class="card" data-company="solumn" data-date="2026-10-09" data-category="software" data-search="solumn ai brainbrowser foundations programme ai safety alignment evaluation rle docker deterministic verifier rsp anthropic deepmind 200000 stipend ppo remote dubai recent">
