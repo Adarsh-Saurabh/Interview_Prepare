@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>System Design & Distributed Systems (HLD) · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html">🧩 Data Structures & Algorithms (DSA)</option><option value="os.html">⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html">🌐 Computer Networks (CN)</option><option value="coa.html">💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html">🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html" selected>🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html">🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html">📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html">🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#rapid-recall" class="toc-link">⚡ 10-Min Rapid Recall Sheet</a></li>
+<li><a href="#visual-diagrams" class="toc-link">📊 Visual HLD & Distributed Architectures</a></li>
+<li><a href="#core-deep-dives" class="toc-link">🧠 Consistent Hashing, Rate Limiting & TinyURL</a></li>
+<li><a href="#interview-traps" class="toc-link">⚠️ High-Frequency Distributed Systems Traps</a></li>
+<li><a href="#flashcards" class="toc-link">🎯 10 High-Frequency GFG Interview Q&As</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track B: Software Engineering & Design</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">System Design (HLD)</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 15 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#rapid-recall" class="toc-link">⚡ 10-Min Rapid Recall Sheet</a></li>
+<li><a href="#visual-diagrams" class="toc-link">📊 Visual HLD & Distributed Architectures</a></li>
+<li><a href="#core-deep-dives" class="toc-link">🧠 Consistent Hashing, Rate Limiting & TinyURL</a></li>
+<li><a href="#interview-traps" class="toc-link">⚠️ High-Frequency Distributed Systems Traps</a></li>
+<li><a href="#flashcards" class="toc-link">🎯 10 High-Frequency GFG Interview Q&As</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">🏗️</div>
+              <div>
+                <h1 class="hero-title">System Design & Distributed Systems (HLD)</h1>
+                <p class="hero-subtitle">CAP/PACELC, Consistent Hashing Ring, TinyURL Architecture, Raft Consensus, Kafka Internals, Distributed Sagas, and Rate Limiters.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">Media.net</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Swiggy</span><span class="pill pill-blue">Cred</span><span class="pill pill-blue">Warner Bros</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+    <!-- SECTION 1: RAPID RECALL -->
+    <section id="rapid-recall" class="section-block">
+      <div class="section-head">
+        <h2 class="section-title">⚡ 10-Minute Rapid Recall Cheat Sheet</h2>
+        <span class="pill pill-blue">High-Level Design</span>
+      </div>
+
+      <!-- CAP & PACELC -->
+      <h3 style="font-size: 1rem; color: var(--accent-blue); margin: 1rem 0 0.5rem;">1. CAP Theorem & PACELC Master Matrix</h3>
+      <div class="table-container">
+        <table class="dense-table">
+          <thead>
+            <tr>
+              <th>Classification</th>
+              <th>Guarantees Under Partition (P)</th>
+              <th>Behavior During Normal Operation (No Partition)</th>
+              <th>Real-World Systems</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>CP (Consistency + Partition)</strong></td>
+              <td>Refuses requests or errors out to guarantee strict linearizable consistency across remaining nodes.</td>
+              <td>Focuses on ACID consistency over lowest latency.</td>
+              <td>Google Spanner, HBase, ZooKeeper, MongoDB (strict write majority).</td>
+            </tr>
+            <tr>
+              <td><strong>AP (Availability + Partition)</strong></td>
+              <td>Always accepts reads and writes, returning potentially stale data (Eventual Consistency).</td>
+              <td>Focuses on ultra-low read/write latency.</td>
+              <td>Amazon DynamoDB, Apache Cassandra, CouchDB.</td>
+            </tr>
+            <tr>
+              <td><strong>PACELC Theorem Extension</strong></td>
+              <td colspan="3">
+                <strong>If Partition (P):</strong> Choose Availability (A) OR Consistency (C).<br>
+                <strong>Else (E):</strong> Choose Latency (L) OR Consistency (C).<br>
+                <em>Example:</em> DynamoDB is <strong>PA/EL</strong> (Available under partition, Low latency under normal conditions).
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Rate Limiting Algorithms -->
+      <h3 style="font-size: 1rem; color: var(--accent-emerald); margin: 1.5rem 0 0.5rem;">2. Rate Limiting Algorithms Matrix</h3>
+      <div class="table-container">
+        <table class="dense-table">
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>How It Works</th>
+              <th>Pros</th>
+              <th>Cons / Pitfalls</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Token Bucket</strong></td>
+              <td>Tokens added to bucket at constant rate $R$ up to capacity $B$. Request consumes 1 token.</td>
+              <td>Allows short controlled bursts up to bucket capacity $B$; memory-efficient ($O(1)$ per user).</td>
+              <td>Requires concurrency synchronization (handled via Redis Lua script).</td>
+            </tr>
+            <tr>
+              <td><strong>Leaky Bucket</strong></td>
+              <td>Requests enter a FIFO queue and leak out at a strictly constant processing rate.</td>
+              <td>Smooths traffic outflow to perfectly constant rate; ideal for message queues.</td>
+              <td>Bursts are buffered or dropped even if backend is completely idle.</td>
+            </tr>
+            <tr>
+              <td><strong>Sliding Window Counter</strong></td>
+              <td>Blends request count of current window and percentage of previous window: $\text{Count} = C_{curr} + C_{prev} \times (1 - \text{progress})$.</td>
+              <td>Smooths out boundary burst spikes of Fixed Window without high memory cost of Sliding Log.</td>
+              <td>Approximation based on uniform traffic assumption (near 99.9% accurate).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Caching Invalidation Table -->
+      <h3 style="font-size: 1rem; color: var(--accent-amber); margin: 1.5rem 0 0.5rem;">3. Caching Invalidation & Failure Modes Cheat Sheet</h3>
+      <div class="table-container">
+        <table class="dense-table">
+          <thead>
+            <tr>
+              <th>Cache Failure Mode</th>
+              <th>Root Cause</th>
+              <th>Impact</th>
+              <th>Standard Production Fix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cache Stampede (Thundering Herd)</strong></td>
+              <td>Hot cached key expires; 10,000 concurrent requests all miss cache and hit the database simultaneously!</td>
+              <td>Database CPU spikes to 100%, causing cascading database failure.</td>
+              <td><strong>Distributed Mutex Lock</strong> (only 1 request queries DB while others wait) or <strong>Probabilistic Early Expiration (XFetch algorithm)</strong>.</td>
+            </tr>
+            <tr>
+              <td><strong>Cache Penetration</strong></td>
+              <td>Malicious or erroneous queries for keys that do NOT exist in DB (e.g. <code>id = -9999</code>).</td>
+              <td>Every query bypasses cache and hits disk database every time!</td>
+              <td><strong>Bloom Filter</strong> in front of cache (returns "definitely not in DB" in $O(1)$) OR cache the <code>null</code> value with a short TTL.</td>
+            </tr>
+            <tr>
+              <td><strong>Cache Avalanche</strong></td>
+              <td>Thousands of cached keys set with the identical expiration time (e.g. 1 hour) expire simultaneously.</td>
+              <td>Sudden flood of massive queries overwhelms database at that exact minute.</td>
+              <td><strong>Add Random Jitter</strong> to expiration TTL: $\text{TTL} = \text{Base} + \text{rand}(0, 300\text{s})$.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 2: VISUAL DIAGRAMS -->
+    <section id="visual-diagrams" class="section-block">
+      <div class="section-head">
+        <h2 class="section-title">📊 Visual HLD & Distributed Architectures</h2>
+        <span class="pill pill-emerald">System Architectures</span>
+      </div>
+
+      <div class="svg-diagram-card">
+        
+    <svg viewBox="0 0 860 360" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ch-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+      </defs>
+
+      <!-- Center Hash Ring -->
+      <circle cx="340" cy="180" r="130" fill="none" stroke="#334155" stroke-width="4" stroke-dasharray="6" />
+      <text x="340" y="175" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">Hash Ring (0 to 2³² - 1)</text>
+      <text x="340" y="195" fill="#94a3b8" font-size="10" text-anchor="middle">Clockwise Key Routing &orarr;</text>
+
+      <!-- Server Nodes on Ring -->
+      <!-- Node A -->
+      <circle cx="340" cy="50" r="18" fill="#0284c7" stroke="#38bdf8" stroke-width="2" />
+      <text x="340" y="55" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">A</text>
+      <text x="340" y="25" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">Server A</text>
+
+      <!-- Node B -->
+      <circle cx="470" cy="180" r="18" fill="#059669" stroke="#34d399" stroke-width="2" />
+      <text x="470" y="185" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">B</text>
+      <text x="515" y="185" fill="#34d399" font-size="10" font-weight="700" text-anchor="start">Server B</text>
+
+      <!-- Node C -->
+      <circle cx="210" cy="180" r="18" fill="#d97706" stroke="#fbbf24" stroke-width="2" />
+      <text x="210" y="185" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">C</text>
+      <text x="165" y="185" fill="#fbbf24" font-size="10" font-weight="700" text-anchor="end">Server C</text>
+
+      <!-- Virtual Nodes (A_v, B_v, C_v) -->
+      <circle cx="430" cy="90" r="10" fill="#0369a1" />
+      <text x="455" y="93" fill="#94a3b8" font-size="9">A_v1</text>
+
+      <circle cx="430" cy="270" r="10" fill="#047857" />
+      <text x="455" y="275" fill="#94a3b8" font-size="9">B_v1</text>
+
+      <circle cx="250" cy="270" r="10" fill="#b45309" />
+      <text x="215" y="275" fill="#94a3b8" font-size="9">C_v1</text>
+
+      <!-- Keys mapped on Ring -->
+      <!-- Key 1 -->
+      <circle cx="390" cy="58" r="6" fill="#f43f5e" />
+      <text x="410" y="52" fill="#f43f5e" font-size="9" font-weight="700">Key 1 &rarr; B</text>
+
+      <!-- Key 2 -->
+      <circle cx="460" cy="225" r="6" fill="#f43f5e" />
+      <text x="480" y="235" fill="#f43f5e" font-size="9" font-weight="700">Key 2 &rarr; C</text>
+
+      <!-- Explanation Box Right -->
+      <rect x="560" y="40" width="280" height="280" rx="8" fill="#1e293b" stroke="#334155" />
+      <text x="700" y="68" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">Consistent Hashing Rules</text>
+
+      <text x="580" y="105" fill="#f1f5f9" font-size="11" font-weight="700">1. Key Placement:</text>
+      <text x="580" y="125" fill="#94a3b8" font-size="10">Hash key &rarr; place on ring &rarr; walk</text>
+      <text x="580" y="140" fill="#94a3b8" font-size="10">clockwise &rarr; first server owns the key.</text>
+
+      <text x="580" y="170" fill="#f1f5f9" font-size="11" font-weight="700">2. Virtual Nodes (vNodes):</text>
+      <text x="580" y="190" fill="#94a3b8" font-size="10">Each physical server has 100-256</text>
+      <text x="580" y="205" fill="#94a3b8" font-size="10">virtual positions to eliminate data skew.</text>
+
+      <text x="580" y="235" fill="#f1f5f9" font-size="11" font-weight="700">3. Node Addition / Removal:</text>
+      <text x="580" y="255" fill="#34d399" font-size="10">Only K/N keys are moved! (vs 100%</text>
+      <text x="580" y="270" fill="#34d399" font-size="10">re-hash in naive key % N).</text>
+    </svg>
+    
+        <div class="diagram-caption">Figure 10.1: Consistent Hashing Ring with Virtual Nodes — Eliminating Data Skew and Minimizing Key Migration on Server Scale-Out.</div>
+      </div>
+
+      <div class="svg-diagram-card">
+        
+    <svg viewBox="0 0 860 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="tu-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+      </defs>
+
+      <!-- Client -->
+      <rect x="20" y="110" width="90" height="70" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="65" y="140" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">Client</text>
+      <text x="65" y="158" fill="#94a3b8" font-size="9" text-anchor="middle">Browser/App</text>
+
+      <line x1="110" y1="145" x2="145" y2="145" stroke="#38bdf8" stroke-width="2" marker-end="url(#tu-arrow)" />
+
+      <!-- CDN & L7 LB -->
+      <rect x="150" y="100" width="120" height="90" rx="8" fill="#0369a1" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="210" y="130" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">CDN &amp; L7 LB</text>
+      <text x="210" y="150" fill="#bae6fd" font-size="9" text-anchor="middle">Cloudflare / NGINX</text>
+      <text x="210" y="165" fill="#e0f2fe" font-size="8" text-anchor="middle">SSL / Rate Limit</text>
+
+      <line x1="270" y1="145" x2="315" y2="145" stroke="#38bdf8" stroke-width="2" marker-end="url(#tu-arrow)" />
+
+      <!-- Web / App Cluster -->
+      <rect x="320" y="100" width="130" height="90" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="2" />
+      <text x="385" y="130" fill="#34d399" font-size="12" font-weight="800" text-anchor="middle">API Servers</text>
+      <text x="385" y="150" fill="#f1f5f9" font-size="9" text-anchor="middle">Stateless App Nodes</text>
+      <text x="385" y="165" fill="#94a3b8" font-size="8" text-anchor="middle">Base62 Encode/Decode</text>
+
+      <!-- Split to Cache (Top) and DB (Bottom) and KGS (Right) -->
+      <line x1="450" y1="125" x2="515" y2="70" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#tu-arrow)" />
+      <line x1="450" y1="165" x2="515" y2="220" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#tu-arrow)" />
+
+      <!-- Redis Cache Cluster -->
+      <rect x="520" y="40" width="140" height="65" rx="6" fill="#881337" stroke="#f43f5e" stroke-width="1.5" />
+      <text x="590" y="65" fill="#fecdd3" font-size="11" font-weight="700" text-anchor="middle">Redis Cache</text>
+      <text x="590" y="82" fill="#ffffff" font-size="9" text-anchor="middle">ShortURL &rarr; LongURL</text>
+      <text x="590" y="95" fill="#fda4af" font-size="8" text-anchor="middle">LRU Eviction (Top 20%)</text>
+
+      <!-- Database Cluster -->
+      <rect x="520" y="195" width="140" height="75" rx="6" fill="#065f46" stroke="#34d399" stroke-width="1.5" />
+      <text x="590" y="220" fill="#a7f3d0" font-size="11" font-weight="700" text-anchor="middle">Primary DB (SQL/NoSQL)</text>
+      <text x="590" y="238" fill="#ffffff" font-size="9" text-anchor="middle">Stores URL Mappings</text>
+      <text x="590" y="252" fill="#6ee7b7" font-size="8" text-anchor="middle">Read Replicas + Sharding</text>
+
+      <!-- KGS (Key Generation Service) -->
+      <line x1="450" y1="145" x2="715" y2="145" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#tu-arrow)" />
+      <rect x="720" y="105" width="125" height="80" rx="6" fill="#78350f" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="782" y="132" fill="#fde68a" font-size="11" font-weight="800" text-anchor="middle">KGS Cluster</text>
+      <text x="782" y="150" fill="#ffffff" font-size="9" text-anchor="middle">Pre-generates 7-char</text>
+      <text x="782" y="165" fill="#fde68a" font-size="8" text-anchor="middle">Collision-Free Keys</text>
+
+      <text x="430" y="25" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">High-Level Architecture (HLD) of a High-Throughput URL Shortener (TinyURL)</text>
+    </svg>
+    
+        <div class="diagram-caption">Figure 10.2: Production High-Level Design (HLD) of a Scalable URL Shortener (TinyURL) with Key Generation Service (KGS).</div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: CORE DEEP DIVES -->
+    <section id="core-deep-dives" class="section-block">
+      <div class="section-head">
+        <h2 class="section-title">🧠 Consistent Hashing, Rate Limiting & TinyURL</h2>
+        <span class="pill pill-purple">System Design Mechanics</span>
+      </div>
+
+      <!-- TinyURL Math & Encoding -->
+      <h3 style="color: var(--accent-blue); font-size: 1.1rem; margin-top: 1rem;">1. Designing TinyURL: Base62 Encoding & Key Generation Service (KGS)</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+        <strong>Scale & Capacity Estimations:</strong><br>
+        • Write volume: 500 million new URLs / month &rarr; ~200 writes / sec.<br>
+        • Read volume: 100:1 read-to-write ratio &rarr; 20,000 reads / sec (20K QPS).<br>
+        • Storage for 5 years: $500\text{M} \times 12 \times 5 = 30\text{ billion}$ records. At 500 bytes per record = <strong>15 TB storage</strong>.
+      </p>
+
+      <div class="callout callout-pro">
+        <div class="callout-title">💡 Why Base62 Encoding instead of MD5/Base64?</div>
+        <ul>
+          <li><strong>Base64</strong> uses characters <code>[0-9a-zA-Z+/]</code>. The symbols <code>+</code> and <code>/</code> have special reserved meanings in URLs and require encoding (e.g. <code>%2B</code>), breaking URL aesthetics.</li>
+          <li><strong>Base62</strong> uses only alphanumeric characters: <code>[0-9a-zA-Z]</code> (10 digits + 26 lowercase + 26 uppercase = 62 characters).</li>
+          <li>A 7-character string in Base62 produces: $62^7 = \mathbf{3,521,614,606,208}$ (3.52 Trillion) unique URLs, easily sufficient for centuries!</li>
+        </ul>
+      </div>
+
+      <!-- KGS vs MD5 -->
+      <h3 style="color: var(--accent-amber); font-size: 1.1rem; margin-top: 1.5rem;">2. Resolving Hash Collisions: Key Generation Service (KGS)</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+        If you hash long URLs using MD5/SHA256 and take the first 7 characters, different URLs can hash to the same 7 characters (Hash Collision). Retrying or appending sequence numbers causes race conditions in distributed clusters.<br><br>
+        <strong>The KGS Solution:</strong> A dedicated standalone Key Generation Service pre-generates 7-character random unique strings offline and stores them in a database. When a server needs to shorten a URL, it grabs a batch of 1,000 pre-generated unique keys from KGS into local memory. Zero collisions, zero MD5 hash overhead, and instant $O(1)$ response time!
+      </p>
+    </section>
+
+    <!-- SECTION 4: INTERVIEW TRAPS -->
+    <section id="interview-traps" class="section-block">
+      <div class="section-head">
+        <h2 class="section-title">⚠️ High-Frequency Distributed Systems Traps</h2>
+        <span class="pill pill-rose">System Design Traps</span>
+      </div>
+
+      <div class="callout callout-trap">
+        <div class="callout-title">Trap #1: L4 vs L7 Load Balancing — Which should you pick?</div>
+        <p><strong>L4 (Transport Layer - TCP/UDP):</strong> Operates strictly on IP address and port numbers without inspecting the payload packet contents. Extremely fast, minimal CPU overhead (handles millions of packets/sec via Linux IPVS / AWS NLB). Cannot route based on HTTP headers, cookies, or URL paths.</p>
+        <p><strong>L7 (Application Layer - HTTP/HTTPS):</strong> Terminates the TLS connection, parses the full HTTP request (URL paths, headers, JWT tokens). Enables smart routing (e.g. <code>/api/v1/video</code> &rarr; Video Service; <code>/api/v1/auth</code> &rarr; Auth Service), but consumes significantly more CPU memory for TLS decrypt and request parsing (e.g. AWS ALB, NGINX, HAProxy).</p>
+      </div>
+
+      <div class="callout callout-trap">
+        <div class="callout-title">Trap #2: Push vs Pull Architecture for Social Feeds (The Celebrity Problem)</div>
+        <p>• <strong>Push Model (Fan-out-on-write):</strong> When User A posts a tweet, system pushes it to the home feed cache of all their followers. Reads are instant ($O(1)$). <em>Catastrophic failure:</em> When Elon Musk (200M followers) tweets, the server must write to 200,000,000 user feed mailboxes, creating a massive queue backlog!</p>
+        <p>• <strong>Hybrid Solution (Production Twitter/Instagram):</strong> Standard users use Push model. For "Celebrity" users with &gt; 50,000 followers, do NOT fan out their posts! When a follower opens their feed, the system pulls the celebrity's recent tweets and merges them with the follower's feed in-memory at read time (Fan-out-on-read).</p>
+      </div>
+    </section>
+
+    <!-- SECTION 5: FLASHCARDS (10 GFG QUESTIONS) -->
+    <section id="flashcards" class="section-block">
+      <div class="section-head">
+        <h2 class="section-title">🎯 10 High-Frequency GFG Interview Q&As (Self-Assessment)</h2>
+        <span class="pill pill-blue">10 Questions</span>
+      </div>
+
+      <details class="faq-accordion">
+        <summary>Q1: What is Consistent Hashing and why does adding a node only redistribute K/N keys?</summary>
+        <div class="faq-body">
+          In standard hashing (<code>hash(key) % N</code>), changing $N$ (adding or removing a server) changes the modulus denominator for almost 100% of keys, invalidating the entire cache fleet and causing a database crash.<br><br>
+          In <strong>Consistent Hashing</strong>, both servers and keys are hashed onto the same circular ring ($0$ to $2^{32}-1$). A key belongs to the first server encountered clockwise. When a new server is added, it only claims keys between itself and its predecessor on the ring. Thus, on average, only $K/N$ keys move (where $K = \text{total keys}$, $N = \text{total servers}$)!
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q2: How does Apache Kafka achieve its massive throughput?</summary>
+        <div class="faq-body">
+          Kafka achieves throughput of millions of messages/sec on commodity hardware through 4 architectural design choices:
+          <ol style="margin-left: 1.2rem;">
+            <li><strong>Sequential Disk I/O:</strong> Kafka appends messages sequentially to an immutable commit log. Sequential disk access is as fast as random memory access on modern NVMe drives.</li>
+            <li><strong>OS Page Cache:</strong> Messages are cached in the Linux OS page cache rather than Java JVM heap, eliminating JVM garbage collection pauses.</li>
+            <li><strong>Zero-Copy Transfer:</strong> Uses the Linux <code>sendfile()</code> system call to transfer data directly from OS page cache to network socket buffer, bypassing user-space CPU memory copying.</li>
+            <li><strong>Batching & Compression:</strong> Producers batch messages into chunks and compress them (Snappy, LZ4) before network transmission.</li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q3: What are the differences between WebSockets, Long Polling, and Server-Sent Events (SSE)?</summary>
+        <div class="faq-body">
+          • <strong>Short Polling:</strong> Client repeatedly sends HTTP requests at fixed intervals (high overhead, mostly empty responses).<br>
+          • <strong>Long Polling:</strong> Client sends HTTP request; server holds connection open until new data is available or timeout occurs.<br>
+          • <strong>WebSockets:</strong> Full-duplex, bi-directional persistent TCP connection initiated via HTTP upgrade handshake. Ideal for real-time multiplayer games, live trading order books (Pace Stock Broking), and chat apps.<br>
+          • <strong>Server-Sent Events (SSE):</strong> Monodirectional stream from server to client over HTTP (client cannot send data over the same connection). Ideal for live sports ticker updates, stock price feeds, and LLM text streaming (ChatGPT/Gemini).
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q4: How do you implement a distributed Rate Limiter in Redis without race conditions?</summary>
+        <div class="faq-body">
+          To enforce an atomic sliding window rate limit without race conditions between concurrent requests, use a <strong>Redis Lua Script</strong>:
+          <pre><code class="language-lua">-- Redis Lua script for Sliding Window Rate Limiter
+local key = KEYS[1]
+local now = tonumber(ARGV[1])
+local window = tonumber(ARGV[2])
+local limit = tonumber(ARGV[3])
+local clearBefore = now - window
+
+-- 1. Remove timestamps older than current window
+redis.call('ZREMRANGEBYSCORE', key, 0, clearBefore)
+-- 2. Count current elements in window
+local currentRequests = redis.call('ZCARD', key)
+
+if currentRequests < limit then
+    redis.call('ZADD', key, now, now)
+    redis.call('EXPIRE', key, window)
+    return 1 -- Allowed
+else
+    return 0 -- Throttled
+end</code></pre>
+          Because Redis executes Lua scripts atomically in a single thread, no locks are required!
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q5: What is the difference between Strong Consistency, Eventual Consistency, and Read-Your-Writes?</summary>
+        <div class="faq-body">
+          • <strong>Strong (Linearizable) Consistency:</strong> Any read following a write is guaranteed to return the updated value across all replicas. Requires synchronous replication and consensus (Paxos/Raft). High write latency.<br>
+          • <strong>Eventual Consistency:</strong> Replicas converge to the same value over time if no new updates are made. Reads immediately after a write may return stale data. High availability and low latency.<br>
+          • <strong>Read-Your-Writes (Monotonic Read) Consistency:</strong> Guarantees that a user will always see their own updates immediately (e.g. posting a comment shows up on the author's screen immediately even if other users see it 3 seconds later).
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q6: What are Bloom Filters and how do they prevent Cache Penetration?</summary>
+        <div class="faq-body">
+          A <strong>Bloom Filter</strong> is a space-efficient probabilistic data structure that tests whether an element is a member of a set using a bit array of size $m$ and $k$ independent hash functions.<br>
+          • <strong>Guarantees:</strong> Zero False Negatives (If it says an item is NOT in the database, it is 100% definitely NOT in the database!). Small probability of False Positives.<br>
+          • <strong>Usage in Caching:</strong> When a request for key $X$ arrives, check the Bloom Filter first. If the Bloom filter returns "false", reject the request immediately with HTTP 404 without querying Redis or touching the SQL database!
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q7: How do you design an Idempotent API?</summary>
+        <div class="faq-body">
+          An operation is <strong>idempotent</strong> if making the request multiple times produces the identical side-effect as making it once (essential for payment processing when network drops mid-request).<br>
+          • <strong>Implementation:</strong> Client generates a unique UUID <strong>Idempotency Key</strong> (e.g. in HTTP header <code>Idempotency-Key: 123e4567-e89b...</code>).<br>
+          • Server stores the idempotency key in a Redis/SQL distributed lock with state (<code>PROCESSING</code> / <code>COMPLETED</code>).<br>
+          • If a duplicate request arrives while processing, reject or wait; if already completed, return the cached successful response without re-charging the credit card!
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q8: How does a Content Delivery Network (CDN) route requests using Anycast?</summary>
+        <div class="faq-body">
+          In <strong>Anycast BGP Routing</strong>, multiple CDN edge servers located across different geographical continents share the <strong>exact same single IP address</strong>.<br>
+          When a user queries the IP, internet border routers route the packets to the geographically closest edge server via the shortest BGP autonomous system (AS) hop count. Static assets (images, video chunks, CSS) are served from local edge RAM/SSD in &lt; 10ms without crossing ocean cables!
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q9: Explain the Two-Phase Commit (2PC) Protocol and its biggest flaw.</summary>
+        <div class="faq-body">
+          2PC coordinates atomic distributed transactions across multiple database nodes:
+          <ul>
+            <li><strong>Phase 1 (Prepare):</strong> Coordinator sends <code>PREPARE</code> to all cohorts. Cohorts execute transaction, write to undo/redo logs, lock resources, and reply <code>YES</code> or <code>NO</code>.</li>
+            <li><strong>Phase 2 (Commit):</strong> If ALL cohorts vote <code>YES</code>, coordinator sends <code>COMMIT</code>. If any cohort votes <code>NO</code>, coordinator sends <code>ROLLBACK</code>.</li>
+          </ul>
+          <strong>Biggest Flaw (Blocking Coordinator Failure):</strong> If the coordinator crashes mid-commit after cohorts locked their resources, cohorts are permanently blocked in uncertainty, holding table locks and freezing the system! (Modern systems use Saga Pattern or Raft consensus instead).
+        </div>
+      </details>
+
+      <details class="faq-accordion">
+        <summary>Q10: What is Database Sharding and how do you choose a Shard Key?</summary>
+        <div class="faq-body">
+          <strong>Database Sharding</strong> partitions large database tables horizontally across distinct physical database servers.<br>
+          <strong>Shard Key Selection Criteria:</strong>
+          <ul>
+            <li><strong>High Cardinality:</strong> Keys must have millions of distinct values (e.g. <code>user_id</code> vs low-cardinality <code>country</code>).</li>
+            <li><strong>Uniform Data Distribution:</strong> Avoids "hotspot shards" where 90% of traffic hits one physical machine.</li>
+            <li><strong>Query Isolation:</strong> Choose a key that groups frequently queried data on the same shard to avoid costly distributed cross-shard joins (Scatter-Gather queries).</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+    
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="lld_design_patterns.html" class="nav-btn">← LLD & Patterns</a><a href="api_security.html" class="nav-btn" style="margin-left: auto;">API & Security →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('system_design');
+  });
+</script>
+</body>
+</html>

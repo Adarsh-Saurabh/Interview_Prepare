@@ -1,0 +1,3255 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Study Material & Rapid Cheat Sheets · Adarsh Saurabh</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+
+/* Dashboard & Track Layout */
+.dashboard-hero {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(99, 102, 241, 0.08), rgba(20, 184, 166, 0.08));
+  border: 1px solid var(--border-color);
+  border-radius: 1.25rem;
+  padding: 2.25rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-hero::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-main-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-main-sub {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 900px;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+/* Study Presets Strip */
+.presets-strip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.presets-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.preset-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-btn:hover, .preset-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+}
+
+/* Track Groups */
+.track-group {
+  margin-bottom: 3rem;
+}
+
+.track-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.track-icon {
+  font-size: 1.6rem;
+}
+
+.track-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.track-desc {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+
+.track-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  background: rgba(34, 211, 238, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+}
+
+/* Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.topic-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.topic-card:hover {
+  border-color: var(--border-focus);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-top {
+  display: flex;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.card-icon {
+  font-size: 1.8rem;
+  width: 3.25rem;
+  height: 3.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 0.25rem;
+}
+
+.card-title a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.card-title a:hover {
+  color: var(--accent-blue);
+}
+
+.card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.card-highlights {
+  list-style: none;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.card-highlights li {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.card-highlights li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-weight: 800;
+}
+
+.card-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  transition: all 0.15s;
+}
+
+.card-btn:hover {
+  background: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+}
+
+.card-btn-disabled {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px dashed var(--border-color);
+}
+
+.card-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.done-card {
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.done-card::after {
+  content: '✓ REVIEWED';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-emerald);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+}
+
+/* Progress Tracker Bar */
+.progress-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.progress-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.progress-text-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.progress-text-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.progress-bar-wrapper {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+  background: var(--bg-card);
+  border-radius: 9999px;
+  height: 0.65rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald));
+  border-radius: 9999px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Search & Filter Bar */
+.search-controls {
+  margin-bottom: 1.75rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.role-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.role-chip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.role-chip.active, .role-chip:hover {
+  background: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+}
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <span>⚡ PrepPortal</span>
+        <span class="brand-badge">Master Suite</span>
+      </a>
+      <div class="header-actions">
+        <a href="review.html" class="nav-btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
+          🎯 Weak-Topic Review
+        </a>
+        <a href="../0Interview%20Preparation/index.html" style="text-decoration: none; font-size: 0.82rem; color: var(--accent-cyan); font-weight: 600;">
+          ← Company Portals
+        </a>
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Hero Banner -->
+    <div class="dashboard-hero">
+      <h1 class="hero-main-title">Fast Interview Study Material &amp; Cheat Sheets</h1>
+      <p class="hero-main-sub">
+        Comprehensive 15-Minute Sprint &amp; 60-Minute Deep Dive preparation suite featuring inline SVG mental models, first-principles architectures, complexity matrices, and 120+ verified interview flashcards. Curated for Adarsh Saurabh (NIT Rourkela) across SWE, AI/ML, and FDE tracks.
+      </p>
+      
+      <div class="meta-pills">
+        <span class="pill pill-blue">23 Modules</span>
+        <span class="pill pill-purple">5 Tracks</span>
+        <span class="pill pill-emerald">Dual-Mode: 15m Sprint / 60m Deep</span>
+        <span class="pill pill-amber">Inline SVG Mental Models</span>
+        <span class="pill pill-rose">KaTeX Formulas &amp; Worked Examples</span>
+        <span class="pill pill-cyan">100% Offline Ready</span>
+      </div>
+    </div>
+
+    <!-- Live Preparation Progress Bar (§1.1 Dynamic count) -->
+    <div class="progress-card">
+      <div class="progress-info">
+        <div style="font-size: 1.75rem;">🎯</div>
+        <div>
+          <div class="progress-text-title" id="progressTitle">Preparation Progress: 0 of 23 Modules Reviewed</div>
+          <div class="progress-text-sub">Tick checkboxes on cards as you review to track your readiness.</div>
+        </div>
+      </div>
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+    </div>
+
+    <!-- Study Plan Presets Strip (§3.5.8) -->
+    <div class="presets-strip">
+      <span class="presets-label">⚡ Study Presets:</span>
+      <button class="preset-btn" onclick="applyPreset('all')">Show All</button>
+      <button class="preset-btn" onclick="applyPreset('cram')">🔥 48-Hour Cram (P0 Sprint)</button>
+      <button class="preset-btn" onclick="applyPreset('fde')">🎯 FDE Loop</button>
+      <button class="preset-btn" onclick="applyPreset('ai')">🤖 AI/ML Loop</button>
+      <button class="preset-btn" onclick="applyPreset('swe')">💻 Core SWE Loop</button>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="search-controls">
+      <input type="text" id="moduleSearchInput" class="search-input" placeholder="🔍 Search topics, concepts, or companies (e.g. 'Consistent Hashing', 'KV Cache', 'LRU', 'B+ Tree', 'Apple', 'Pace')..." oninput="filterCards()">
+      <div class="role-chips">
+        <button class="role-chip active" onclick="filterRole('all', this)">All Roles</button>
+        <button class="role-chip" onclick="filterRole('swe', this)">SWE</button>
+        <button class="role-chip" onclick="filterRole('ai', this)">AI / ML</button>
+        <button class="role-chip" onclick="filterRole('fde', this)">FDE</button>
+      </div>
+    </div>
+
+    <!-- Track Groups & Cards -->
+    <div id="tracksContainer">
+      
+        <div class="track-group" data-track-group="A">
+          <div class="track-header">
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <span class="track-icon">💻</span>
+              <div>
+                <h2 class="track-title">Track A — Core CS Fundamentals</h2>
+                <div class="track-desc">Foundational computing systems: DSA, OS, DBMS, Networks, Architecture, Concurrency.</div>
+              </div>
+            </div>
+            <span class="track-count">6 Modules</span>
+          </div>
+          <div class="cards-grid">
+            
+            <div class="topic-card" data-topic="dsa" data-track="A" data-roles="swe fde ai" data-tier="P0" data-tags="data structures & algorithms (dsa) pattern decision tree svg master complexity matrix monotonic stack / window maximum binary search on answer pattern media.net apple swiggy juspay cred swe fde ai p0">
+              <div class="card-top">
+                <div class="card-icon">🧩</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-purple">Coding Master</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="dsa.html">Data Structures & Algorithms (DSA)</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Master Complexity Matrix, 9 Decision Patterns, Monotonic Stacks, DP Shapes, DSU, and Binary Search on Answer.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Pattern Decision Tree SVG</li><li>Master Complexity Matrix</li><li>Monotonic Stack / Window Maximum</li><li>Binary Search on Answer Pattern</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Media.net</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Swiggy</span><span class="pill pill-blue">Juspay</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="dsa" onchange="toggleCardDone('dsa', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="dsa.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="os" data-track="A" data-roles="swe ai" data-tier="P0" data-tags="operating systems (os) process memory layout svg paging & tlb lookup svg deadlock 4 conditions copy-on-write & fork() internals qualcomm nvidia texas instruments apple pace swe ai p0">
+              <div class="card-top">
+                <div class="card-icon">⚡</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-emerald">Core Systems</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="os.html">Operating Systems (OS)</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Process Virtual Memory, TLB Paging Walk, Banker's Algorithm, Semaphore Classic Problems, and CFS Scheduling.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Process Memory Layout SVG</li><li>Paging & TLB Lookup SVG</li><li>Deadlock 4 Conditions</li><li>Copy-on-Write & fork() Internals</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Qualcomm</span><span class="pill pill-blue">Nvidia</span><span class="pill pill-blue">Texas Instruments</span><span class="pill pill-blue">Apple</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="os" onchange="toggleCardDone('os', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="os.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="dbms" data-track="A" data-roles="swe fde" data-tier="P0" data-tags="dbms & storage internals b+ tree index architecture svg wal recovery & checkpoint svg transaction isolation matrix window functions & top sql queries swiggy cred media.net apple nextwave swe fde p0">
+              <div class="card-top">
+                <div class="card-icon">🗄️</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-teal">Databases</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 12 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="dbms.html">DBMS & Storage Internals</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Storage Engines, B+ Tree vs LSM Trees, WAL Logging, MVCC Mechanics, Isolation Levels, and Precedence Serializability.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>B+ Tree Index Architecture SVG</li><li>WAL Recovery & Checkpoint SVG</li><li>Transaction Isolation Matrix</li><li>Window Functions & Top SQL Queries</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Swiggy</span><span class="pill pill-blue">Cred</span><span class="pill pill-blue">Media.net</span><span class="pill pill-blue">Apple</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="dbms" onchange="toggleCardDone('dbms', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="dbms.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="cn" data-track="A" data-roles="swe" data-tier="P1" data-tags="computer networks (cn) 3-way handshake svg tcp congestion control (aimd) http/1.1 vs http/2 vs http/3 time_wait 2*msl trap cisco apple nokia media.net swiggy swe p1">
+              <div class="card-top">
+                <div class="card-icon">🌐</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-blue">Core CS</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 12 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="cn.html">Computer Networks (CN)</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">OSI/TCP-IP, 3-Way Handshake & Teardown, TCP Congestion AIMD/BBR, Sliding Windows, Full-Stack URL Navigation, and TLS 1.3.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>3-Way Handshake SVG</li><li>TCP Congestion Control (AIMD)</li><li>HTTP/1.1 vs HTTP/2 vs HTTP/3</li><li>TIME_WAIT 2*MSL Trap</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Cisco</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Nokia</span><span class="pill pill-blue">Media.net</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="cn" onchange="toggleCardDone('cn', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="cn.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="coa" data-track="A" data-roles="swe" data-tier="P1" data-tags="computer organization & architecture (coa) 5-stage pipeline hazards svg memory hierarchy latency svg cache read/write policy flow false sharing & alignas(64) texas instruments nvidia qualcomm arm apple swe p1">
+              <div class="card-top">
+                <div class="card-icon">💻</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-amber">Hardware / Systems</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 12 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="coa.html">Computer Organization & Architecture (COA)</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">CPU Performance Equation, Amdahl's Law, AMAT Latencies, 5-Stage RISC Pipeline, Out-of-Order Tomasulo, and Cache Coherence MESI.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>5-Stage Pipeline Hazards SVG</li><li>Memory Hierarchy Latency SVG</li><li>Cache Read/Write Policy Flow</li><li>False Sharing & alignas(64)</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Texas Instruments</span><span class="pill pill-blue">Nvidia</span><span class="pill pill-blue">Qualcomm</span><span class="pill pill-blue">Arm</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="coa" onchange="toggleCardDone('coa', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="coa.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="concurrency" data-track="A" data-roles="swe ai" data-tier="P0" data-tags="concurrency & parallelism happens-before memory order svg thread-safe bounded queue print foobar alternately striped lock concurrent hashmap anthropic openai pace (₹41l) apple qualcomm swe ai p0">
+              <div class="card-top">
+                <div class="card-icon">🧵</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-indigo">Cross-Language</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="concurrency.html">Concurrency & Parallelism</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Race Conditions, Memory Models & Happens-Before, Print FooBar/H2O, Thread-Safe Bounded Queues, Striped Locks, and CAS ABA.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Happens-Before Memory Order SVG</li><li>Thread-Safe Bounded Queue</li><li>Print FooBar Alternately</li><li>Striped Lock Concurrent HashMap</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Pace (₹41L)</span><span class="pill pill-blue">Apple</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="concurrency" onchange="toggleCardDone('concurrency', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="concurrency.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="track-group" data-track-group="B">
+          <div class="track-header">
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <span class="track-icon">📐</span>
+              <div>
+                <h2 class="track-title">Track B — Software Engineering & Design</h2>
+                <div class="track-desc">Production design: LLD, System Design, APIs & Auth, C++ Systems, Python Internals.</div>
+              </div>
+            </div>
+            <span class="track-count">5 Modules</span>
+          </div>
+          <div class="cards-grid">
+            
+            <div class="topic-card" data-topic="lld" data-track="B" data-roles="swe fde" data-tier="P0" data-tags="low-level design & design patterns (lld / ood) lru cache class diagram svg factory vs strategy flowchart svg thread-safe double-checked lock parking lot lld schema swiggy media.net cred juspay apple swe fde p0">
+              <div class="card-top">
+                <div class="card-icon">📐</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-purple">OOD & LLD</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="lld_design_patterns.html">Low-Level Design & Design Patterns (LLD / OOD)</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">SOLID Principles, 23 GoF Patterns Matrix, Thread-Safe Singleton, O(1) LRU & LFU Caches, Parking Lot, and Elevator LLD.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>LRU Cache Class Diagram SVG</li><li>Factory vs Strategy Flowchart SVG</li><li>Thread-Safe Double-Checked Lock</li><li>Parking Lot LLD Schema</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Swiggy</span><span class="pill pill-blue">Media.net</span><span class="pill pill-blue">Cred</span><span class="pill pill-blue">Juspay</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="lld" onchange="toggleCardDone('lld', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="lld_design_patterns.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="system_design" data-track="B" data-roles="swe ai fde" data-tier="P0" data-tags="system design & distributed systems (hld) consistent hashing ring svg tinyurl architecture svg rate limiting algorithms matrix cache stampede & thundering herd media.net apple swiggy cred warner bros swe ai fde p0">
+              <div class="card-top">
+                <div class="card-icon">🏗️</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-blue">Architecture</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="system_design.html">System Design & Distributed Systems (HLD)</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">CAP/PACELC, Consistent Hashing Ring, TinyURL Architecture, Raft Consensus, Kafka Internals, Distributed Sagas, and Rate Limiters.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Consistent Hashing Ring SVG</li><li>TinyURL Architecture SVG</li><li>Rate Limiting Algorithms Matrix</li><li>Cache Stampede & Thundering Herd</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Media.net</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Swiggy</span><span class="pill pill-blue">Cred</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="system_design" onchange="toggleCardDone('system_design', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="system_design.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="api_security" data-track="B" data-roles="swe fde" data-tier="P1" data-tags="api design, auth & security oauth 2.0 pkce flow svg jwt header & signature svg idempotency key protocol owasp top 10 defenses palantir cred swiggy apple aiprise swe fde p1">
+              <div class="card-top">
+                <div class="card-icon">🔐</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-amber">Interfaces & Trust</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="api_security.html">API Design, Auth & Security</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">REST vs gRPC vs GraphQL, OAuth 2.0 PKCE, JWT alg:none Attack, OWASP Top 10, Multi-Tenant Data Isolation, and Idempotency Keys.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>OAuth 2.0 PKCE Flow SVG</li><li>JWT Header & Signature SVG</li><li>Idempotency Key Protocol</li><li>OWASP Top 10 Defenses</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Palantir</span><span class="pill pill-blue">Cred</span><span class="pill pill-blue">Swiggy</span><span class="pill pill-blue">Apple</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="api_security" onchange="toggleCardDone('api_security', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="api_security.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="cpp_systems" data-track="B" data-roles="swe" data-tier="P1" data-tags="c++ internals & low-latency systems vtable memory layout svg shared_ptr control block svg lock-free spsc ring buffer std::move & universal references trap pace stock broking (₹41l) texas instruments qualcomm nvidia apple swe p1">
+              <div class="card-top">
+                <div class="card-icon">🚀</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-indigo">Systems & HFT</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="cpp_systems.html">C++ Internals & Low-Latency Systems</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Vtables, Smart Pointer Overhead, Move Semantics & Forwarding, Lock-Free SPSC Ring Buffer, Atomics, and Linux Kernel Bypass.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Vtable Memory Layout SVG</li><li>Shared_ptr Control Block SVG</li><li>Lock-Free SPSC Ring Buffer</li><li>std::move & Universal References Trap</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Pace Stock Broking (₹41L)</span><span class="pill pill-blue">Texas Instruments</span><span class="pill pill-blue">Qualcomm</span><span class="pill pill-blue">Nvidia</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="cpp_systems" onchange="toggleCardDone('cpp_systems', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="cpp_systems.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="python_internals" data-track="B" data-roles="ai fde" data-tier="P0" data-tags="python internals, gil & concurrency cpython gil execution flow svg generational gc pipeline svg mutable default arguments trap __slots__ 40% memory savings anthropic openai solumn ai aiprise apple ai fde p0">
+              <div class="card-top">
+                <div class="card-icon">🐍</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-emerald">Language Deep Dive</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 14 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="python_internals.html">Python Internals, GIL & Concurrency</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">CPython PyObject, GIL Mechanics, Generational Cyclic GC, Decorators & Descriptors, AsyncIO Event Loop, and __slots__ Memory.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>CPython GIL Execution Flow SVG</li><li>Generational GC Pipeline SVG</li><li>Mutable Default Arguments Trap</li><li>__slots__ 40% Memory Savings</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Solumn AI</span><span class="pill pill-blue">AiPrise</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="python_internals" onchange="toggleCardDone('python_internals', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="python_internals.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+          
+            <div class="topic-card" data-topic="python_oop_master" data-track="B" data-roles="ai swe data-science" data-tier="P0" data-tags="python & oops masterclass print cheatsheet 75 interview questions cpython memory mro descriptors metaclasses solid lld ai agents">
+              <div class="card-top">
+                <div class="card-icon">⚡</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <div style="display: flex; align-items: center; gap: 0.4rem;">
+                      <span class="pill pill-rose">P0 Masterclass</span>
+                      <span class="pill pill-cyan">25-Page Print</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--accent-emerald); font-weight: 700;">105 Q&amp;As | 3 LLDs</span>
+                  </div>
+                  <h3 class="card-title"><a href="python_oop_interview_cheatsheet.html">Python &amp; OOP Complete Interview Masterclass</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Print-engineered 25-page high-density cheat sheet. Covers CPython bytecode, descriptors, C3 MRO, memory layout, GIL concurrency, 105 real interview drill questions from foundational OOP to advanced systems with in-depth answers, and 3 production LLDs (LRU Cache, AI Agent Tool Engine, Event Bus).</p>
+              
+              <div class="card-footer">
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Google</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Uber</span><span class="pill pill-blue">Cred</span><span class="pill pill-blue">Swiggy</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="python_oop_master" onchange="toggleCardDone('python_oop_master', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="python_oop_interview_cheatsheet.html" class="card-btn" style="background: var(--accent-blue); color: #000; font-weight: 700;">Open Masterclass →</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        
+        <div class="track-group" data-track-group="C">
+          <div class="track-header">
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <span class="track-icon">🧠</span>
+              <div>
+                <h2 class="track-title">Track C — AI / Machine Learning</h2>
+                <div class="track-desc">Frontier AI & ML: Math for ML, ML Core, Vision/Signals, LLM Internals, RAG/Agents, AI Evals.</div>
+              </div>
+            </div>
+            <span class="track-count">6 Modules</span>
+          </div>
+          <div class="cards-grid">
+            
+            <div class="topic-card" data-topic="math_ml" data-track="C" data-roles="ai" data-tier="P1" data-tags="math foundations for machine learning svd geometric transformation svg forward vs reverse kl divergence svg bayes theorem population grid svg information theory coding challenges openai anthropic apple ai qualcomm deepmind ai p1">
+              <div class="card-top">
+                <div class="card-icon">∑</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-purple">Foundations</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="math_ml.html">Math Foundations for Machine Learning</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Linear Algebra & SVD, Matrix Calculus, Bayes' Theorem, Information Theory (Entropy/KL/Cross-Entropy), and Signal Processing Bridge.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>SVD Geometric Transformation SVG</li><li>Forward vs Reverse KL Divergence SVG</li><li>Bayes Theorem Population Grid SVG</li><li>Information Theory Coding Challenges</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">Apple AI</span><span class="pill pill-blue">Qualcomm</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="math_ml" onchange="toggleCardDone('math_ml', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="math_ml.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="ml_core" data-track="C" data-roles="ai" data-tier="P0" data-tags="classical ml & deep learning core bias-variance capacity curve svg backprop computation graph svg l1 vs l2 geometry svg numpy 2-layer net forward & backward apple ai google meta amazon assurant ai p0">
+              <div class="card-top">
+                <div class="card-icon">📊</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-orange">ML Foundations</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="ml_core.html">Classical ML & Deep Learning Core</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Bias-Variance Decomposition, NumPy Backprop from Scratch, Trees & XGBoost, Optimizer Progression, Normalization, and 9-Step ML System Design.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Bias-Variance Capacity Curve SVG</li><li>Backprop Computation Graph SVG</li><li>L1 vs L2 Geometry SVG</li><li>NumPy 2-Layer Net Forward & Backward</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Apple AI</span><span class="pill pill-blue">Google</span><span class="pill pill-blue">Meta</span><span class="pill pill-blue">Amazon</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="ml_core" onchange="toggleCardDone('ml_core', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="ml_core.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="ml_cv" data-track="C" data-roles="ai" data-tier="P1" data-tags="computer vision & signal processing cnn feature map pipeline svg hog feature extraction svg iou & nms suppression svg u-net architecture & skip connections qualcomm cv/dsp apple vision autobot robotics lumilens texas instruments ai p1">
+              <div class="card-top">
+                <div class="card-icon">👁️</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-orange">Vision & Signals</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 14 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="ml_cv.html">Computer Vision & Signal Processing</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Classical Vision & HOG Keyframes, CNN Lineage (ResNet/MobileNet), IoU & NMS, Vision Transformers (ViT), Diffusion Models, and Nyquist Sampling.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>CNN Feature Map Pipeline SVG</li><li>HOG Feature Extraction SVG</li><li>IoU & NMS Suppression SVG</li><li>U-Net Architecture & Skip Connections</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Qualcomm CV/DSP</span><span class="pill pill-blue">Apple Vision</span><span class="pill pill-blue">Autobot Robotics</span><span class="pill pill-blue">Lumilens</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="ml_cv" onchange="toggleCardDone('ml_cv', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="ml_cv.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="llm_internals" data-track="C" data-roles="ai" data-tier="P0" data-tags="llm & transformer internals transformer block tensor shapes svg mha vs mqa vs gqa layout svg kv cache memory scaling formula grpo vs dpo vs rlhf mechanics anthropic openai meta ai perplexity apple ai ai p0">
+              <div class="card-top">
+                <div class="card-icon">🧠</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-rose">Frontier AI</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="llm_internals.html">LLM & Transformer Internals</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Scaled Dot-Product Attention, MHA vs GQA, KV Cache Scaling, RoPE, Post-Training (SFT/DPO/GRPO), LoRA/PEFT, and PagedAttention Serving.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Transformer Block Tensor Shapes SVG</li><li>MHA vs MQA vs GQA Layout SVG</li><li>KV Cache Memory Scaling Formula</li><li>GRPO vs DPO vs RLHF Mechanics</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Meta AI</span><span class="pill pill-blue">Perplexity</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="llm_internals" onchange="toggleCardDone('llm_internals', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="llm_internals.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="ai_agents" data-track="C" data-roles="ai fde" data-tier="P0" data-tags="rag, agents & genai system design advanced rag flowchart svg langgraph cyclic state machine svg hnsw vs ivf indexing hallucination triad & evaluation anthropic openai palantir solumn ai aiprise ai fde p0">
+              <div class="card-top">
+                <div class="card-icon">🤖</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-rose">GenAI Systems</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="ai_agents.html">RAG, Agents & GenAI System Design</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Hybrid Search & RRF, Vector DBs (HNSW/IVF-PQ), LangGraph Multi-Agent Workflows, Context Rot, Enterprise ACLs, and Model Context Protocol (MCP).</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Advanced RAG Flowchart SVG</li><li>LangGraph Cyclic State Machine SVG</li><li>HNSW vs IVF Indexing</li><li>Hallucination Triad & Evaluation</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Palantir</span><span class="pill pill-blue">Solumn AI</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="ai_agents" onchange="toggleCardDone('ai_agents', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="ai_agents.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="ai_evals" data-track="C" data-roles="ai fde" data-tier="P0" data-tags="ai evaluation, observability & mlops evaluation pyramid svg pass@k vs pass^k reliability formula llm-as-judge agreement grader covariate & concept drift mitigations openai anthropic palantir scale ai apple ai fde p0">
+              <div class="card-top">
+                <div class="card-icon">📈</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-emerald">The Differentiator</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="ai_evals.html">AI Evaluation, Observability & MLOps</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Deterministic vs LLM-as-Judge Graders, RAG Triad, pass@k vs pass^k, Agent Trajectory Evals, A/B Testing, and Drift Detection.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Evaluation Pyramid SVG</li><li>pass@k vs pass^k Reliability Formula</li><li>LLM-as-Judge Agreement Grader</li><li>Covariate & Concept Drift Mitigations</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">Palantir</span><span class="pill pill-blue">Scale AI</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="ai_evals" onchange="toggleCardDone('ai_evals', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="ai_evals.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="track-group" data-track-group="D">
+          <div class="track-header">
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <span class="track-icon">🛠️</span>
+              <div>
+                <h2 class="track-title">Track D — Data & Infrastructure</h2>
+                <div class="track-desc">Operational engineering: SQL & Data Engineering, Linux & Git, Docker & Kubernetes.</div>
+              </div>
+            </div>
+            <span class="track-count">3 Modules</span>
+          </div>
+          <div class="cards-grid">
+            
+            <div class="topic-card" data-topic="sql_data" data-track="D" data-roles="fde ai swe" data-tier="P0" data-tags="sql mastery & data engineering logical query execution order svg window frame rows vs range svg 12 production sql query templates spark skew salting technique palantir fdse swiggy cred apple media.net fde ai swe p0">
+              <div class="card-top">
+                <div class="card-icon">🔎</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-teal">FDE Core</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="sql_data.html">SQL Mastery & Data Engineering</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">12 Standard SQL Query Patterns, Window Frames, Gaps & Islands, Data Modeling (Star/Snowflake), Messy-Data Wrangling, and Unexecutable SQL Execution.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Logical Query Execution Order SVG</li><li>Window Frame ROWS vs RANGE SVG</li><li>12 Production SQL Query Templates</li><li>Spark Skew Salting Technique</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Palantir FDSE</span><span class="pill pill-blue">Swiggy</span><span class="pill pill-blue">Cred</span><span class="pill pill-blue">Apple</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="sql_data" onchange="toggleCardDone('sql_data', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="sql_data.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="linux_git" data-track="D" data-roles="swe ai fde" data-tier="P1" data-tags="linux, git & cli debugging git 4 areas lifecycle svg merge vs rebase history graph svg server diagnosis flowchart svg git bisect binary search debugging all companies palantir qualcomm apple nvidia swe ai fde p1">
+              <div class="card-top">
+                <div class="card-icon">🐧</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-cyan">Daily Tools</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 12 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="linux_git.html">Linux, Git & CLI Debugging</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Server Diagnosis Order, Text Pipelines (grep/awk/sed), Git Internals & Surgery (reflog/bisect), Process Signals, and strace/perf Profiling.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Git 4 Areas Lifecycle SVG</li><li>Merge vs Rebase History Graph SVG</li><li>Server Diagnosis Flowchart SVG</li><li>git bisect Binary Search Debugging</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">All Companies</span><span class="pill pill-blue">Palantir</span><span class="pill pill-blue">Qualcomm</span><span class="pill pill-blue">Apple</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="linux_git" onchange="toggleCardDone('linux_git', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="linux_git.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="docker" data-track="D" data-roles="swe ai fde" data-tier="P1" data-tags="docker, kubernetes & ci/cd docker vs vm architecture svg overlayfs union mount svg kubernetes control plane architecture svg multi-stage build pipeline warner bros celonis ibm aiprise cred swe ai fde p1">
+              <div class="card-top">
+                <div class="card-icon">🐳</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-cyan">Containers & K8s</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 12 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="docker.html">Docker, Kubernetes & CI/CD</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Namespaces & Cgroups, Multi-Stage Dockerfiles, Kubernetes Core Objects (Pods/Deployments/Services), Probes, and CI/CD GitHub Actions.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Docker vs VM Architecture SVG</li><li>OverlayFS Union Mount SVG</li><li>Kubernetes Control Plane Architecture SVG</li><li>Multi-Stage Build Pipeline</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Warner Bros</span><span class="pill pill-blue">Celonis</span><span class="pill pill-blue">IBM</span><span class="pill pill-blue">AiPrise</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="docker" onchange="toggleCardDone('docker', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="docker.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="track-group" data-track-group="E">
+          <div class="track-header">
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <span class="track-icon">🧭</span>
+              <div>
+                <h2 class="track-title">Track E — Role-Specific & Human</h2>
+                <div class="track-desc">Interview loops: FDE Decomposition, Behavioral & STAR, Quantitative Aptitude & Puzzles.</div>
+              </div>
+            </div>
+            <span class="track-count">3 Modules</span>
+          </div>
+          <div class="cards-grid">
+            
+            <div class="topic-card" data-topic="fde_decomp" data-track="E" data-roles="fde" data-tier="P0" data-tags="fde decomposition & client-facing engineering 8-phase decomposition framework svg fde workflow spine svg 10 verbatim client prompts decomposed re-engineering code red herrings palantir fdse openai fde enterprise tech consulting tech fde p0">
+              <div class="card-top">
+                <div class="card-icon">🧭</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-blue">FDE Loop</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="fde_decomp.html">FDE Decomposition & Client-Facing Engineering</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Palantir Open-Ended Decomposition Framework, 10 Verbatim Client Prompts, Scoping Question Bank, Mid-Round Constraint Breaks, and Re-Engineering Red Herrings.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>8-Phase Decomposition Framework SVG</li><li>FDE Workflow Spine SVG</li><li>10 Verbatim Client Prompts Decomposed</li><li>Re-Engineering Code Red Herrings</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Palantir FDSE</span><span class="pill pill-blue">OpenAI FDE</span><span class="pill pill-blue">Enterprise Tech</span><span class="pill pill-blue">Consulting Tech</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="fde_decomp" onchange="toggleCardDone('fde_decomp', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="fde_decomp.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="behavioral" data-track="E" data-roles="swe ai fde" data-tier="P0" data-tags="behavioral, star & project defense star 60% action breakdown svg 12-story competency matrix svg warehouse pathmapper defense dossier anthropic values disagreement strategy palantir anthropic apple qualcomm all companies swe ai fde p0">
+              <div class="card-top">
+                <div class="card-icon">🎤</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-emerald">Every Loop</span>
+                      <span class="pill pill-rose">P0</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="behavioral.html">Behavioral, STAR & Project Defense</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Action-Weighted STAR (60% Action), Real Failure Defense, Anthropic Values Round Preparation, Project Defense Dossiers, and Spoken Rehearsal Drills.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>STAR 60% Action Breakdown SVG</li><li>12-Story Competency Matrix SVG</li><li>Warehouse PathMapper Defense Dossier</li><li>Anthropic Values Disagreement Strategy</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Palantir</span><span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Qualcomm</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="behavioral" onchange="toggleCardDone('behavioral', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="behavioral.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="topic-card" data-topic="quant" data-track="E" data-roles="swe ai fde" data-tier="P1" data-tags="aptitude, probability & puzzles monty hall host knowledge tree svg stars and bars combinatorics svg 12 coins 3 weighings decision tree svg linearity of expectation 15 problem bank pace stock broking (₹41l) campus oas hft/quant openai swe ai fde p1">
+              <div class="card-top">
+                <div class="card-icon">🎲</div>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.35rem; align-items: center;">
+                      <span class="pill pill-amber">OA Gate</span>
+                      <span class="pill pill-amber">P1</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">⏱️ 15 min / 60 min</span>
+                  </div>
+                  <h3 class="card-title"><a href="quant.html">Aptitude, Probability & Puzzles</a></h3>
+                </div>
+              </div>
+              <p class="card-desc">Linearity of Expectation, Markov Absorbing States, Classic Brainteasers (12 Coins, 25 Horses, Monty Hall), Fermi Estimation, and Reservoir Sampling.</p>
+              
+              <div style="margin: 0.75rem 0;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; letter-spacing: 0.05em;">Key Highlights:</div>
+                <ul class="card-highlights">
+                  <li>Monty Hall Host Knowledge Tree SVG</li><li>Stars and Bars Combinatorics SVG</li><li>12 Coins 3 Weighings Decision Tree SVG</li><li>Linearity of Expectation 15 Problem Bank</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Target Companies:</div>
+                <div class="meta-pills" style="margin-bottom: 0.85rem;">
+                  <span class="pill pill-blue">Pace Stock Broking (₹41L)</span><span class="pill pill-blue">Campus OAs</span><span class="pill pill-blue">HFT/Quant</span><span class="pill pill-blue">OpenAI</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                  <label class="card-checkbox-label">
+                    <input type="checkbox" class="topic-check" data-id="quant" onchange="toggleCardDone('quant', this.checked)">
+                    <span>Reviewed</span>
+                  </label>
+                  <a href="quant.html" class="card-btn">Open Module →</a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+    </div>
+
+  </div>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+let currentRoleFilter = 'all';
+
+function initDashboardProgress() {
+  let doneCount = 0;
+  const checks = document.querySelectorAll('.topic-check');
+  checks.forEach(chk => {
+    const id = chk.getAttribute('data-id');
+    const isDone = localStorage.getItem('module_done_' + id) === 'true';
+    chk.checked = isDone;
+    const card = chk.closest('.topic-card');
+    if (isDone) {
+      card.classList.add('done-card');
+      doneCount++;
+    } else {
+      card.classList.remove('done-card');
+    }
+  });
+  updateProgressBar(doneCount, checks.length);
+}
+
+function toggleCardDone(id, isChecked) {
+  localStorage.setItem('module_done_' + id, isChecked);
+  const card = document.querySelector(`.topic-card[data-topic="${id}"]`);
+  if (card) {
+    if (isChecked) card.classList.add('done-card');
+    else card.classList.remove('done-card');
+  }
+  const checks = document.querySelectorAll('.topic-check');
+  let doneCount = 0;
+  checks.forEach(c => { if (c.checked) doneCount++; });
+  updateProgressBar(doneCount, checks.length);
+}
+
+function updateProgressBar(done, total) {
+  const fill = document.getElementById('progressBarFill');
+  const title = document.getElementById('progressTitle');
+  if (fill && title) {
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    fill.style.width = pct + '%';
+    title.innerText = `Preparation Progress: ${done} of ${total} Modules Reviewed (${pct}%)`;
+  }
+}
+
+function filterRole(role, btn) {
+  currentRoleFilter = role;
+  document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  filterCards();
+}
+
+function filterCards() {
+  const query = document.getElementById('moduleSearchInput').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.topic-card');
+  
+  cards.forEach(card => {
+    const tags = card.getAttribute('data-tags') || '';
+    const roles = card.getAttribute('data-roles') || '';
+    
+    const matchesQuery = !query || tags.includes(query);
+    const matchesRole = currentRoleFilter === 'all' || roles.includes(currentRoleFilter);
+    
+    if (matchesQuery && matchesRole) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+function applyPreset(preset) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const cards = document.querySelectorAll('.topic-card');
+  if (preset === 'all') {
+    cards.forEach(c => c.style.display = 'flex');
+    return;
+  }
+  
+  cards.forEach(card => {
+    const tier = card.getAttribute('data-tier');
+    const roles = card.getAttribute('data-roles') || '';
+    let show = false;
+    
+    if (preset === 'cram') {
+      show = (tier === 'P0');
+    } else if (preset === 'fde') {
+      show = roles.includes('fde');
+    } else if (preset === 'ai') {
+      show = roles.includes('ai');
+    } else if (preset === 'swe') {
+      show = roles.includes('swe');
+    }
+    
+    card.style.display = show ? 'flex' : 'none';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initDashboardProgress();
+});
+</script>
+</body>
+</html>

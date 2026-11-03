@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Computer Networks (CN) · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html">🧩 Data Structures & Algorithms (DSA)</option><option value="os.html">⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html" selected>🌐 Computer Networks (CN)</option><option value="coa.html">💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html">🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html">🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html">🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html">📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html">🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: OSI, TCP vs UDP & Congestion</a></li>
+<li><a href="#tcp-handshake-svg" class="toc-link">📊 TCP 3-Way Handshake & 4-Way Teardown</a></li>
+<li><a href="#dns-resolution-svg" class="toc-link">🌐 DNS Resolution Chain & URL Lifecycle</a></li>
+<li><a href="#sliding-window-routing" class="toc-link">📦 Sliding Window Protocols & Routing Algorithms</a></li>
+<li><a href="#worked-cn-math" class="toc-link">📐 Worked Numericals: BDP, VLSM & Ethernet Framing</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 Top Tech Interview Flashcards & Defenses</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track A: Core CS Fundamentals</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">Networks</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 12 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: OSI, TCP vs UDP & Congestion</a></li>
+<li><a href="#tcp-handshake-svg" class="toc-link">📊 TCP 3-Way Handshake & 4-Way Teardown</a></li>
+<li><a href="#dns-resolution-svg" class="toc-link">🌐 DNS Resolution Chain & URL Lifecycle</a></li>
+<li><a href="#sliding-window-routing" class="toc-link">📦 Sliding Window Protocols & Routing Algorithms</a></li>
+<li><a href="#worked-cn-math" class="toc-link">📐 Worked Numericals: BDP, VLSM & Ethernet Framing</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 Top Tech Interview Flashcards & Defenses</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">🌐</div>
+              <div>
+                <h1 class="hero-title">Computer Networks (CN)</h1>
+                <p class="hero-subtitle">OSI/TCP-IP, 3-Way Handshake & Teardown, TCP Congestion AIMD/BBR, Sliding Windows, Full-Stack URL Navigation, and TLS 1.3.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">Cisco</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Nokia</span><span class="pill pill-blue">Media.net</span><span class="pill pill-blue">Swiggy</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+<section class="section-block" id="sprint-core" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sprint-core" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ 15-Minute Sprint: OSI, TCP vs UDP & Congestion
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sprint-core" onchange="toggleSectionDone('sprint-core', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    <span class="pill pill-amber">P1 Track A</span><span class="pill pill-blue">Networking</span><span class="pill pill-teal">15-Min Sprint</span><span class="pill pill-indigo">Systems Core</span>
+<div class="callout callout-important" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">IMPORTANT</span>
+    <span>Computer Networks: Systems & Low-Latency Ground Rules</span>
+  </div>
+  <div class="callout-body">
+    In engineering loops at Cisco, Apple, Qualcomm, Cloudflare, and HFT firms (Pace Stock Broking, Tower), interviewers probe protocol mechanics, sliding window calculations, subnets, and low-latency TCP socket tuning rather than textbook definitions. Understand why TCP TIME_WAIT lasts 2×MSL, why Nagle's algorithm kills interactive RPCs, and how QUIC solves TCP head-of-line blocking.
+  </div>
+</div>
+
+<div class="numbers-card" data-depth="sprint">
+  <div class="numbers-title">📊 Key Numbers to Know Cold: Networking Latency & Packet Magnitudes</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr><th>Operation / Quantity</th><th>Order of Magnitude</th><th>Engineering Implication</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td><strong>L1 Cache / Same Core</strong></td>
+          <td><span class="num-highlight">~0.5 - 1 ns</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Fastest CPU memory reference</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Intra-Datacenter RTT</strong></td>
+          <td><span class="num-highlight">~0.5 - 1 ms</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">East-West traffic within same availability zone</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Cross-Country RTT (US Coast-to-Coast)</strong></td>
+          <td><span class="num-highlight">~60 - 80 ms</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Speed-of-light in fiber propagation delay</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Trans-Atlantic RTT (London - NYC)</strong></td>
+          <td><span class="num-highlight">~70 - 90 ms</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Subsea fiber optical transmission</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Ethernet Minimum Frame</strong></td>
+          <td><span class="num-highlight">64 Bytes</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Required for CSMA/CD collision detection</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Standard MTU</strong></td>
+          <td><span class="num-highlight">1500 Bytes</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Maximum Transmission Unit for standard Ethernet frame</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="subsection-block" id="osi-tcp-matrix" data-depth="sprint">
+  <h3 class="subsection-title">
+    <a href="#osi-tcp-matrix" class="heading-anchor" title="Direct link">#</a>
+    OSI 7-Layer vs TCP/IP 4-Layer Architecture
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Layer Name</th><th>Protocol Data Unit (PDU)</th><th>Core Protocols</th><th>Addressing / Hardware</th><th>Core Responsibility</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>7. Application</td><td>Data / Message</td><td>HTTP/2/3, DNS, SSH, TLS, gRPC, SMTP</td><td>URLs, Domain Names, Sockets</td><td>User interface and application process communication.</td></tr><tr><td>6. Presentation</td><td>Data</td><td>TLS/SSL, ASCII, JSON, Protobuf</td><td>Syntax / Encoding</td><td>Data serialization, compression, and cryptographic encryption.</td></tr><tr><td>5. Session</td><td>Data</td><td>RPC, NetBIOS, SOCKS</td><td>Session IDs, Tokens</td><td>Establishing, managing, and terminating presentation connections.</td></tr><tr><td>4. Transport</td><td>Segment (TCP) / Datagram (UDP)</td><td>TCP, UDP, QUIC, SCTP</td><td>Port Numbers (16-bit: 0-65535)</td><td>End-to-end host-to-host process communication, flow/congestion control.</td></tr><tr><td>3. Network</td><td>Packet</td><td>IPv4, IPv6, ICMP, OSPF, BGP, IPsec</td><td>IP Addresses (32-bit / 128-bit), Routers</td><td>Logical addressing and packet routing across networks.</td></tr><tr><td>2. Data Link</td><td>Frame</td><td>Ethernet (802.3), Wi-Fi (802.11), ARP</td><td>MAC Addresses (48-bit), Switches, NICs</td><td>Node-to-node framing, physical addressing, CRC error checking.</td></tr><tr><td>1. Physical</td><td>Bit</td><td>1000BASE-T, Fiber Optics, DSL</td><td>Voltages, Photons, Cables, Hubs</td><td>Transmission of raw unstructured bit streams over physical medium.</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="tcp-vs-udp" data-depth="sprint">
+  <h3 class="subsection-title">
+    <a href="#tcp-vs-udp" class="heading-anchor" title="Direct link">#</a>
+    TCP vs UDP: The Complete Transport Layer Matrix
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Dimension</th><th>TCP (Transmission Control Protocol)</th><th>UDP (User Datagram Protocol)</th><th>Engineering Tradeoff</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Connection State</td><td>Connection-Oriented (3-way handshake required)</td><td>Connectionless (Fire-and-forget datagrams)</td><td>Handshake adds 1 RTT connection latency</td></tr><tr><td>Reliability Guarantee</td><td>Guaranteed delivery via ACKs, sequence numbers & retransmissions</td><td>Unreliable: packets can be dropped, duplicated, or arrive out of order</td><td>TCP retransmissions add head-of-line blocking latency</td></tr><tr><td>Ordering</td><td>Strict in-order byte stream delivery</td><td>No ordering guarantee</td><td>TCP buffer holds subsequent packets until lost packet arrives</td></tr><tr><td>Header Overhead</td><td>20 - 60 Bytes (Includes flags, seq, ack, window, options)</td><td>Strictly 8 Bytes (Source port, dest port, length, checksum)</td><td>UDP headers consume 60% less packet byte overhead</td></tr><tr><td>Flow & Congestion Control</td><td>Yes: Sliding window (flow) + AIMD / CUBIC / BBR (congestion)</td><td>None: sends at application line speed</td><td>UDP can overwhelm network queues if unthrottled</td></tr><tr><td>Primary Use Cases</td><td>Web (HTTP/1.1, HTTP/2), File transfer, SSH, Financial transactions</td><td>DNS, Video streaming (RTP), Gaming, VoIP, QUIC (HTTP/3)</td><td>Use UDP when low latency is preferred over packet completeness</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="sliding-window-matrix" data-depth="sprint">
+  <h3 class="subsection-title">
+    <a href="#sliding-window-matrix" class="heading-anchor" title="Direct link">#</a>
+    Sliding Window Flow Control: Stop-and-Wait vs GBN vs Selective Repeat
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Protocol</th><th>Sender Window ($W_s$)</th><th>Receiver Window ($W_r$)</th><th>Sequence Numbers Required</th><th>Handling of Lost Frame</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Stop-and-Wait</td><td>1</td><td>1</td><td>$N \ge 2$</td><td>Retransmits single frame upon timer expiry. Extremely low efficiency!</td></tr><tr><td>Go-Back-N (GBN)</td><td>$N \le 2^k - 1$</td><td>1</td><td>$N \le 2^k - 1$</td><td>Receiver discards all subsequent out-of-order frames. Sender retransmits entire window from lost frame!</td></tr><tr><td>Selective Repeat (SR)</td><td>$N \le 2^{k-1}$</td><td>$N = W_s \le 2^{k-1}$</td><td>$W_s + W_r \le 2^k$</td><td>Receiver buffers out-of-order frames. Sender retransmits ONLY the specific lost frame!</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="tcp-handshake-svg" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#tcp-handshake-svg" class="heading-anchor" title="Direct link to this section">#</a>
+        📊 TCP 3-Way Handshake & 4-Way Teardown
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="tcp-handshake-svg" onchange="toggleSectionDone('tcp-handshake-svg', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="handshake-architecture" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#handshake-architecture" class="heading-anchor" title="Direct link">#</a>
+    TCP 3-Way Handshake, 4-Way Teardown & TIME_WAIT (2×MSL)
+  </h3>
+  <div class="subsection-body">
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    TCP Handshake & Teardown Protocol State Machine
+  </div>
+  <div class="diagram-caption">🔍 
+    <svg viewBox="0 0 850 480" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+        <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+        </marker>
+        <marker id="arrow-rose" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
+        </marker>
+      </defs>
+
+      <!-- Client & Server -->
+      <rect x="80" y="20" width="140" height="40" rx="8" fill="#0369a1" />
+      <text x="150" y="45" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">CLIENT (Host A)</text>
+      <line x1="150" y1="60" x2="150" y2="460" stroke="#334155" stroke-width="2" stroke-dasharray="4" />
+
+      <rect x="630" y="20" width="140" height="40" rx="8" fill="#065f46" />
+      <text x="700" y="45" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">SERVER (Host B)</text>
+      <line x1="700" y1="60" x2="700" y2="460" stroke="#334155" stroke-width="2" stroke-dasharray="4" />
+
+      <!-- Section 1: 3-Way Handshake -->
+      <text x="425" y="85" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">--- 1. ESTABLISHMENT: 3-WAY HANDSHAKE ---</text>
+
+      <line x1="150" y1="110" x2="690" y2="150" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" />
+      <rect x="330" y="112" width="190" height="24" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="1" />
+      <text x="425" y="128" fill="#38bdf8" font-size="11" font-weight="600" text-anchor="middle" font-family="monospace">1. SYN = 1, Seq = x</text>
+
+      <line x1="700" y1="165" x2="160" y2="205" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)" />
+      <rect x="290" y="167" width="270" height="24" rx="4" fill="#0f172a" stroke="#059669" stroke-width="1" />
+      <text x="425" y="183" fill="#34d399" font-size="11" font-weight="600" text-anchor="middle" font-family="monospace">2. SYN = 1, ACK = 1, Seq = y, Ack = x+1</text>
+
+      <line x1="150" y1="220" x2="690" y2="260" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" />
+      <rect x="310" y="222" width="230" height="24" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="1" />
+      <text x="425" y="238" fill="#38bdf8" font-size="11" font-weight="600" text-anchor="middle" font-family="monospace">3. ACK = 1, Seq = x+1, Ack = y+1</text>
+
+      <!-- Section 2: 4-Way Teardown -->
+      <text x="425" y="300" fill="#f43f5e" font-size="13" font-weight="800" text-anchor="middle">--- 2. TERMINATION: 4-WAY TEARDOWN ---</text>
+
+      <line x1="150" y1="320" x2="690" y2="355" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrow-rose)" />
+      <rect x="330" y="322" width="190" height="22" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1" />
+      <text x="425" y="337" fill="#f43f5e" font-size="11" font-weight="600" text-anchor="middle" font-family="monospace">1. FIN = 1, Seq = u</text>
+
+      <line x1="700" y1="365" x2="160" y2="395" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow)" />
+      <rect x="310" y="367" width="230" height="22" rx="4" fill="#0f172a" stroke="#fbbf24" stroke-width="1" />
+      <text x="425" y="382" fill="#fbbf24" font-size="11" font-weight="600" text-anchor="middle" font-family="monospace">2. ACK = 1, Ack = u+1</text>
+
+      <line x1="700" y1="405" x2="160" y2="435" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrow-rose)" />
+      <rect x="330" y="407" width="190" height="22" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1" />
+      <text x="425" y="422" fill="#f43f5e" font-size="11" font-weight="600" text-anchor="middle" font-family="monospace">3. FIN = 1, Seq = v</text>
+
+      <line x1="150" y1="445" x2="690" y2="475" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow)" />
+      <rect x="310" y="447" width="230" height="22" rx="4" fill="#0f172a" stroke="#fbbf24" stroke-width="1" />
+      <text x="425" y="462" fill="#fbbf24" font-size="11" font-weight="600" text-anchor="middle" font-family="monospace">4. ACK = 1, Ack = v+1 (Enters TIME_WAIT)</text>
+    </svg>
+    </div>
+</div>
+
+<div class="callout callout-tip" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">TIP</span>
+    <span>Why Does TCP TIME_WAIT Last for 2×MSL (Maximum Segment Lifetime)?</span>
+  </div>
+  <div class="callout-body">
+    MSL is the maximum time a packet can wander in an IP network before being dropped by routers (default 60s, so 2×MSL = 2 minutes or 60s in Linux).
+1. **Acknowledge Final ACK Delivery**: Host A sends the final ACK (Step 4). If that ACK is dropped in the network, Host B will retransmit its FIN. If Host A did not linger in `TIME_WAIT`, it would respond with an RST error, causing Host B to think the connection crashed abnormally instead of clean close!
+2. **Prevent Stale Packet Contamination**: Ensures old duplicate packets lingering in network routers from this connection expire before a new socket is opened with the same IP and Port tuple.
+  </div>
+</div>
+
+<div class="callout callout-important" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">IMPORTANT</span>
+    <span>HFT Low-Latency Callout: Nagle's Algorithm vs Delayed ACKs</span>
+  </div>
+  <div class="callout-body">
+    • **Nagle's Algorithm** (`RFC 896`): Delays sending small TCP packets until previous packets are ACKed to avoid bandwidth waste on tiny headers.
+• **Delayed ACK**: Receiver waits up to 200ms before sending an ACK to piggyback on outgoing data.
+• **The Deadlock**: Nagle waits for an ACK; the receiver waits for data to piggyback the ACK! Result: 200ms latency cliff on every RPC!
+• **Fix**: Disable Nagle immediately in low-latency systems via `setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &opt, sizeof(opt))`.
+  </div>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="url-request-lifecycle" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#url-request-lifecycle" class="heading-anchor" title="Direct link">#</a>
+    The Complete URL Lifecycle: What Happens When You Type google.com
+  </h3>
+  <div class="subsection-body">
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    DNS Hierarchical Resolution Chain
+  </div>
+  <div class="diagram-caption">🔍 
+    <svg viewBox="0 0 880 260" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="860" height="240" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+      
+      <!-- Client -->
+      <rect x="30" y="90" width="110" height="60" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="85" y="115" fill="#38bdf8" font-size="12" font-weight="800" text-anchor="middle">Browser / OS</text>
+      <text x="85" y="135" fill="#94a3b8" font-size="10" text-anchor="middle">Cache Miss</text>
+
+      <line x1="140" y1="120" x2="200" y2="120" stroke="#38bdf8" stroke-width="2" />
+      <text x="170" y="110" fill="#38bdf8" font-size="9" text-anchor="middle">1. Recursive</text>
+
+      <!-- ISP / Public Recursive Resolver -->
+      <rect x="200" y="80" width="150" height="80" rx="6" fill="#0369a1" stroke="#38bdf8" stroke-width="2" />
+      <text x="275" y="110" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">Recursive Resolver</text>
+      <text x="275" y="130" fill="#bae6fd" font-size="9" text-anchor="middle">8.8.8.8 / 1.1.1.1</text>
+      <text x="275" y="145" fill="#fbbf24" font-size="9" text-anchor="middle">(Does the Legwork)</text>
+
+      <!-- Arrows to 3 Nameservers -->
+      <line x1="350" y1="100" x2="480" y2="45" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="415" y="65" fill="#fbbf24" font-size="9" text-anchor="middle">2. Iterative</text>
+
+      <line x1="350" y1="120" x2="480" y2="120" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="415" y="112" fill="#fbbf24" font-size="9" text-anchor="middle">3. Iterative</text>
+
+      <line x1="350" y1="140" x2="480" y2="195" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="415" y="175" fill="#fbbf24" font-size="9" text-anchor="middle">4. Iterative</text>
+
+      <!-- 3 Servers on Right -->
+      <rect x="480" y="25" width="360" height="45" rx="6" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="500" y="52" fill="#fbbf24" font-size="11" font-weight="700">A. Root Nameserver (.):</text>
+      <text x="660" y="52" fill="#94a3b8" font-size="10">Points to TLD Nameserver for .com</text>
+
+      <rect x="480" y="100" width="360" height="45" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.5" />
+      <text x="500" y="127" fill="#34d399" font-size="11" font-weight="700">B. TLD Nameserver (.com):</text>
+      <text x="670" y="127" fill="#94a3b8" font-size="10">Points to Authoritative Nameserver</text>
+
+      <rect x="480" y="175" width="360" height="45" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+      <text x="500" y="202" fill="#34d399" font-size="11" font-weight="800">C. Authoritative Nameserver:</text>
+      <text x="690" y="202" fill="#a7f3d0" font-size="10">Returns A / AAAA Record (IP Address!)</text>
+    </svg>
+    </div>
+</div>
+
+<div class="callout callout-tip" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">TIP</span>
+    <span>The 8-Phase End-to-End Interview Narrative</span>
+  </div>
+  <div class="callout-body">
+    1. **Browser Cache & OS Resolution**: Checks Browser DNS cache → OS hosts file & cache → Local DNS resolver.
+2. **Recursive DNS Resolution**: Recursive resolver queries Root (.) → TLD (.com) → Authoritative nameserver to obtain IP A/AAAA record.
+3. **ARP (Address Resolution Protocol)**: If target IP is local or gateway router IP is needed, OS broadcasts ARP request to resolve MAC address.
+4. **TCP 3-Way Handshake**: Client sends SYN → Server responds SYN-ACK → Client responds ACK. Connection established in 1 RTT.
+5. **TLS 1.3 Cryptographic Handshake**: ClientHello (with supported ciphers & KeyShare) → ServerHello (KeyShare, Cert, Finished) → 1 RTT secure channel (or 0-RTT on session resumption).
+6. **HTTP/2 Request**: Client sends binary multiplexed HTTP frame (`GET / HTTP/2`).
+7. **Server Processing**: Reverse proxy (Nginx) → Gateway → Load Balancer → App service executes business logic and returns HTTP 200 with HTML body.
+8. **DOM / CSSOM & Rendering**: Browser parses HTML to DOM, CSS to CSSOM, computes Render Tree, executes Layout/Reflow, paints pixels to GPU.
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="sliding-window-routing" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sliding-window-routing" class="heading-anchor" title="Direct link to this section">#</a>
+        📦 Sliding Window Protocols & Routing Algorithms
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sliding-window-routing" onchange="toggleSectionDone('sliding-window-routing', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="routing-algorithms" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#routing-algorithms" class="heading-anchor" title="Direct link">#</a>
+    Routing Algorithms: Distance-Vector vs Link-State
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Feature</th><th>Distance-Vector Routing (RIP)</th><th>Link-State Routing (OSPF)</th><th>Path-Vector (BGP)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Algorithm Used</td><td>Bellman-Ford algorithm</td><td>Dijkstra's Shortest Path First (SPF)</td><td>Policy-based path vector</td></tr><tr><td>Information Shared</td><td>Shares entire routing table with immediate neighbors only</td><td>Floods link states of immediate interfaces to entire network</td><td>Exchanges AS paths with BGP peers</td></tr><tr><td>Convergence Speed</td><td>Slow: prone to routing loops & Count-to-Infinity problem</td><td>Fast: routers build complete network topology graph</td><td>Moderate: driven by inter-AS policy rules</td></tr><tr><td>Mitigations</td><td>Split Horizon, Poison Reverse, Hold-down timers</td><td>Hierarchical Areas (Area 0 Backbone), Link State Advertisements (LSAs)</td><td>BGP AS-Path loop detection (rejects route if own AS is in path)</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="socket-io-c10k" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#socket-io-c10k" class="heading-anchor" title="Direct link">#</a>
+    Socket I/O Models: select vs poll vs epoll (C10K Scalability)
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>System Call</th><th>Time Complexity</th><th>Max File Descriptors</th><th>Mechanism & Bottleneck</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>`select()`</td><td>O(N) linear scan</td><td>Fixed: 1024 (`FD_SETSIZE`)</td><td>User passes bitmasks to kernel; kernel scans all FDs; user must scan all 1024 FDs to find active sockets. Inefficient.</td></tr><tr><td>`poll()`</td><td>O(N) linear scan</td><td>Unlimited (array of `pollfd`)</td><td>Removes 1024 FD limit, but still requires kernel and user to iterate through the entire array on every event.</td></tr><tr><td>`epoll()` (Linux)</td><td>O(1) event-driven</td><td>Unlimited (bounded by RAM)</td><td>Uses in-kernel Red-Black Tree to track monitored FDs and a Ready List. Only returns active FDs! Solves the C10K problem.</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="worked-cn-math" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#worked-cn-math" class="heading-anchor" title="Direct link to this section">#</a>
+        📐 Worked Numericals: BDP, VLSM & Ethernet Framing
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="worked-cn-math" onchange="toggleSectionDone('worked-cn-math', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="worked-bdp" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#worked-bdp" class="heading-anchor" title="Direct link">#</a>
+    Worked Numerical 1: Bandwidth-Delay Product (BDP) & Window Sizing
+  </h3>
+  <div class="subsection-body">
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">\text{BDP} = \text{Bandwidth (bits/sec)} \times \text{RTT (sec)}</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>Bandwidth Delay Product represents the volume of unacknowledged data in flight required to fill the network pipe</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>\text{Bandwidth}</code></td><td class='formula-def'>Bottleneck transmission rate of the link in bits per second.</td></tr><tr><td class='formula-sym'><code>\text{RTT}</code></td><td class='formula-def'>Round Trip Time in seconds.</td></tr><tr><td class='formula-sym'><code>\text{Window Size}</code></td><td class='formula-def'>TCP Receive Window buffer must equal or exceed BDP to prevent sender stalling.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> Standard 16-bit TCP header window is capped at 65,535 bytes (64KB). On high-bandwidth links, TCP Window Scaling option (RFC 1323) is mandatory to fill the pipe!</div>
+</div>
+
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Calculate BDP for a 1 Gbps Trans-Atlantic Fiber Link with 80 ms RTT</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Convert Units</span>
+          </div>
+          <div class="we-step-body">Bandwidth = $1\text{ Gbps} = 10^9\text{ bits/sec}$. RTT = $80\text{ ms} = 0.08\text{ sec}$.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Calculate BDP in Bits</span>
+          </div>
+          <div class="we-step-body">$$\text{BDP} = 10^9 \times 0.08 = 80,000,000\text{ bits}$$</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Convert to Bytes</span>
+          </div>
+          <div class="we-step-body">$$\text{BDP} = \frac{80,000,000}{8} = 10,000,000\text{ bytes} \approx 10\text{ MB}$$</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 4</span>
+            <span class="we-step-label">Determine Window Scaling</span>
+          </div>
+          <div class="we-step-body">A standard 64KB TCP window can only achieve throughput of $64\text{KB} / 80\text{ms} = 6.4\text{ Mbps}$ (less than 1% of the 1Gbps pipe!). The TCP Window Scale factor must be at least $\ge 8$ ($2^8 = 256$) to support a 10MB window.</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      BDP is 10 MB. Without TCP Window Scaling, a 1 Gbps link operates at less than 1% capacity due to sender stalling.
+    </div>
+  </details>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="worked-vlsm" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#worked-vlsm" class="heading-anchor" title="Direct link">#</a>
+    Worked Numerical 2: VLSM Subnetting for 3 Unequal Departments
+  </h3>
+  <div class="subsection-body">
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Subnet 192.168.1.0/24 into 3 Subnets for Sales (100 hosts), Dev (50 hosts), HR (25 hosts)</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Sort Subnets by Size (Largest First)</span>
+          </div>
+          <div class="we-step-body">Sales needs 100 hosts, Dev needs 50 hosts, HR needs 25 hosts.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Subnet 1: Sales (100 Hosts)</span>
+          </div>
+          <div class="we-step-body">Need $2^h - 2 \ge 100 \implies h = 7$ bits ($2^7 - 2 = 126$ usable hosts). Subnet mask: $32 - 7 = /25$ (255.255.255.128). Network: 192.168.1.0/25. Host range: 192.168.1.1 to 192.168.1.126. Broadcast: 192.168.1.127.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Subnet 2: Dev (50 Hosts)</span>
+          </div>
+          <div class="we-step-body">Need $2^h - 2 \ge 50 \implies h = 6$ bits ($2^6 - 2 = 62$ usable hosts). Subnet mask: $32 - 6 = /26$ (255.255.255.192). Network: 192.168.1.128/26. Host range: 192.168.1.129 to 192.168.1.190. Broadcast: 192.168.1.191.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 4</span>
+            <span class="we-step-label">Subnet 3: HR (25 Hosts)</span>
+          </div>
+          <div class="we-step-body">Need $2^h - 2 \ge 25 \implies h = 5$ bits ($2^5 - 2 = 30$ usable hosts). Subnet mask: $32 - 5 = /27$ (255.255.255.224). Network: 192.168.1.192/27. Host range: 192.168.1.193 to 192.168.1.222. Broadcast: 192.168.1.223.</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      Successfully partitioned without address overlap: Sales (/25), Dev (/26), and HR (/27), preserving remaining space from 192.168.1.224 for future growth.
+    </div>
+  </details>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="interview-flashcards" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-flashcards" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 Top Tech Interview Flashcards & Defenses
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-flashcards" onchange="toggleSectionDone('interview-flashcards', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="interview-flashcards" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#interview-flashcards" class="heading-anchor" title="Direct link">#</a>
+    🎯 High-Yield Computer Networks Interview Flashcards
+  </h3>
+  <div class="subsection-body">
+<details class="faq-accordion" data-depth="sprint" data-qid="790416">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why is TCP 3-Way Handshake necessary instead of a 2-Way Handshake?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">1</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">N</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">w</span><span class="pill pill-cyan">o</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">k</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">S</span><span class="pill pill-cyan">y</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">s</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Both client and server must agree on each other's Initial Sequence Numbers (ISNs) to establish bidirectional reliable communication. In a 2-way handshake, if an old delayed SYN packet wanders through the network and arrives at the server after the original connection terminated, the server would send SYN-ACK and immediately allocate resources believing a new connection opened! Host A never sent that SYN, so it ignores the ACK. The server is left holding a half-open ghost connection that wastes memory.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('790416', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('790416', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('790416', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="430898">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How does HTTP/3 with QUIC solve Head-of-Line (HoL) Blocking compared to HTTP/2?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">1</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">M</span><span class="pill pill-cyan">o</span><span class="pill pill-cyan">d</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">W</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">b</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">/</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">S</span><span class="pill pill-cyan">y</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">s</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      HTTP/2 multiplexes multiple application requests as virtual streams over a SINGLE underlying TCP connection. If a single TCP packet containing Stream 1 data is dropped, the TCP stack buffers all subsequent packets in the OS socket buffer until the dropped packet is retransmitted and acknowledged. Consequently, Streams 2, 3, and 4 are blocked, even though none of their packets were dropped! HTTP/3 runs over QUIC (UDP), implementing stream multiplexing at the transport layer directly: dropping a packet for Stream 1 has ZERO impact on Streams 2, 3, and 4.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('430898', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('430898', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('430898', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="987174">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why does Ethernet enforce a 64-Byte Minimum Frame Size?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">1</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">H</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">d</span><span class="pill pill-cyan">w</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">/</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">S</span><span class="pill pill-cyan">y</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">s</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      In classic Ethernet using CSMA/CD, a sender must continue transmitting data long enough to detect a collision from the furthest possible station on the cable before finishing its transmission ($T_{\text{tx}} \ge 2 \times T_{\text{prop}}$). At 10 Mbps over a maximum cable length of 2500m (with repeaters), round-trip propagation delay is ~51.2 µs. In 51.2 µs, a 10 Mbps transceiver outputs $51.2 \times 10 = 512\text{ bits} = 64\text{ bytes}$. If a frame was smaller than 64 bytes, transmission would finish before the collision signal returned, causing undetected corrupted frames!
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('987174', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('987174', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('987174', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="152835">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the difference between ARP and RARP?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">1</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">C</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">p</span><span class="pill pill-cyan">u</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">C</span><span class="pill pill-cyan">l</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">c</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      ARP (Address Resolution Protocol) resolves a known Layer 3 logical IP address to a physical Layer 2 MAC address using broadcast requests and unicast replies. RARP (Reverse ARP) allows a diskless workstation to query a server to find its own IP address given its known hardware MAC address upon boot (superseded by BOOTP and DHCP).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('152835', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('152835', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('152835', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+</div>
+</div>
+
+  </div>
+</section>
+
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="dbms.html" class="nav-btn">← DBMS & Storage</a><a href="coa.html" class="nav-btn" style="margin-left: auto;">Architecture →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('cn');
+  });
+</script>
+</body>
+</html>

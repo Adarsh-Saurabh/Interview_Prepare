@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>AI Evaluation, Observability & MLOps · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html">🧩 Data Structures & Algorithms (DSA)</option><option value="os.html">⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html">🌐 Computer Networks (CN)</option><option value="coa.html">💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html">🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html">🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html">🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html" selected>📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html">🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Evaluation Hierarchy & Graders</a></li>
+<li><a href="#pass-metrics" class="toc-link">📐 pass@k vs pass^k: Production Reliability</a></li>
+<li><a href="#rag-triad" class="toc-link">🎯 RAG Triad & Retrieval Metrics (nDCG / MRR)</a></li>
+<li><a href="#llm-as-judge" class="toc-link">⚖️ LLM-as-a-Judge & Alignment Verification</a></li>
+<li><a href="#drift-observability" class="toc-link">📉 Drift Detection (PSI) & Production MLOps</a></li>
+<li><a href="#eval-harness-code" class="toc-link">🛠️ Production Eval Harness Implementation</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 32 Top Tech Interview Q&As</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track C: AI / Machine Learning</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">AI Evals & MLOps</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 15 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Evaluation Hierarchy & Graders</a></li>
+<li><a href="#pass-metrics" class="toc-link">📐 pass@k vs pass^k: Production Reliability</a></li>
+<li><a href="#rag-triad" class="toc-link">🎯 RAG Triad & Retrieval Metrics (nDCG / MRR)</a></li>
+<li><a href="#llm-as-judge" class="toc-link">⚖️ LLM-as-a-Judge & Alignment Verification</a></li>
+<li><a href="#drift-observability" class="toc-link">📉 Drift Detection (PSI) & Production MLOps</a></li>
+<li><a href="#eval-harness-code" class="toc-link">🛠️ Production Eval Harness Implementation</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 32 Top Tech Interview Q&As</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">📈</div>
+              <div>
+                <h1 class="hero-title">AI Evaluation, Observability & MLOps</h1>
+                <p class="hero-subtitle">Deterministic vs LLM-as-Judge Graders, RAG Triad, pass@k vs pass^k, Agent Trajectory Evals, A/B Testing, and Drift Detection.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">Palantir</span><span class="pill pill-blue">Scale AI</span><span class="pill pill-blue">Apple</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+<section class="section-block" id="sprint-core" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sprint-core" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ 15-Min Sprint: Evaluation Hierarchy & Graders
+      </h2>
+      <span class="pill pill-emerald">Core Philosophy</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sprint-core" onchange="toggleSectionDone('sprint-core', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="one-liner-box" data-depth="sprint">
+  <div class="ol-badge">🗣️ 15-SECOND INTERVIEW ANSWER</div>
+  <p class="ol-text">"Push as much evaluation as humanly possible into deterministic code graders (JSON schema, regex, string asserts, unit tests) before ever falling back to an LLM judge; shipping a demo with zero automated evals is the #1 reason AI take-homes get rejected."</p>
+</div>
+
+
+    <p>Evaluation is the defining differentiator in modern AI engineering. Teams reject candidates who demonstrate complex agent frameworks but cannot prove their systems work reliably.</p>
+
+    
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    
+    <svg viewBox="0 0 880 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Tier 4: Online / Canary (Top) -->
+      <polygon points="440,30 330,95 550,95" fill="rgba(244, 63, 94, 0.25)" stroke="#f43f5e" stroke-width="2" />
+      <text x="440" y="70" fill="#f43f5e" font-size="12" font-weight="800" text-anchor="middle">ONLINE / CANARY (A/B, Guardrails)</text>
+
+      <!-- Tier 3: End-to-End System -->
+      <polygon points="330,105 550,105 620,170 260,170" fill="rgba(192, 132, 252, 0.25)" stroke="#c084fc" stroke-width="2" />
+      <text x="440" y="142" fill="#c084fc" font-size="12" font-weight="800" text-anchor="middle">E2E TASK EVALS (Trajectory, pass^k, Cost)</text>
+
+      <!-- Tier 2: Component Evals -->
+      <polygon points="260,180 620,180 690,245 190,245" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="2" />
+      <text x="440" y="217" fill="#38bdf8" font-size="12" font-weight="800" text-anchor="middle">COMPONENT EVALS (Recall@k, Reranker nDCG, Judge Faithfulness)</text>
+
+      <!-- Tier 1: Deterministic Code Graders (Bottom) -->
+      <polygon points="190,255 690,255 760,315 120,315" fill="rgba(52, 211, 153, 0.25)" stroke="#34d399" stroke-width="2" />
+      <text x="440" y="290" fill="#34d399" font-size="12" font-weight="800" text-anchor="middle">DETERMINISTIC UNIT GRADERS (Regex, JSON Schema, Assertions, Compilers)</text>
+    </svg>
+    
+  </div>
+  <div class="diagram-caption">🔍 The AI Evaluation Hierarchy: Deterministic Code up to Online Guardrails</div>
+</div>
+
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Evaluation Layer</th><th>Grading Mechanism</th><th>Cost & Speed</th><th>What it Catches / Blind Spots</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Deterministic Grader</td><td>Python assertions, Pydantic JSON schema, syntax parser, compiler.</td><td>Sub-millisecond, Free.</td><td>Catches structural formatting, hallucinated JSON keys, tool call schemas. Blind to semantic truth.</td></tr><tr><td>Component Retrieval</td><td>Recall@k, MRR, nDCG, Hit Rate against golden queries.</td><td>Fast, Cheap (embeddings).</td><td>Catches bad chunking and missing knowledge chunks. Blind to generation hallucinations.</td></tr><tr><td>LLM-as-a-Judge</td><td>Strong judge model (e.g. Claude 3.5 Sonnet / GPT-4o) scoring against rubric.</td><td>~$0.02 / call, ~1.5s.</td><td>Evaluates nuance and groundedness. Blind to subtle factual falsehoods unless verified by human agreement.</td></tr><tr><td>Human Eval (Golden Set)</td><td>Domain experts grading 50-100 sampled inputs with guidelines.</td><td>High cost, slow.</td><td>Ultimate ground truth; mandatory to measure Cohen's Kappa against LLM-as-a-judge.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="pass-metrics" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#pass-metrics" class="heading-anchor" title="Direct link to this section">#</a>
+        📐 pass@k vs pass^k: Production Reliability
+      </h2>
+      <span class="pill pill-rose">Reliability Math</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="pass-metrics" onchange="toggleSectionDone('pass-metrics', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">$$\text{pass@}k = 1 - \frac{\binom{n - c}{k}}{\binom{n}{k}}, \quad \text{vs} \quad \text{pass}^k = \left(\frac{c}{n}\right)^k$$</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>pass at k measures probability of at least one success in k attempts, while pass to the power of k measures probability that all k independent attempts succeed.</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>n</code></td><td class='formula-def'>Total generated samples per prompt (e.g., n = 20)</td></tr><tr><td class='formula-sym'><code>c</code></td><td class='formula-def'>Number of correct samples passing verification</td></tr><tr><td class='formula-sym'><code>k</code></td><td class='formula-def'>Target sample budget (e.g., k = 1 or k = 5)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> pass@k flatters models (if 1 of 10 attempts passes, pass@10 is high, fine for coding assistants with human review). But for autonomous production workflows, pass^k measures reliability: if a model is 90% accurate on individual steps, a 5-step agent has pass^5 = 0.9^5 = 59% reliability!</div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="rag-triad" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#rag-triad" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 RAG Triad & Retrieval Metrics (nDCG / MRR)
+      </h2>
+      <span class="pill pill-teal">RAG Quality</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="rag-triad" onchange="toggleSectionDone('rag-triad', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>RAG Metric</th><th>Definition & Formula</th><th>Target Value</th><th>Diagnostic Failure Signal</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Context Relevance</td><td>Fraction of retrieved chunks relevant to the user query.</td><td>&gt; 0.85</td><td>Low score indicates bad chunking strategy or vector search noise.</td></tr><tr><td>Groundedness (Faithfulness)</td><td>Fraction of claims in generated answer supported by retrieved context.</td><td>&gt; 0.95</td><td>Low score indicates hallucination! The LLM is inventing ungrounded facts.</td></tr><tr><td>Answer Relevance</td><td>Degree to which generated response directly addresses query intent.</td><td>&gt; 0.90</td><td>Low score indicates model wandered off-topic or gave a non-committal answer.</td></tr><tr><td>nDCG@k</td><td>Normalized Discounted Cumulative Gain accounting for document position.</td><td>&gt; 0.80</td><td>High ranking documents are irrelevant, forcing relevant chunks below the LLM fold.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="llm-as-judge" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#llm-as-judge" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚖️ LLM-as-a-Judge & Alignment Verification
+      </h2>
+      <span class="pill pill-purple">Judge Quality</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="llm-as-judge" onchange="toggleSectionDone('llm-as-judge', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>Before deploying an LLM judge, you <strong>must measure judge-vs-human agreement</strong> (Cohen's Kappa). Without human validation, your judge is merely grading with its own baked-in biases.</p>
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>LLM-as-a-Judge Bias</th><th>Mechanism</th><th>Engineering Mitigation</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Position Bias</td><td>Judges favor whichever candidate answer is presented first in pairwise comparisons.</td><td>Run pairwise evaluation twice, swapping candidate order (A/B and B/A). Discard ties.</td></tr><tr><td>Verbosity Bias</td><td>Judges consistently score longer, wordier responses higher regardless of content.</td><td>Instruct the judge to penalize fluff; enforce strict word budgets in candidate prompts.</td></tr><tr><td>Self-Preference Bias</td><td>A judge model (e.g. GPT-4o) naturally favors outputs generated by GPT-4o over Claude/Llama.</td><td>Use cross-model jury panels (e.g. average Claude 3.5 Sonnet + GPT-4o + Gemini 1.5 Pro).</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="drift-observability" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#drift-observability" class="heading-anchor" title="Direct link to this section">#</a>
+        📉 Drift Detection (PSI) & Production MLOps
+      </h2>
+      <span class="pill pill-amber">Drift Math</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="drift-observability" onchange="toggleSectionDone('drift-observability', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">$$\text{PSI} = \sum \left(P_i - Q_i\right) \times \ln\left(\frac{P_i}{Q_i}\right)$$</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>Population Stability Index equals sum of actual minus expected percentage multiplied by natural log of actual over expected.</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>P_i</code></td><td class='formula-def'>Actual production inference distribution in bin i</td></tr><tr><td class='formula-sym'><code>Q_i</code></td><td class='formula-def'>Baseline training / reference validation distribution in bin i</td></tr><tr><td class='formula-sym'><code>PSI &lt; 0.1</code></td><td class='formula-def'>Negligible shift; model is stable</td></tr><tr><td class='formula-sym'><code>PSI &gt; 0.2</code></td><td class='formula-def'>Significant distribution drift! Model must be retrained</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> When stakeholders complain 'the model got worse,' 90% of the time the model is unchanged—input distributions drifted (covariate drift). Compute PSI on embedding distances and token lengths to diagnose immediately.</div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="eval-harness-code" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#eval-harness-code" class="heading-anchor" title="Direct link to this section">#</a>
+        🛠️ Production Eval Harness Implementation
+      </h2>
+      <span class="pill pill-emerald">Harness Code</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="eval-harness-code" onchange="toggleSectionDone('eval-harness-code', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 Production Evaluation Harness with Deterministic Graders</span><span class="code-lang-tag">python</span></div>
+  <pre class="line-numbers"><code class="language-python">import re
+import json
+
+class ProductionEvalHarness:
+    def __init__(self, golden_dataset):
+        self.dataset = golden_dataset # List of dicts with query, expected_answer, expected_keys
+
+    def evaluate_response(self, response_text, item):
+        scores = {}
+        
+        # 1. Deterministic JSON validity &amp; schema check
+        try:
+            parsed = json.loads(response_text)
+            scores[&quot;valid_json&quot;] = 1.0
+            
+            # Check mandatory keys
+            missing_keys = [k for k in item.get(&quot;expected_keys&quot;, []) if k not in parsed]
+            scores[&quot;schema_compliance&quot;] = 1.0 if not missing_keys else 0.0
+        except json.JSONDecodeError:
+            scores[&quot;valid_json&quot;] = 0.0
+            scores[&quot;schema_compliance&quot;] = 0.0
+            
+        # 2. Deterministic Regex Ground Truth Assertion
+        if &quot;expected_regex&quot; in item:
+            match = re.search(item[&quot;expected_regex&quot;], response_text, re.IGNORECASE)
+            scores[&quot;regex_match&quot;] = 1.0 if match else 0.0
+            
+        return scores</code></pre>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="interview-flashcards" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-flashcards" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 32 Top Tech Interview Q&As
+      </h2>
+      <span class="pill pill-rose">Assessment</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-flashcards" onchange="toggleSectionDone('interview-flashcards', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<details class="faq-accordion" data-depth="sprint" data-qid="512001">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How do you know your AI system is actually working well?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">Philosophy</span><span class="pill pill-indigo">OpenAI</span><span class="pill pill-indigo">Anthropic</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      By building an automated 4-tier evaluation pipeline: (1) Deterministic unit graders for syntax/schema, (2) Component metrics (Recall@k, nDCG) for retrieval, (3) Model-graded faithfulness on a curated golden set verified against human agreement, and (4) Online latency, guardrail error rates, and user engagement monitoring.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('512001', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('512001', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('512001', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="971483">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the difference between pass@k and pass^k?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Metrics</span><span class="pill pill-indigo">OpenAI</span><span class="pill pill-indigo">Scale AI</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      pass@k is the probability that AT LEAST ONE sample out of k independent attempts succeeds (good for human-in-the-loop assistants). pass^k is the probability that ALL k steps succeed consecutively (vital for autonomous multi-step agents where failure cascades).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('971483', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('971483', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('971483', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="703091">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why might a model do worse with retrieved context than with none?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">RAG</span><span class="pill pill-indigo">Anthropic</span><span class="pill pill-indigo">Palantir</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Due to context rot, distraction from irrelevant or noisy chunks, contradictory documents in the retrieval set, or the 'Lost in the Middle' effect where relevant information buried in the middle of long contexts is ignored.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('703091', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('703091', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('703091', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="803407">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What are the 3 pillars of the RAG Triad?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">RAG</span><span class="pill pill-indigo">Palantir</span><span class="pill pill-indigo">Apple</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Context Relevance (is retrieved context relevant to the user query?), Groundedness / Faithfulness (is the answer strictly supported by context without hallucination?), and Answer Relevance (does the answer address the question asked?).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('803407', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('803407', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('803407', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="749213">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Before you trust an LLM-as-a-judge, what must you measure?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Judges</span><span class="pill pill-indigo">Scale AI</span><span class="pill pill-indigo">Meta</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      You must measure inter-annotator agreement (Cohen's Kappa) between the LLM judge's scores and human expert labels on a sampled test set. A judge with low human correlation will silently drift and game evals.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('749213', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('749213', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('749213', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="366682">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Name 3 biases in LLM-as-a-Judge scoring and their fixes.</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Judges</span><span class="pill pill-indigo">Google</span><span class="pill pill-indigo">Anthropic</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Position Bias (favors choice A over B -> swap order and average), Verbosity Bias (favors longer answers -> penalize token length or enforce word limits), Self-Preference Bias (favors own model family -> use multi-model juries).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('366682', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('366682', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('366682', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="198811">
+  <summary class="faq-summary">
+    <div class="faq-question-text">A stakeholder says 'the model got worse.' You have no eval set. What do you do first?</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Debugging</span><span class="pill pill-indigo">Palantir</span><span class="pill pill-indigo">OpenAI</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      First, freeze production logs and pull the latest 50 user queries and responses. Compare their embedding and token length distribution against historical data to check for covariate input drift. Then construct an emergency golden set from those queries to establish a reproducible baseline.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('198811', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('198811', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('198811', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="821377">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Explain the difference between Covariate Drift, Prior Probability Drift, and Concept Drift.</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">MLOps</span><span class="pill pill-indigo">Amazon</span><span class="pill pill-indigo">Uber</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Covariate Drift: Input distribution P(X) changes while P(Y|X) remains fixed. Prior Probability Drift: Target label distribution P(Y) changes. Concept Drift: Relationship between input and output P(Y|X) changes (e.g. meaning of fraud changes).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('821377', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('821377', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('821377', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+  </div>
+</section>
+
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="ai_agents.html" class="nav-btn">← RAG & Agents</a><a href="sql_data.html" class="nav-btn" style="margin-left: auto;">SQL & Data Eng →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('ai_evals');
+  });
+</script>
+</body>
+</html>

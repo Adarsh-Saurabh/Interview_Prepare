@@ -1,0 +1,2277 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>FDE Decomposition & Client-Facing Engineering · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html">🧩 Data Structures & Algorithms (DSA)</option><option value="os.html">⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html">🌐 Computer Networks (CN)</option><option value="coa.html">💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html">🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html">🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html">🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html">📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html" selected>🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: The Decomposition Framework</a></li>
+<li><a href="#scoping-questions" class="toc-link">❓ 15-Question Client Scoping Bank</a></li>
+<li><a href="#workflow-spine" class="toc-link">🦴 The FDE Workflow Spine: Data to Operational Impact</a></li>
+<li><a href="#worked-decompositions" class="toc-link">🧭 10 Verbatim Worked Client Decompositions</a></li>
+<li><a href="#constraint-breaks" class="toc-link">🚨 Mid-Round Constraint Breaks: How to Re-Plan</a></li>
+<li><a href="#re-engineering-red-herrings" class="toc-link">🔍 Re-Engineering Round & Red Herrings</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 30 Top Tech Interview Q&As</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track E: Role-Specific & Human</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">FDE Decomposition</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 15 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: The Decomposition Framework</a></li>
+<li><a href="#scoping-questions" class="toc-link">❓ 15-Question Client Scoping Bank</a></li>
+<li><a href="#workflow-spine" class="toc-link">🦴 The FDE Workflow Spine: Data to Operational Impact</a></li>
+<li><a href="#worked-decompositions" class="toc-link">🧭 10 Verbatim Worked Client Decompositions</a></li>
+<li><a href="#constraint-breaks" class="toc-link">🚨 Mid-Round Constraint Breaks: How to Re-Plan</a></li>
+<li><a href="#re-engineering-red-herrings" class="toc-link">🔍 Re-Engineering Round & Red Herrings</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 30 Top Tech Interview Q&As</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">🧭</div>
+              <div>
+                <h1 class="hero-title">FDE Decomposition & Client-Facing Engineering</h1>
+                <p class="hero-subtitle">Palantir Open-Ended Decomposition Framework, 10 Verbatim Client Prompts, Scoping Question Bank, Mid-Round Constraint Breaks, and Re-Engineering Red Herrings.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">Palantir FDSE</span><span class="pill pill-blue">OpenAI FDE</span><span class="pill pill-blue">Enterprise Tech</span><span class="pill pill-blue">Consulting Tech</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+<section class="section-block" id="sprint-core" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sprint-core" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ 15-Min Sprint: The Decomposition Framework
+      </h2>
+      <span class="pill pill-blue">Framework</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sprint-core" onchange="toggleSectionDone('sprint-core', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="one-liner-box" data-depth="sprint">
+  <div class="ol-badge">🗣️ 15-SECOND INTERVIEW ANSWER</div>
+  <p class="ol-text">"Deliver a functioning, simple idea first and verbally agree on the plan with your interviewer before diving into high-level design; jumping straight to technical implementation is the #1 rejection failure mode in FDE decomposition rounds."</p>
+</div>
+
+
+    <p>Palantir defines Problem Decomposition as: <em>'technical challenges that are open-ended in nature, with multiple possible solutions that incur different trade-offs.'</em> Every prompt follows an invariant structure: <strong>a named institution + a loosely-bounded measurable problem + messy legacy data sources + zero technical spec</strong>.</p>
+
+    
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    
+    <svg viewBox="0 0 880 200" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="fde-arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+      </defs>
+
+      <g transform="translate(10, 40)">
+        <!-- Step 1: User & Outcome -->
+        <rect x="0" y="0" width="95" height="55" rx="6" fill="#0369a1" stroke="#38bdf8" />
+        <text x="47" y="24" fill="#fff" font-size="10" font-weight="800" text-anchor="middle">1. USER &amp;</text>
+        <text x="47" y="40" fill="#bae6fd" font-size="9" text-anchor="middle">DECISION</text>
+
+        <line x1="95" y1="27" x2="115" y2="27" stroke="#38bdf8" stroke-width="2" marker-end="url(#fde-arr)" />
+
+        <!-- Step 2: Data Sources -->
+        <rect x="120" y="0" width="95" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" />
+        <text x="167" y="24" fill="#f1f5f9" font-size="10" font-weight="700" text-anchor="middle">2. DATA</text>
+        <text x="167" y="40" fill="#94a3b8" font-size="9" text-anchor="middle">OWNERSHIP</text>
+
+        <line x1="215" y1="27" x2="235" y2="27" stroke="#38bdf8" stroke-width="2" marker-end="url(#fde-arr)" />
+
+        <!-- Step 3: MVP Pipeline -->
+        <rect x="240" y="0" width="95" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" />
+        <text x="287" y="24" fill="#f1f5f9" font-size="10" font-weight="700" text-anchor="middle">3. MVP</text>
+        <text x="287" y="40" fill="#94a3b8" font-size="9" text-anchor="middle">PIPELINE</text>
+
+        <line x1="335" y1="27" x2="355" y2="27" stroke="#38bdf8" stroke-width="2" marker-end="url(#fde-arr)" />
+
+        <!-- Step 4: Agreement Handshake (CRITICAL) -->
+        <rect x="360" y="0" width="110" height="55" rx="6" fill="rgba(245, 158, 11, 0.2)" stroke="#fbbf24" stroke-width="2" />
+        <text x="415" y="24" fill="#fbbf24" font-size="10" font-weight="800" text-anchor="middle">4. AGREEMENT</text>
+        <text x="415" y="40" fill="#fde68a" font-size="9" text-anchor="middle">HANDSHAKE 🤝</text>
+
+        <line x1="470" y1="27" x2="490" y2="27" stroke="#38bdf8" stroke-width="2" marker-end="url(#fde-arr)" />
+
+        <!-- Step 5: Ontology -->
+        <rect x="495" y="0" width="95" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" />
+        <text x="542" y="24" fill="#f1f5f9" font-size="10" font-weight="700" text-anchor="middle">5. ONTOLOGY</text>
+        <text x="542" y="40" fill="#94a3b8" font-size="9" text-anchor="middle">DATA MODEL</text>
+
+        <line x1="590" y1="27" x2="610" y2="27" stroke="#38bdf8" stroke-width="2" marker-end="url(#fde-arr)" />
+
+        <!-- Step 6: UI / Action -->
+        <rect x="615" y="0" width="95" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" />
+        <text x="662" y="24" fill="#f1f5f9" font-size="10" font-weight="700" text-anchor="middle">6. OPERATOR</text>
+        <text x="662" y="40" fill="#94a3b8" font-size="9" text-anchor="middle">INTERFACE</text>
+
+        <line x1="710" y1="27" x2="730" y2="27" stroke="#38bdf8" stroke-width="2" marker-end="url(#fde-arr)" />
+
+        <!-- Step 7: Outcome -->
+        <rect x="735" y="0" width="115" height="55" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+        <text x="792" y="24" fill="#34d399" font-size="10" font-weight="800" text-anchor="middle">7. MEASURED</text>
+        <text x="792" y="40" fill="#a7f3d0" font-size="9" text-anchor="middle">IMPACT &amp; RISK</text>
+      </g>
+    </svg>
+    
+  </div>
+  <div class="diagram-caption">🔍 Palantir 8-Phase Decomposition Workflow: Notice Step 4 Explicit Agreement Handshake</div>
+</div>
+
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Evaluation Criterion</th><th>What Passing Candidates Demonstrate</th><th>Instant Rejection Failure Modes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>User & Decision Focus</td><td>Starts with the human operator: 'What decision does this person make every morning?'</td><td>Starts with machine learning models, neural networks, or Kafka pipelines.</td></tr><tr><td>Scoping Discipline</td><td>Asks 5 targeted clarifying questions to establish boundary conditions.</td><td>Assumes all requirements and designs silently in isolation.</td></tr><tr><td>The Agreement Handshake</td><td>Pauses after ideation: 'Does this high-level approach sound aligned before I detail the architecture?'</td><td>Races through 20 minutes of architecture without checking in.</td></tr><tr><td>Adaptability under Change</td><td>Pivots calmly when the interviewer breaks a constraint mid-round.</td><td>Defends original plan defensively or freezes when constraints flip.</td></tr><tr><td>Translating Tech -> Value</td><td>Explains technical choices in terms of client risk and operational savings.</td><td>Uses technical buzzwords without connecting them to measurable business impact.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="scoping-questions" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#scoping-questions" class="heading-anchor" title="Direct link to this section">#</a>
+        ❓ 15-Question Client Scoping Bank
+      </h2>
+      <span class="pill pill-teal">Question Bank</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="scoping-questions" onchange="toggleSectionDone('scoping-questions', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Question Category</th><th>Exact Question to Ask the Interviewer</th><th>Strategic Intent</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Who is the user?</td><td><em>'Who is the operational end-user interacting with this system daily (e.g., dispatchers, doctors, field analysts)?'</em></td><td>Grounds the interface in real humans.</td></tr><tr><td>What is the decision?</td><td><em>'What specific decision does this operator make, and what data do they currently look at to make it?'</em></td><td>Prevents building useless dashboards.</td></tr><tr><td>What data exists?</td><td><em>'Who owns this data, how frequently is it refreshed (batch vs real-time), and what is the schema agreement?'</em></td><td>Uncovers dirty integration reality.</td></tr><tr><td>What is the success metric?</td><td><em>'How will the client leadership evaluate whether this deployment was successful 6 months from now?'</em></td><td>Establishes quantitative ROI targets.</td></tr><tr><td>What are the constraints?</td><td><em>'Are there regulatory, privacy, or air-gapped network constraints (e.g. HIPAA, GDPR, classified networks)?'</em></td><td>Eliminates illegal or impossible architectures.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="workflow-spine" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#workflow-spine" class="heading-anchor" title="Direct link to this section">#</a>
+        🦴 The FDE Workflow Spine: Data to Operational Impact
+      </h2>
+      <span class="pill pill-purple">Workflow Spine</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="workflow-spine" onchange="toggleSectionDone('workflow-spine', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Stage in Spine</th><th>Core Engineering Responsibility</th><th>Example: Reducing Hospital Medication Errors</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1. User & Decision</td><td>Nurse administering medication at patient bedside.</td><td>Decision: Is this dosage safe given the patient's real-time vitals?</td></tr><tr><td>2. Data Sources</td><td>Electronic Health Records (Epic/Cerner), Pharmacy inventory DB, Bedside IoT vitals monitor.</td><td>EHR updates on discharge; IoT vitals stream at 1Hz.</td></tr><tr><td>3. MVP Pipeline</td><td>Streaming ingestion engine normalizing medication names into RxNorm standard ontology.</td><td>Alert engine checking prescription against allergy records.</td></tr><tr><td>4. Operator UI</td><td>Mobile tablet barcode scanner confirming barcode on medication vial matches patient wristband.</td><td>Simple RED/GREEN modal with override requirement.</td></tr><tr><td>5. Outcome Metric</td><td>Zero preventable medication dosage errors; alert fatigue rate &lt; 5%.</td><td>Measurable 99.9% reduction in wrong-dosage administrations.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="worked-decompositions" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#worked-decompositions" class="heading-anchor" title="Direct link to this section">#</a>
+        🧭 10 Verbatim Worked Client Decompositions
+      </h2>
+      <span class="pill pill-emerald">Verbatim Drills</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="worked-decompositions" onchange="toggleSectionDone('worked-decompositions', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="subsection-block" id="decomp-cooking" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#decomp-cooking" class="heading-anchor" title="Direct link">#</a>
+    1. Cooking for Elderly People with Poor Vision (Verbatim Palantir Prompt)
+  </h3>
+  
+</div>
+
+    
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Palantir Verbatim Prompt: Technology for Visually Impaired Elderly to Cook Safely</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Clarify the Human Constraint</span>
+          </div>
+          <div class="we-step-body">The user is elderly, has severe vision loss (cataracts/macular degeneration), may have mild tremors or cognitive fatigue, and is working around high heat, sharp knives, and boiling liquids.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Frame the Minimal Viable Solution (MVP)</span>
+          </div>
+          <div class="we-step-body">Avoid complex computer vision headsets that disorient elderly users. Propose a smart tactile induction cooktop with physical rotary dial clicks, coupled with a high-contrast voice-prompt scale and RFID-tagged spice jars.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Architect the Hardware/Software Boundary</span>
+          </div>
+          <div class="we-step-body">Spices and pantry containers have distinct tactile shapes and high-frequency RFID tags. Placing a container on the prep station triggers an audio readout: 'Black Pepper, 5 grams.' The induction cooktop has temperature limits and auto-shutoff if no pan is detected for 30 seconds.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 4</span>
+            <span class="we-step-label">Address Failure Modes & Edge Cases</span>
+          </div>
+          <div class="we-step-body">What if the user spills boiling water? The cooktop is induction (glass surface never burns). What if internet drops? The entire system operates offline on local microcontrollers with zero cloud dependencies.</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      Focusing on physical human ergonomics (tactile feedback + voice + induction safety) passes with distinction, whereas proposing an AR headset with computer vision object detection fails on safety and user adoption!
+    </div>
+  </details>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="constraint-breaks" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#constraint-breaks" class="heading-anchor" title="Direct link to this section">#</a>
+        🚨 Mid-Round Constraint Breaks: How to Re-Plan
+      </h2>
+      <span class="pill pill-rose">Live Adaptation</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="constraint-breaks" onchange="toggleSectionDone('constraint-breaks', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>In Palantir and FDE loops, interviewers <strong>almost always introduce a new constraint mid-round</strong> (e.g. <em>'The city just informed us that ambulance GPS cannot be tracked due to union contracts.'</em>). Defending your original plan is an instant fail; gracefully acknowledging the change and narrating an alternative is an immediate pass.</p>
+
+    
+<div class="followup-chain" data-depth="deep">
+  <div class="fc-header">
+    <span class="fc-badge">🎯 INTERVIEW DRILL LADDER</span>
+    <div class="fc-root-q"><strong>Root Question:</strong> You designed an emergency 911 dispatch optimization system relying on real-time ambulance GPS feeds. The interviewer injects: 'The paramedic union has vetoed real-time GPS tracking due to privacy agreements.' How do you adapt?</div>
+  </div>
+  <div class="fc-levels-container">
+    
+        <div class="fc-level">
+          <div class="fc-connector">↳ Follow-Up Drill 1</div>
+          <details class="fc-accordion">
+            <summary class="fc-summary"><strong>Q:</strong> Do not argue with the constraint.</summary>
+            <div class="fc-answer">Acknowledge immediately: 'Understood. That removes our live route tracking, but we can still optimize dispatch using historical station readiness and cell tower check-ins.'</div>
+          </details>
+        </div>
+        
+        <div class="fc-level">
+          <div class="fc-connector">↳ Follow-Up Drill 2</div>
+          <details class="fc-accordion">
+            <summary class="fc-summary"><strong>Q:</strong> What data source replaces live GPS?</summary>
+            <div class="fc-answer">We substitute automated bay-door open/close sensors at ambulance stations and radio milestone check-ins (Unit En Route, On Scene, Transporting).</div>
+          </details>
+        </div>
+        
+        <div class="fc-level">
+          <div class="fc-connector">↳ Follow-Up Drill 3</div>
+          <details class="fc-accordion">
+            <summary class="fc-summary"><strong>Q:</strong> How does this impact the accuracy metric?</summary>
+            <div class="fc-answer">We transition from dynamic sub-minute routing to static zone-based readiness scores, while preserving 85% of our dispatch optimization value.</div>
+          </details>
+        </div>
+        
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="re-engineering-red-herrings" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#re-engineering-red-herrings" class="heading-anchor" title="Direct link to this section">#</a>
+        🔍 Re-Engineering Round & Red Herrings
+      </h2>
+      <span class="pill pill-amber">Debugging Drill</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="re-engineering-red-herrings" onchange="toggleSectionDone('re-engineering-red-herrings', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="callout callout-trap" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">⚠️ INTERVIEW TRAP</span>
+    <span>The Re-Engineering Round Trap: Read ALL Code Before Touching Anything!</span>
+  </div>
+  <div class="callout-body">
+    In the Re-Engineering round, you are given 200-500 lines of complex unfamiliar code with a buggy output. <strong>Interviewers deliberately plant red herrings</strong> (misleading stylistic quirks, irrelevant off-by-one loops, or dead functions). If you jump at the first suspicious line you see, you waste 20 minutes in a rabbit hole. Read the entire codebase from top to bottom, write down input/output expectations, and trace data flow before changing a single character.
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="interview-flashcards" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-flashcards" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 30 Top Tech Interview Q&As
+      </h2>
+      <span class="pill pill-rose">Assessment</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-flashcards" onchange="toggleSectionDone('interview-flashcards', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<details class="faq-accordion" data-depth="sprint" data-qid="392858">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the primary difference between a Forward Deployed Engineer (FDE) and a core SWE?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">FDE Core</span><span class="pill pill-indigo">Palantir</span><span class="pill pill-indigo">OpenAI</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      An FDE works directly on client deployments, translating ambiguous business and operational problems into scalable software solutions. Success is measured by operational impact and user adoption, not just code volume.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('392858', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('392858', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('392858', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="568920">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why is jumping directly to technical implementation a failure mode in decomposition rounds?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">Decomposition</span><span class="pill pill-indigo">Palantir FDSE</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Because it risks solving the wrong problem. Without understanding who the user is, what decision they are making, and what data is legally available, even the most sophisticated ML architecture will fail in production.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('568920', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('568920', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('568920', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="288559">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is Palantir's Dev vs Delta distinction?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Culture</span><span class="pill pill-indigo">Palantir</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      'Dev' refers to core product platform engineering ('one capability built for many customers'). 'Delta' refers to forward-deployed engineering ('custom integrations and capabilities built for one critical customer').
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('288559', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('288559', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('288559', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="909889">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How do you handle a situation where two client legacy systems disagree on the 'source of truth' by 8%?</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Data Integration</span><span class="pill pill-indigo">Palantir FDSE</span><span class="pill pill-indigo">Anduril</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      First, document the discrepancy and quantify its financial/operational impact. Then consult business stakeholders to understand the business logic behind each system (e.g., booked revenue vs recognized cash). Establish deterministic reconciliation rules in the data pipeline rather than guessing.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('909889', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('909889', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('909889', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+  </div>
+</section>
+
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="docker.html" class="nav-btn">← Docker & K8s</a><a href="behavioral.html" class="nav-btn" style="margin-left: auto;">Behavioral & STAR →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('fde_decomp');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,2813 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Concurrency & Parallelism · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html">🧩 Data Structures & Algorithms (DSA)</option><option value="os.html">⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html">🌐 Computer Networks (CN)</option><option value="coa.html">💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html" selected>🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html">🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html">🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html">📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html">🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Concurrency Fundamentals</a></li>
+<li><a href="#primitives-matrix" class="toc-link">⚖️ Primitives Selection Matrix</a></li>
+<li><a href="#memory-models" class="toc-link">🧠 Memory Models & Happens-Before</a></li>
+<li><a href="#thread-sizing" class="toc-link">📐 Thread Pool Sizing & Latency</a></li>
+<li><a href="#language-comparison" class="toc-link">🌐 Multi-Language Concurrency Matrix</a></li>
+<li><a href="#classic-problems" class="toc-link">🧵 Classic Coordination Problems Code</a></li>
+<li><a href="#thread-safe-structures" class="toc-link">🏗️ Production Thread-Safe Data Structures</a></li>
+<li><a href="#lock-free-internals" class="toc-link">🚀 Lock-Free & Atomics Deep Dive</a></li>
+<li><a href="#debugging-concurrency" class="toc-link">🔍 Race Detectors & Concurrency Debugging</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 32 Top Tech Interview Q&As</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track A: Core CS Fundamentals</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">Concurrency</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 15 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Concurrency Fundamentals</a></li>
+<li><a href="#primitives-matrix" class="toc-link">⚖️ Primitives Selection Matrix</a></li>
+<li><a href="#memory-models" class="toc-link">🧠 Memory Models & Happens-Before</a></li>
+<li><a href="#thread-sizing" class="toc-link">📐 Thread Pool Sizing & Latency</a></li>
+<li><a href="#language-comparison" class="toc-link">🌐 Multi-Language Concurrency Matrix</a></li>
+<li><a href="#classic-problems" class="toc-link">🧵 Classic Coordination Problems Code</a></li>
+<li><a href="#thread-safe-structures" class="toc-link">🏗️ Production Thread-Safe Data Structures</a></li>
+<li><a href="#lock-free-internals" class="toc-link">🚀 Lock-Free & Atomics Deep Dive</a></li>
+<li><a href="#debugging-concurrency" class="toc-link">🔍 Race Detectors & Concurrency Debugging</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 32 Top Tech Interview Q&As</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">🧵</div>
+              <div>
+                <h1 class="hero-title">Concurrency & Parallelism</h1>
+                <p class="hero-subtitle">Race Conditions, Memory Models & Happens-Before, Print FooBar/H2O, Thread-Safe Bounded Queues, Striped Locks, and CAS ABA.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Pace (₹41L)</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Qualcomm</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+<section class="section-block" id="sprint-core" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sprint-core" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ 15-Min Sprint: Concurrency Fundamentals
+      </h2>
+      <span class="pill pill-indigo">Core Mechanics</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sprint-core" onchange="toggleSectionDone('sprint-core', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="one-liner-box" data-depth="sprint">
+  <div class="ol-badge">🗣️ 15-SECOND INTERVIEW ANSWER</div>
+  <p class="ol-text">"Concurrency is about structure (dealing with lots of things at once); parallelism is about execution (doing lots of things at once on multiple cores). Asynchrony is about non-blocking handoffs without burning an OS thread."</p>
+</div>
+
+
+    <p>Concurrency exists because processors have multiple execution cores, memory subsystems have latency ladders (1ns L1 vs 100ns RAM), and I/O devices are orders of magnitude slower than CPUs. High-concurrency systems must coordinate access to shared state without data corruption, deadlock, or convoy starvation.</p>
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Failure Mode</th><th>Formal Definition</th><th>Minimal Reproducible Example</th><th>Engineering Mitigation</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Data Race</td><td>Two threads access the same memory location concurrently, at least one write, without synchronization.</td><td>Thread 1: <code>x++</code>, Thread 2: <code>x++</code> simultaneously.</td><td><code>std::atomic&lt;T&gt;</code>, Mutex lock, Memory Barriers.</td></tr><tr><td>Race Condition</td><td>Flaw in timing/interleaving where program output depends on non-deterministic scheduling.</td><td>Check-then-act: <code>if (!map.contains(k)) map.put(k, v);</code></td><td>Atomic compound operations, Synchronized blocks.</td></tr><tr><td>Deadlock</td><td>Two or more threads blocked forever, each holding a resource the other needs.</td><td>T1 holds Lock A, wants Lock B. T2 holds Lock B, wants Lock A.</td><td>Strict global lock ordering, <code>std::lock(m1, m2)</code>.</td></tr><tr><td>Livelock</td><td>Threads actively change state in response to each other without making forward progress.</td><td>Two polite threads releasing locks repeatedly when seeing contention.</td><td>Exponential backoff with randomized jitter.</td></tr><tr><td>Starvation</td><td>A runnable thread is perpetually denied CPU time or locks due to unfair scheduling.</td><td>Low priority thread waiting behind endless stream of high-priority threads.</td><td>FIFO queue fairness, aging, ticket locks.</td></tr><tr><td>Priority Inversion</td><td>Low-priority thread holds lock needed by high-priority thread; mid-priority thread preempts low.</td><td>Mars Pathfinder anomaly: Information bus mutex held by meteorology task.</td><td>Priority Inheritance Protocol (PIP).</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+    
+<div class="callout callout-trap" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">⚠️ INTERVIEW TRAP</span>
+    <span>Spurious Wakeups: Why condition variables MUST use a while loop</span>
+  </div>
+  <div class="callout-body">
+    A thread waiting on a condition variable can wake up even if no thread signaled it (OS scheduler preemption, signal interrupts, or another thread woke up first and consumed the predicate). If you write <code>if (!ready) cv.wait(lock);</code>, the thread proceeds on spurious wakeup with invalid state! Always write <code>while (!ready) cv.wait(lock);</code> or <code>cv.wait(lock, [&amp;]{{ return ready; }});</code>.
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="primitives-matrix" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#primitives-matrix" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚖️ Primitives Selection Matrix
+      </h2>
+      <span class="pill pill-blue">Decision Matrix</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="primitives-matrix" onchange="toggleSectionDone('primitives-matrix', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>Interviews evaluate your ability to select the <em>cheapest synchronization primitive</em> that satisfies correctness guarantees without over-locking.</p>
+
+    
+<div class="decision-matrix-card" data-depth="sprint">
+  <div class="dm-title">⚖️ Decision Matrix: Synchronization Primitives Selection</div>
+  <div class="table-container">
+    <table class="data-table dm-table">
+      <thead>
+        <tr><th>Option / Pattern</th><th>Prime Use-Cases (Best Choice)</th><th>Anti-Patterns / Failure Points</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="dm-name"><strong>std::mutex</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Mutual exclusion for critical sections with unpredictable duration or complex object mutation.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Sub-microsecond hot paths (high kernel context switch cost); read-heavy workloads.</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Spinlock</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Ultra-short critical sections (≤ 50 CPU cycles) where thread sleep/wakeup latency (>2µs) dominates.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Single-core CPUs; critical sections that perform I/O, allocate memory, or yield.</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>std::shared_mutex (RW Lock)</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Workloads with &gt;90% reads and infrequent writes where multiple concurrent readers boost throughput.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Write-heavy workloads; very short reads where atomic refcount cache contention exceeds lock savings.</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Counting Semaphore</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Resource pool throttling (e.g., maximum 10 concurrent database connections or bounded queues).</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Simple mutual exclusion (mutex is cleaner and has ownership semantics).</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Condition Variable</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Thread coordination based on state changes (Producer-Consumer buffer empty/full).</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Stateless synchronization (use events/latches); atomic flags.</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>std::atomic<T></strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Single primitive variable updates (counters, boolean flags, pointers) without locking.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Multi-variable invariant updates (e.g., updating balance AND transaction log together).</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+    
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    
+    <svg viewBox="0 0 880 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Coarse Lock (Left) -->
+      <rect x="40" y="20" width="360" height="230" rx="8" fill="#111827" stroke="#f43f5e" stroke-width="1.5" />
+      <text x="220" y="45" fill="#f43f5e" font-size="13" font-weight="800" text-anchor="middle">COARSE-GRAINED LOCK (Single Global Mutex)</text>
+      
+      <rect x="60" y="65" width="320" height="40" rx="6" fill="rgba(244, 63, 94, 0.2)" stroke="#f43f5e" stroke-width="1.5" />
+      <text x="220" y="90" fill="#fca5a5" font-size="11" font-weight="700" text-anchor="middle">Global std::mutex mtx; (Severe Contention)</text>
+
+      <g transform="translate(60, 120)">
+        <rect x="0" y="0" width="70" height="110" fill="#1e293b" stroke="#475569" />
+        <text x="35" y="60" fill="#94a3b8" font-size="11" text-anchor="middle">Bucket 0</text>
+        <rect x="80" y="0" width="70" height="110" fill="#1e293b" stroke="#475569" />
+        <text x="115" y="60" fill="#94a3b8" font-size="11" text-anchor="middle">Bucket 1</text>
+        <rect x="160" y="0" width="70" height="110" fill="#1e293b" stroke="#475569" />
+        <text x="195" y="60" fill="#94a3b8" font-size="11" text-anchor="middle">Bucket 2</text>
+        <rect x="240" y="0" width="80" height="110" fill="#1e293b" stroke="#475569" />
+        <text x="280" y="60" fill="#94a3b8" font-size="11" text-anchor="middle">Bucket N</text>
+      </g>
+
+      <!-- Striped Lock (Right) -->
+      <rect x="480" y="20" width="360" height="230" rx="8" fill="#111827" stroke="#34d399" stroke-width="1.5" />
+      <text x="660" y="45" fill="#34d399" font-size="13" font-weight="800" text-anchor="middle">LOCK STRIPING (e.g., 16 Independent Mutexes)</text>
+
+      <g transform="translate(500, 70)">
+        <!-- Stripe 0 -->
+        <rect x="0" y="0" width="155" height="35" rx="4" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399" />
+        <text x="77" y="22" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">Mutex 0 (Protects 0, 16, 32...)</text>
+        
+        <!-- Stripe 1 -->
+        <rect x="170" y="0" width="155" height="35" rx="4" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" />
+        <text x="247" y="22" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">Mutex 1 (Protects 1, 17, 33...)</text>
+      </g>
+
+      <g transform="translate(500, 120)">
+        <rect x="0" y="0" width="70" height="110" fill="#1e293b" stroke="#34d399" stroke-width="1.5" />
+        <text x="35" y="55" fill="#34d399" font-size="11" text-anchor="middle">Bucket 0</text>
+        <text x="35" y="75" fill="#64748b" font-size="9" text-anchor="middle">(Stripe 0)</text>
+
+        <rect x="80" y="0" width="70" height="110" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+        <text x="115" y="55" fill="#38bdf8" font-size="11" text-anchor="middle">Bucket 1</text>
+        <text x="115" y="75" fill="#64748b" font-size="9" text-anchor="middle">(Stripe 1)</text>
+
+        <rect x="160" y="0" width="70" height="110" fill="#1e293b" stroke="#34d399" stroke-width="1.5" />
+        <text x="195" y="55" fill="#34d399" font-size="11" text-anchor="middle">Bucket 16</text>
+        <text x="195" y="75" fill="#64748b" font-size="9" text-anchor="middle">(Stripe 0)</text>
+
+        <rect x="240" y="0" width="80" height="110" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+        <text x="280" y="55" fill="#38bdf8" font-size="11" text-anchor="middle">Bucket 17</text>
+        <text x="280" y="75" fill="#64748b" font-size="9" text-anchor="middle">(Stripe 1)</text>
+      </g>
+    </svg>
+    
+  </div>
+  <div class="diagram-caption">🔍 Coarse-Grained Global Mutex vs Lock Striping (16 Independent Mutex Buckets)</div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="memory-models" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#memory-models" class="heading-anchor" title="Direct link to this section">#</a>
+        🧠 Memory Models & Happens-Before
+      </h2>
+      <span class="pill pill-indigo">Low-Latency</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="memory-models" onchange="toggleSectionDone('memory-models', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>Modern out-of-order CPUs (x86, ARM64) and optimizing compilers aggressively reorder instructions as long as single-threaded semantics are preserved. Without memory barriers, writes on Core 0 may become visible to Core 1 out of order.</p>
+
+    
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    
+    <svg viewBox="0 0 880 340" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="conc-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+        <marker id="sync-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+        </marker>
+      </defs>
+
+      <!-- Thread 1 Column -->
+      <rect x="50" y="20" width="340" height="290" rx="10" fill="#111827" stroke="#1e293b" stroke-width="1.5" />
+      <text x="220" y="50" fill="#38bdf8" font-size="14" font-weight="800" text-anchor="middle">THREAD 1 (Producer / Writer)</text>
+      
+      <rect x="80" y="75" width="280" height="40" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+      <text x="220" y="100" fill="#f1f5f9" font-size="12" font-family="monospace" text-anchor="middle">data = 42; (Normal Write)</text>
+
+      <line x1="220" y1="120" x2="220" y2="155" stroke="#64748b" stroke-width="2" marker-end="url(#conc-arrow)" />
+      <text x="230" y="142" fill="#94a3b8" font-size="10">Program Order</text>
+
+      <rect x="80" y="160" width="280" height="45" rx="6" fill="rgba(52, 211, 153, 0.15)" stroke="#34d399" stroke-width="2" />
+      <text x="220" y="182" fill="#34d399" font-size="12" font-weight="700" font-family="monospace" text-anchor="middle">ready.store(true, release);</text>
+      <text x="220" y="197" fill="#a7f3d0" font-size="10" text-anchor="middle">Release Barrier: flushes writes before</text>
+
+      <!-- Synchronization Edge across threads -->
+      <path d="M 360 182 C 430 182, 450 182, 510 182" fill="none" stroke="#34d399" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#sync-arrow)" />
+      <text x="440" y="172" fill="#34d399" font-size="11" font-weight="800" text-anchor="middle">Synchronizes-With</text>
+
+      <!-- Thread 2 Column -->
+      <rect x="490" y="20" width="340" height="290" rx="10" fill="#111827" stroke="#1e293b" stroke-width="1.5" />
+      <text x="660" y="50" fill="#a855f7" font-size="14" font-weight="800" text-anchor="middle">THREAD 2 (Consumer / Reader)</text>
+
+      <rect x="520" y="160" width="280" height="45" rx="6" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2" />
+      <text x="660" y="182" fill="#38bdf8" font-size="12" font-weight="700" font-family="monospace" text-anchor="middle">while (!ready.load(acquire));</text>
+      <text x="660" y="197" fill="#bae6fd" font-size="10" text-anchor="middle">Acquire Barrier: prevents reads moving up</text>
+
+      <line x1="660" y1="210" x2="660" y2="245" stroke="#64748b" stroke-width="2" marker-end="url(#conc-arrow)" />
+      <text x="670" y="232" fill="#94a3b8" font-size="10">Program Order</text>
+
+      <rect x="520" y="250" width="280" height="40" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1" />
+      <text x="660" y="275" fill="#34d399" font-size="12" font-family="monospace" text-anchor="middle">assert(data == 42); // GUARANTEED</text>
+    </svg>
+    
+  </div>
+  <div class="diagram-caption">🔍 Happens-Before Relationship via Release-Acquire Synchronization Barrier</div>
+</div>
+
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Memory Order</th><th>Guarantees</th><th>Cost on x86-64</th><th>Cost on ARM64 / PowerPC</th><th>Canonical Use-Case</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>memory_order_relaxed</code></td><td>Atomicity only. Zero ordering or synchronization guarantees.</td><td>0 cycles (plain mov)</td><td>0 cycles (plain ldr/str)</td><td>Incrementing statistics counters, metrics.</td></tr><tr><td><code>memory_order_acquire</code></td><td>Prevents memory reads/writes after this load from being reordered before it.</td><td>0 cycles (x86 loads already acquire)</td><td>DMB barrier instruction (~5-15 cycles)</td><td>Reading flags, Consumer lock acquisition.</td></tr><tr><td><code>memory_order_release</code></td><td>Prevents memory reads/writes before this store from being reordered after it.</td><td>0 cycles (x86 stores already release)</td><td>DMB barrier instruction (~5-15 cycles)</td><td>Publishing shared data, Producer release.</td></tr><tr><td><code>memory_order_acq_rel</code></td><td>Combined acquire and release barrier for Read-Modify-Write operations.</td><td>0 cycles (except LOCK prefix)</td><td>Full memory barrier (~15-30 cycles)</td><td>CAS loops, reference counting (fetch_sub).</td></tr><tr><td><code>memory_order_seq_cst</code></td><td>Sequential consistency. Single global total order visible across all cores.</td><td>LOCK prefix / MFENCE (~20-40 cycles)</td><td>Full DMB ISH barrier (~20-40 cycles)</td><td>Default atomic operations; critical algorithms.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+    
+<div class="callout callout-trap" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">⚠️ INTERVIEW TRAP</span>
+    <span>Why 'volatile' does NOT mean thread-safe in C++ and Java</span>
+  </div>
+  <div class="callout-body">
+    In C/C++, <code>volatile</code> tells the compiler not to optimize away reads/writes to memory-mapped hardware registers. It provides <strong>zero atomicity and zero memory barriers</strong>! In Java, <code>volatile</code> provides visibility and acquire-release ordering, but still no atomicity for compound operations like <code>i++</code>.
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="thread-sizing" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#thread-sizing" class="heading-anchor" title="Direct link to this section">#</a>
+        📐 Thread Pool Sizing & Latency
+      </h2>
+      <span class="pill pill-emerald">Capacity</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="thread-sizing" onchange="toggleSectionDone('thread-sizing', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">$$N_{\text{threads}} = N_{\text{CPU}} \times \left(1 + \frac{\text{Wait Time}}{\text{Compute Time}}\right)$$</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>Optimal pool threads equals CPU core count multiplied by one plus ratio of I/O wait time to compute time.</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>N_threads</code></td><td class='formula-def'>Target thread pool worker count</td></tr><tr><td class='formula-sym'><code>N_CPU</code></td><td class='formula-def'>Available hardware execution threads / CPU cores</td></tr><tr><td class='formula-sym'><code>Wait Time</code></td><td class='formula-def'>Time spent waiting for socket I/O, disk read, or database response</td></tr><tr><td class='formula-sym'><code>Compute Time</code></td><td class='formula-def'>Time spent executing CPU instructions (parsing, hashing, serialization)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> For purely CPU-bound tasks (matrix multiply), set pool size = N_CPU (extra threads cause context-switch thrashing). For I/O-bound tasks with 90% wait time (wait/compute = 9), pool size = 10 * N_CPU.</div>
+</div>
+
+
+    
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Deriving Thread Count for a High-Throughput REST Gateway</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Identify Workload Metrics</span>
+          </div>
+          <div class="we-step-body">A server has 16 vCPU cores. Profiling reveals average request processing takes 5ms of CPU JSON serialization and 45ms of database socket wait time.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Compute Wait-to-Compute Ratio</span>
+          </div>
+          <div class="we-step-body">$$\frac{\text{Wait}}{\text{Compute}} = \frac{45\text{ms}}{5\text{ms}} = 9$$</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Apply Sizing Formula</span>
+          </div>
+          <div class="we-step-body">$$N_{\text{threads}} = 16 \times (1 + 9) = 160\text{ worker threads}$$</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      Setting the thread pool to 160 threads achieves maximum hardware utilization without CPU starvation. If set to 16, 90% of cores remain idle during network stalls.
+    </div>
+  </details>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="language-comparison" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#language-comparison" class="heading-anchor" title="Direct link to this section">#</a>
+        🌐 Multi-Language Concurrency Matrix
+      </h2>
+      <span class="pill pill-teal">Cross-Platform</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="language-comparison" onchange="toggleSectionDone('language-comparison', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Language / Runtime</th><th>Threading Model</th><th>Memory Isolation</th><th>GIL / Runtime Lock</th><th>Optimal Workload Pattern</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>C++ (std::thread)</td><td>1:1 Native OS Threads.</td><td>Shared address space; manual synchronization.</td><td>None. True CPU hardware parallelism.</td><td>High-Frequency Trading, Game Engines, Systems.</td></tr><tr><td>Python (CPython)</td><td>1:1 OS Threads under GIL.</td><td>Shared memory across threads; separate in multiprocessing.</td><td>CPython Global Interpreter Lock (GIL).</td><td>AsyncIO for I/O bounds; Multiprocessing for CPU.</td></tr><tr><td>Java (JVM / Loom)</td><td>Platform Threads (1:1) + Virtual Threads (M:N).</td><td>Shared heap with garbage collector.</td><td>JVM HotSpot object monitors.</td><td>Enterprise microservices, high-concurrency web.</td></tr><tr><td>Go (Goroutines)</td><td>M:N User-space Scheduler (GMP model).</td><td>Shared heap; channels promote shared-nothing.</td><td>No GIL. Cooperative preemption at function prologue.</td><td>Cloud-native services, Kubernetes, microservices.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="classic-problems" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#classic-problems" class="heading-anchor" title="Direct link to this section">#</a>
+        🧵 Classic Coordination Problems Code
+      </h2>
+      <span class="pill pill-rose">Coding Drills</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="classic-problems" onchange="toggleSectionDone('classic-problems', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>These coordination problems are the verbatim coding challenges asked in Anthropic, OpenAI, and Apple concurrency rounds.</p>
+
+    
+<div class="subsection-block" id="classic-foobar" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#classic-foobar" class="heading-anchor" title="Direct link">#</a>
+    1. Print FooBar Alternately (C++ Condition Variables & Semaphores)
+  </h3>
+  
+</div>
+
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 FooBar Coordination in C++</span><span class="code-lang-tag">cpp</span></div>
+  <pre class="line-numbers"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;
+#include &lt;condition_variable&gt;
+
+class FooBar {
+private:
+    int n;
+    std::mutex mtx;
+    std::condition_variable cv;
+    bool foo_turn = true;
+
+public:
+    FooBar(int n) : n(n) {}
+
+    void foo() {
+        for (int i = 0; i &lt; n; i++) {
+            std::unique_lock&lt;std::mutex&gt; lock(mtx);
+            cv.wait(lock, [this]() { return foo_turn; });
+            std::cout &lt;&lt; &quot;foo&quot;;
+            foo_turn = false;
+            cv.notify_one();
+        }
+    }
+
+    void bar() {
+        for (int i = 0; i &lt; n; i++) {
+            std::unique_lock&lt;std::mutex&gt; lock(mtx);
+            cv.wait(lock, [this]() { return !foo_turn; });
+            std::cout &lt;&lt; &quot;bar&quot;;
+            foo_turn = true;
+            cv.notify_one();
+        }
+    }
+};</code></pre>
+</div>
+
+
+    
+<div class="subsection-block" id="classic-h2o" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#classic-h2o" class="heading-anchor" title="Direct link">#</a>
+    2. Building H2O Molecule Coordination (Python Condition Variables)
+  </h3>
+  
+</div>
+
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 Building H2O Molecule Synchronization</span><span class="code-lang-tag">python</span></div>
+  <pre class="line-numbers"><code class="language-python">import threading
+
+class H2O:
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.cv = threading.Condition(self.lock)
+        self.h_count = 0
+
+    def hydrogen(self, releaseHydrogen):
+        with self.cv:
+            while self.h_count == 2:
+                self.cv.wait()
+            self.h_count += 1
+            releaseHydrogen()
+            self.cv.notify_all()
+
+    def oxygen(self, releaseOxygen):
+        with self.cv:
+            while self.h_count &lt; 2:
+                self.cv.wait()
+            releaseOxygen()
+            self.h_count = 0
+            self.cv.notify_all()</code></pre>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="thread-safe-structures" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#thread-safe-structures" class="heading-anchor" title="Direct link to this section">#</a>
+        🏗️ Production Thread-Safe Data Structures
+      </h2>
+      <span class="pill pill-purple">Systems Design</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="thread-safe-structures" onchange="toggleSectionDone('thread-safe-structures', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="subsection-block" id="struct-bounded-queue" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#struct-bounded-queue" class="heading-anchor" title="Direct link">#</a>
+    1. Thread-Safe Bounded Blocking Queue
+  </h3>
+  
+</div>
+
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 Production Bounded Blocking Queue</span><span class="code-lang-tag">cpp</span></div>
+  <pre class="line-numbers"><code class="language-cpp">#include &lt;queue&gt;
+#include &lt;mutex&gt;
+#include &lt;condition_variable&gt;
+
+template &lt;typename T&gt;
+class BoundedBlockingQueue {
+private:
+    std::queue&lt;T&gt; queue_;
+    size_t capacity_;
+    std::mutex mtx_;
+    std::condition_variable not_full_;
+    std::condition_variable not_empty_;
+
+public:
+    explicit BoundedBlockingQueue(size_t capacity) : capacity_(capacity) {}
+
+    void push(T value) {
+        std::unique_lock&lt;std::mutex&gt; lock(mtx_);
+        not_full_.wait(lock, [this] { return queue_.size() &lt; capacity_; });
+        queue_.push(std::move(value));
+        not_empty_.notify_one();
+    }
+
+    T pop() {
+        std::unique_lock&lt;std::mutex&gt; lock(mtx_);
+        not_empty_.wait(lock, [this] { return !queue_.empty(); });
+        T value = std::move(queue_.front());
+        queue_.pop();
+        not_full_.notify_one();
+        return value;
+    }
+};</code></pre>
+</div>
+
+
+    
+<div class="followup-chain" data-depth="deep">
+  <div class="fc-header">
+    <span class="fc-badge">🎯 INTERVIEW DRILL LADDER</span>
+    <div class="fc-root-q"><strong>Root Question:</strong> What is the bottleneck in this BoundedBlockingQueue when scaled to 64 threads?</div>
+  </div>
+  <div class="fc-levels-container">
+    
+        <div class="fc-level">
+          <div class="fc-connector">↳ Follow-Up Drill 1</div>
+          <details class="fc-accordion">
+            <summary class="fc-summary"><strong>Q:</strong> Both push() and pop() contend on the same std::mutex mtx_, causing core cache-line invalidation.</summary>
+            <div class="fc-answer">Split into two distinct locks: one head_mutex_ for pops and one tail_mutex_ for pushes, using a dummy node.</div>
+          </details>
+        </div>
+        
+        <div class="fc-level">
+          <div class="fc-connector">↳ Follow-Up Drill 2</div>
+          <details class="fc-accordion">
+            <summary class="fc-summary"><strong>Q:</strong> Now push and pop operate independently, but how do they coordinate capacity without locking both?</summary>
+            <div class="fc-answer">Use an std::atomic<size_t> count_ with acquire-release ordering or separate producer/consumer semaphores.</div>
+          </details>
+        </div>
+        
+        <div class="fc-level">
+          <div class="fc-connector">↳ Follow-Up Drill 3</div>
+          <details class="fc-accordion">
+            <summary class="fc-summary"><strong>Q:</strong> When does this two-lock queue still degrade?</summary>
+            <div class="fc-answer">Under extreme load, false sharing occurs if head_mutex_ and tail_mutex_ share the same 64-byte L1 cache line. Fix with alignas(64).</div>
+          </details>
+        </div>
+        
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="lock-free-internals" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#lock-free-internals" class="heading-anchor" title="Direct link to this section">#</a>
+        🚀 Lock-Free & Atomics Deep Dive
+      </h2>
+      <span class="pill pill-indigo">HFT Depth</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="lock-free-internals" onchange="toggleSectionDone('lock-free-internals', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>Lock-free programming guarantees that <em>at least one thread makes progress</em> in a finite number of steps, eliminating priority inversion and deadlock. However, it requires meticulous memory ordering to avoid the ABA problem and cache thrashing.</p>
+
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 Lock-Free Single-Producer Single-Consumer (SPSC) Ring Buffer</span><span class="code-lang-tag">cpp</span></div>
+  <pre class="line-numbers"><code class="language-cpp">#include &lt;atomic&gt;
+#include &lt;cstddef&gt;
+#include &lt;new&gt;
+
+template &lt;typename T, size_t Capacity&gt;
+class LockFreeSPSCQueue {
+    static_assert((Capacity &amp; (Capacity - 1)) == 0, &quot;Capacity must be power of 2&quot;);
+private:
+    T buffer_[Capacity];
+    
+    // Align to separate 64-byte cache lines to eliminate False Sharing
+    alignas(64) std::atomic&lt;size_t&gt; tail_{0}; // Written by Producer
+    alignas(64) std::atomic&lt;size_t&gt; head_{0}; // Written by Consumer
+
+public:
+    bool push(const T&amp; item) {
+        size_t current_tail = tail_.load(std::memory_order_relaxed);
+        size_t current_head = head_.load(std::memory_order_acquire);
+        
+        if (current_tail - current_head &gt;= Capacity) return false; // Full
+        
+        buffer_[current_tail &amp; (Capacity - 1)] = item;
+        tail_.store(current_tail + 1, std::memory_order_release);
+        return true;
+    }
+
+    bool pop(T&amp; item) {
+        size_t current_head = head_.load(std::memory_order_relaxed);
+        size_t current_tail = tail_.load(std::memory_order_acquire);
+        
+        if (current_head == current_tail) return false; // Empty
+        
+        item = buffer_[current_head &amp; (Capacity - 1)];
+        head_.store(current_head + 1, std::memory_order_release);
+        return true;
+    }
+};</code></pre>
+</div>
+
+
+    
+<div class="see-also-box" data-depth="deep">
+  <span class="see-also-label">Connected Concepts (See Also):</span>
+  <div class="see-also-links"><a href="cpp_systems.html#atomic-memory" class="see-also-link">🔗 C++ Atomics & Memory Ordering</a> <a href="coa.html#false-sharing" class="see-also-link">🔗 COA False Sharing & alignas(64)</a> <a href="os.html#sync-primitives" class="see-also-link">🔗 OS Futexes & Spinlocks</a></div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="debugging-concurrency" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#debugging-concurrency" class="heading-anchor" title="Direct link to this section">#</a>
+        🔍 Race Detectors & Concurrency Debugging
+      </h2>
+      <span class="pill pill-amber">Tooling</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="debugging-concurrency" onchange="toggleSectionDone('debugging-concurrency', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Debugging Tool</th><th>Technology & Mechanism</th><th>Overhead</th><th>Detection Capability</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>ThreadSanitizer (TSan)</td><td>Compiler instrumentation (Clang/GCC <code>-fsanitize=thread</code>). Intercepts every memory access.</td><td>5×-15× CPU, 5×-10× RAM</td><td>Data races, deadlocks, lock-order inversions.</td></tr><tr><td>Valgrind Helgrind</td><td>Binary dynamic instrumentation. Tracks POSIX pthread API calls.</td><td>20×-50× slowdown</td><td>POSIX mutex misuse, lock order cycles, data races.</td></tr><tr><td>Deterministic Replay</td><td>Records scheduler decisions and thread inter-leavings to replay elusive bugs.</td><td>Moderate</td><td>Heisenbugs (bugs that disappear under debugging/print statements).</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+    
+<div class="callout callout-trap" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">⚠️ INTERVIEW TRAP</span>
+    <span>The Heisenbug Trap in Concurrency Debugging</span>
+  </div>
+  <div class="callout-body">
+    Adding <code>printf</code> or <code>std::cout</code> to debug a concurrency race condition almost always hides the bug. Console logging performs system calls and acquires internal I/O mutexes, adding tens of thousands of CPU cycles of latency and forcing memory barriers that serialize the threads. Always debug with TSan or lock-free ring-buffer trace logs.
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="interview-flashcards" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-flashcards" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 32 Top Tech Interview Q&As
+      </h2>
+      <span class="pill pill-rose">Assessment</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-flashcards" onchange="toggleSectionDone('interview-flashcards', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<details class="faq-accordion" data-depth="sprint" data-qid="114563">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Concurrency vs Parallelism — explain in one sentence each.</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">Fundamentals</span><span class="pill pill-indigo">Anthropic</span><span class="pill pill-indigo">Apple</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Concurrency is about handling multiple tasks by interleaving their execution over time (structural); parallelism is about executing multiple tasks simultaneously across physically separate hardware cores (computational).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('114563', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('114563', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('114563', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="50280">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the difference between a Data Race and a Race Condition?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Core CS</span><span class="pill pill-indigo">OpenAI</span><span class="pill pill-indigo">Google</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      A Data Race occurs when two threads access the same memory location concurrently without synchronization and at least one is a write (Undefined Behavior in C++). A Race Condition is a higher-level semantic timing flaw where valid operations occur in an unexpected sequence (e.g. check-then-act).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('50280', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('50280', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('50280', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="977425">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why must condition_variable wait() ALWAYS be placed inside a while loop?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">POSIX</span><span class="pill pill-indigo">Qualcomm</span><span class="pill pill-indigo">Pace</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Because of spurious wakeups (the OS kernel may unblock the thread without an explicit notification) and stolen wakes (another thread may wake up first and invalidate the predicate before this thread acquires the mutex).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('977425', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('977425', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('977425', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="627921">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is a Livelock? Give an example that is not a deadlock.</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Failures</span><span class="pill pill-indigo">Microsoft</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      A state where threads continuously change their states in response to each other without making forward progress. Example: Two ethernet nodes detecting collision and repeatedly attempting retransmission at the exact same fixed time interval, or two courteous threads repeatedly releasing locks to let the other pass.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('627921', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('627921', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('627921', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="784409">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Explain the ABA problem in Compare-And-Swap (CAS) lock-free algorithms.</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Lock-Free</span><span class="pill pill-indigo">Pace (₹41L)</span><span class="pill pill-indigo">Jane Street</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Thread 1 reads pointer value A. Thread 2 preempts, changes A to B, and then changes it back to A. Thread 1 resumes and executes CAS(A, C), succeeding because the memory address is still A, unaware that the underlying node or state was mutated. Mitigation: Tagged pointers with monotonic version counters (Double-CAS).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('784409', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('784409', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('784409', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="965976">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is Priority Inversion and how does Priority Inheritance solve it?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Real-Time</span><span class="pill pill-indigo">Apple</span><span class="pill pill-indigo">Texas Instruments</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      When a high-priority thread H is blocked waiting for a lock held by low-priority thread L, and a medium-priority thread M preempts L because M has higher priority than L, preventing L from finishing and releasing the lock for H. Priority Inheritance dynamically elevates L's priority to H's level until L releases the lock.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('965976', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('965976', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('965976', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="20603">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How do you size a thread pool for CPU-bound vs I/O-bound workloads?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Architecture</span><span class="pill pill-indigo">Amazon</span><span class="pill pill-indigo">Palantir</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      For CPU-bound tasks: N_threads = N_CPU (or N_CPU + 1 to absorb page faults). For I/O-bound tasks: N_threads = N_CPU * (1 + Wait_Time / Compute_Time).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('20603', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('20603', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('20603', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="720349">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why does adding more threads sometimes make a multi-threaded application slower?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Performance</span><span class="pill pill-indigo">Meta</span><span class="pill pill-indigo">Netflix</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Due to Amdahl's law serial bottlenecks, excessive OS context switching overhead, thread scheduling quantum preemption, and severe CPU cache coherence traffic (cache-line bouncing and false sharing).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('720349', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('720349', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('720349', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="902811">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is False Sharing and how do you prevent it in C++?</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Hardware</span><span class="pill pill-indigo">Pace</span><span class="pill pill-indigo">Nvidia</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      When two threads running on different cores modify independent variables that reside within the same 64-byte L1 cache line, forcing continuous cache invalidation traffic (MESI protocol bouncing). Prevent by padding variables using alignas(64) or std::hardware_destructive_interference_size.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('902811', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('902811', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('902811', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="25904">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the difference between memory_order_relaxed and memory_order_seq_cst?</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Atomics</span><span class="pill pill-indigo">Qualcomm</span><span class="pill pill-indigo">Apple</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      memory_order_relaxed guarantees only atomicity of the single operation with zero synchronization or ordering guarantees relative to other memory accesses. memory_order_seq_cst enforces a single total globally consistent order of all operations across all cores.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('25904', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('25904', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('25904', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="32185">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why is double-checked locking broken without memory barriers / volatile?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Patterns</span><span class="pill pill-indigo">Google</span><span class="pill pill-indigo">Adobe</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Because instruction reordering allows memory allocation and pointer assignment (instance = raw_ptr) to execute before the object constructor completes. A concurrent thread can see instance != nullptr and access uninitialized memory.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('32185', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('32185', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('32185', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="608849">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is a Futex in Linux and why is it faster than a classic kernel semaphore?</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Linux</span><span class="pill pill-indigo">Qualcomm</span><span class="pill pill-indigo">Pace</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      A Fast Userspace Mutex. On uncontended lock acquisition/release, it executes purely in user space via atomic CAS instructions without any system call. It only enters the Linux kernel (sys_futex) to put the thread to sleep when real contention occurs.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('608849', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('608849', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('608849', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+  </div>
+</section>
+
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="coa.html" class="nav-btn">← Architecture</a><a href="lld_design_patterns.html" class="nav-btn" style="margin-left: auto;">LLD & Patterns →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('concurrency');
+  });
+</script>
+</body>
+</html>

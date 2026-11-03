@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Computer Organization & Architecture (COA) · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html">🧩 Data Structures & Algorithms (DSA)</option><option value="os.html">⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html">🌐 Computer Networks (CN)</option><option value="coa.html" selected>💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html">🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html">🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html">🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html">📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html">🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: CPU Equations, Amdahl & AMAT</a></li>
+<li><a href="#pipeline-hazards-svg" class="toc-link">📊 5-Stage RISC Pipeline & Forwarding</a></li>
+<li><a href="#cache-hierarchy-mesi" class="toc-link">🧠 Cache Coherence MESI & False Sharing</a></li>
+<li><a href="#ooo-tomasulo" class="toc-link">🚀 Out-of-Order Execution & Tomasulo's Algorithm</a></li>
+<li><a href="#worked-coa-math" class="toc-link">📐 Worked Numericals: Amdahl, AMAT & Cache Bits</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 Top Tech Interview Flashcards & Defenses</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track A: Core CS Fundamentals</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">Architecture</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 12 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: CPU Equations, Amdahl & AMAT</a></li>
+<li><a href="#pipeline-hazards-svg" class="toc-link">📊 5-Stage RISC Pipeline & Forwarding</a></li>
+<li><a href="#cache-hierarchy-mesi" class="toc-link">🧠 Cache Coherence MESI & False Sharing</a></li>
+<li><a href="#ooo-tomasulo" class="toc-link">🚀 Out-of-Order Execution & Tomasulo's Algorithm</a></li>
+<li><a href="#worked-coa-math" class="toc-link">📐 Worked Numericals: Amdahl, AMAT & Cache Bits</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 Top Tech Interview Flashcards & Defenses</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">💻</div>
+              <div>
+                <h1 class="hero-title">Computer Organization & Architecture (COA)</h1>
+                <p class="hero-subtitle">CPU Performance Equation, Amdahl's Law, AMAT Latencies, 5-Stage RISC Pipeline, Out-of-Order Tomasulo, and Cache Coherence MESI.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">Texas Instruments</span><span class="pill pill-blue">Nvidia</span><span class="pill pill-blue">Qualcomm</span><span class="pill pill-blue">Arm</span><span class="pill pill-blue">Apple</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+<section class="section-block" id="sprint-core" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sprint-core" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ 15-Minute Sprint: CPU Equations, Amdahl & AMAT
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sprint-core" onchange="toggleSectionDone('sprint-core', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    <span class="pill pill-amber">P1 Track A</span><span class="pill pill-indigo">Hardware Architecture</span><span class="pill pill-teal">15-Min Sprint</span><span class="pill pill-rose">Performance Equations</span>
+<div class="callout callout-important" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">IMPORTANT</span>
+    <span>Computer Architecture & Hardware Performance Essentials</span>
+  </div>
+  <div class="callout-body">
+    Hardware engineering interviews at Nvidia, Qualcomm, Apple, Arm, and Texas Instruments focus on quantitative performance modeling: applying the CPU Performance Equation, calculating multi-level AMAT, deriving Amdahl's Law speedups, understanding pipeline hazards, and mitigating multicore cache coherence bottlenecks (MESI & False Sharing).
+  </div>
+</div>
+
+<div class="numbers-card" data-depth="sprint">
+  <div class="numbers-title">📊 Key Numbers to Know Cold: Memory Hierarchy Latency Ladder (Reference Cycles)</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr><th>Operation / Quantity</th><th>Order of Magnitude</th><th>Engineering Implication</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td><strong>CPU Registers</strong></td>
+          <td><span class="num-highlight">0 cycles (~0.25 ns)</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Fastest physical flip-flops on execution core</td>
+        </tr>
+        
+        <tr>
+          <td><strong>L1 Cache Access</strong></td>
+          <td><span class="num-highlight">~4 - 5 cycles (~1 ns)</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Dedicated per-core 32KB/64KB SRAM</td>
+        </tr>
+        
+        <tr>
+          <td><strong>L2 Cache Access</strong></td>
+          <td><span class="num-highlight">~14 cycles (~3 - 4 ns)</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Dedicated per-core 512KB/1MB SRAM</td>
+        </tr>
+        
+        <tr>
+          <td><strong>L3 Shared Cache</strong></td>
+          <td><span class="num-highlight">~40 - 60 cycles (~12 - 15 ns)</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Shared LLC across all cores on die (16MB - 64MB)</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Main Memory (DRAM)</strong></td>
+          <td><span class="num-highlight">~150 - 200 cycles (~50 - 80 ns)</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Off-chip DDR5 memory bus roundtrip</td>
+        </tr>
+        
+        <tr>
+          <td><strong>NVMe SSD / PCIe</strong></td>
+          <td><span class="num-highlight">~10,000 - 50,000 cycles (~5 - 15 µs)</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Flash storage read over PCIe bus</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="subsection-block" id="core-equations" data-depth="sprint">
+  <h3 class="subsection-title">
+    <a href="#core-equations" class="heading-anchor" title="Direct link">#</a>
+    The Three Foundational Performance Equations
+  </h3>
+  <div class="subsection-body">
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">\text{CPU Time} = \text{Instruction Count (IC)} \times \text{CPI} \times \text{Clock Period } (T_c) = \frac{\text{IC} \times \text{CPI}}{\text{Clock Frequency } (f)}</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>CPU execution time is the product of instructions executed, average cycles per instruction, and clock period</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>\text{IC}</code></td><td class='formula-def'>Total dynamic instruction count executed by the binary (determined by compiler & ISA).</td></tr><tr><td class='formula-sym'><code>\text{CPI}</code></td><td class='formula-def'>Average Cycles Per Instruction (determined by CPU microarchitecture, pipeline stalls, and cache misses).</td></tr><tr><td class='formula-sym'><code>T_c = 1/f</code></td><td class='formula-def'>Clock cycle time in seconds (determined by semiconductor fabrication and longest pipeline stage delay).</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> A compiler optimization that decreases IC might increase CPI (e.g. replacing simple ALU ops with slow unrolled loops). Real performance requires minimizing the full product!</div>
+</div>
+
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">\text{Speedup} = \frac{1}{(1 - p) + \frac{p}{s}} \quad \xrightarrow{s \to \infty} \quad \text{Max Theoretical Speedup} = \frac{1}{1 - p}</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>Amdahl's Law states overall speedup is strictly bounded by the serial fraction of the execution workload</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>p</code></td><td class='formula-def'>Parallelizable fraction of the execution runtime (between 0.0 and 1.0).</td></tr><tr><td class='formula-sym'><code>s</code></td><td class='formula-def'>Speedup factor achieved on the parallelizable fraction (number of CPU cores).</td></tr><tr><td class='formula-sym'><code>1 - p</code></td><td class='formula-def'>Inherently serial portion that cannot be parallelized.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> If a program is 90% parallel (p = 0.90), the maximum possible speedup on INFINITE processors is 1 / (1 - 0.9) = 10×! The serial 10% dominates total execution time.</div>
+</div>
+
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">\text{AMAT} = t_{\text{L1\_hit}} + m_{\text{L1}} \left( t_{\text{L2\_hit}} + m_{\text{L2}} \left( t_{\text{L3\_hit}} + m_{\text{L2}} \cdot t_{\text{DRAM\_penalty}} \right) \right)</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>Average Memory Access Time across a multi-level cache hierarchy</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>t_{\text{hit}}</code></td><td class='formula-def'>Latency in cycles to access the cache level upon a hit.</td></tr><tr><td class='formula-sym'><code>m</code></td><td class='formula-def'>Local miss rate at the corresponding cache level.</td></tr><tr><td class='formula-sym'><code>t_{\text{penalty}}</code></td><td class='formula-def'>Miss penalty latency to retrieve the line from the next level down.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> Because DRAM latency is ~200 cycles, even a tiny 1% miss rate at L3 dramatically degrades effective CPI!</div>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="pipeline-hazards-table" data-depth="sprint">
+  <h3 class="subsection-title">
+    <a href="#pipeline-hazards-table" class="heading-anchor" title="Direct link">#</a>
+    Pipeline Hazards Matrix & Hardware Mitigations
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Hazard Type</th><th>Underlying Cause</th><th>Hardware Solution</th><th>Compiler / Software Mitigation</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Structural Hazard</td><td>Resource conflict: two instructions need same hardware unit simultaneously</td><td>Separate Harvard Architecture (I-Cache vs D-Cache); multi-port register files</td><td>Compiler instruction scheduling / bubble insertion</td></tr><tr><td>Data Hazard: RAW (True Dependency)</td><td>Instruction reads a register before previous instruction writes it</td><td>Hardware Forwarding / Bypassing (EX/MEM → EX, MEM/WB → EX)</td><td>Reorder instructions to fill load delay slot</td></tr><tr><td>Data Hazard: Load-Use Hazard</td><td>Instruction depends on result of immediate preceding LOAD</td><td>Forwarding cannot travel backwards in time! Hardware inserts **1-cycle stall bubble**</td><td>Schedule independent instruction between load and dependent use</td></tr><tr><td>Data Hazard: WAR & WAW (Name Dependencies)</td><td>Anti-dependency (WAR) or Output dependency (WAW) sharing register name</td><td>Register Renaming via Reorder Buffer / Tomasulo Reservation Stations</td><td>Compiler register allocation with distinct registers</td></tr><tr><td>Control Hazard (Branch)</td><td>Branch outcome / target unknown during Fetch stage</td><td>Branch Prediction (Dynamic 2-bit branch predictor, BTB); Speculative execution</td><td>Branchless programming (conditional moves `cmov`, bit hacks)</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="pipeline-hazards-svg" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#pipeline-hazards-svg" class="heading-anchor" title="Direct link to this section">#</a>
+        📊 5-Stage RISC Pipeline & Forwarding
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="pipeline-hazards-svg" onchange="toggleSectionDone('pipeline-hazards-svg', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="pipeline-arch" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#pipeline-arch" class="heading-anchor" title="Direct link">#</a>
+    5-Stage Classic RISC Pipeline Architecture
+  </h3>
+  <div class="subsection-body">
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    5-Stage RISC Pipeline Execution and Hardware Forwarding Paths
+  </div>
+  <div class="diagram-caption">🔍 
+    <svg viewBox="0 0 860 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="coa-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+        <marker id="fwd-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+        </marker>
+      </defs>
+
+      <!-- Stage 1: IF -->
+      <rect x="30" y="70" width="120" height="90" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+      <text x="90" y="105" fill="#38bdf8" font-size="14" font-weight="800" text-anchor="middle">1. IF</text>
+      <text x="90" y="125" fill="#f1f5f9" font-size="11" font-weight="600" text-anchor="middle">Instruction Fetch</text>
+      <text x="90" y="142" fill="#94a3b8" font-size="9" text-anchor="middle">PC → I-Cache</text>
+
+      <line x1="150" y1="115" x2="190" y2="115" stroke="#38bdf8" stroke-width="2" marker-end="url(#coa-arrow)" />
+
+      <!-- Stage 2: ID -->
+      <rect x="195" y="70" width="120" height="90" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+      <text x="255" y="105" fill="#38bdf8" font-size="14" font-weight="800" text-anchor="middle">2. ID</text>
+      <text x="255" y="125" fill="#f1f5f9" font-size="11" font-weight="600" text-anchor="middle">Decode / Reg Read</text>
+      <text x="255" y="142" fill="#94a3b8" font-size="9" text-anchor="middle">Register File</text>
+
+      <line x1="315" y1="115" x2="355" y2="115" stroke="#38bdf8" stroke-width="2" marker-end="url(#coa-arrow)" />
+
+      <!-- Stage 3: EX -->
+      <rect x="360" y="70" width="120" height="90" rx="8" fill="#0369a1" stroke="#38bdf8" stroke-width="2" />
+      <text x="420" y="105" fill="#ffffff" font-size="14" font-weight="800" text-anchor="middle">3. EX</text>
+      <text x="420" y="125" fill="#ffffff" font-size="11" font-weight="600" text-anchor="middle">Execute / ALU</text>
+      <text x="420" y="142" fill="#bae6fd" font-size="9" text-anchor="middle">Arithmetic Ops</text>
+
+      <line x1="480" y1="115" x2="520" y2="115" stroke="#38bdf8" stroke-width="2" marker-end="url(#coa-arrow)" />
+
+      <!-- Stage 4: MEM -->
+      <rect x="525" y="70" width="120" height="90" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+      <text x="585" y="105" fill="#38bdf8" font-size="14" font-weight="800" text-anchor="middle">4. MEM</text>
+      <text x="585" y="125" fill="#f1f5f9" font-size="11" font-weight="600" text-anchor="middle">Memory Access</text>
+      <text x="585" y="142" fill="#94a3b8" font-size="9" text-anchor="middle">Load / Store D-Cache</text>
+
+      <line x1="645" y1="115" x2="685" y2="115" stroke="#38bdf8" stroke-width="2" marker-end="url(#coa-arrow)" />
+
+      <!-- Stage 5: WB -->
+      <rect x="690" y="70" width="120" height="90" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+      <text x="750" y="105" fill="#38bdf8" font-size="14" font-weight="800" text-anchor="middle">5. WB</text>
+      <text x="750" y="125" fill="#f1f5f9" font-size="11" font-weight="600" text-anchor="middle">Write Back</text>
+      <text x="750" y="142" fill="#94a3b8" font-size="9" text-anchor="middle">Result → Reg File</text>
+
+      <!-- Forwarding Path 1: EX/MEM to EX -->
+      <path d="M 480 140 C 480 200, 380 200, 380 165" fill="none" stroke="#34d399" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#fwd-arrow)" />
+      <text x="430" y="215" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">ALU Forwarding (EX/MEM → EX)</text>
+
+      <!-- Forwarding Path 2: MEM/WB to EX -->
+      <path d="M 690 140 C 690 250, 360 250, 360 165" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4" marker-end="url(#fwd-arrow)" />
+      <text x="525" y="265" fill="#fbbf24" font-size="10" font-weight="700" text-anchor="middle">Load Forwarding (MEM/WB → EX)</text>
+    </svg>
+    </div>
+</div>
+
+<div class="callout callout-tip" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">TIP</span>
+    <span>Why Forwarding Cannot Eliminate the Load-Use Hazard Stall</span>
+  </div>
+  <div class="callout-body">
+    Consider:
+`LW R1, 0(R2)` (Load Word into R1)
+`ADD R3, R1, R4` (Add depends on R1)
+In the pipeline: When `LW` is in the EX stage, memory has NOT yet been read (data is only fetched in the **MEM** stage). But `ADD` enters the EX stage in the very next cycle and needs the value of `R1` at the beginning of EX! Forwarding cannot send data backwards in time from the end of MEM to the start of EX in the same cycle. The hardware hazard detection unit must stall the pipeline by inserting **1 bubble cycle**, freezing PC and IF/ID registers.
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="cache-hierarchy-mesi" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#cache-hierarchy-mesi" class="heading-anchor" title="Direct link to this section">#</a>
+        🧠 Cache Coherence MESI & False Sharing
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="cache-hierarchy-mesi" onchange="toggleSectionDone('cache-hierarchy-mesi', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="mesi-protocol" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#mesi-protocol" class="heading-anchor" title="Direct link">#</a>
+    MESI Cache Coherence Protocol State Machine
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>MESI State</th><th>Is Line in Memory Valid?</th><th>Is Line in Other Caches?</th><th>Can Core Read?</th><th>Can Core Write Directly?</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>M (Modified)</td><td>❌ Stale (Cache line is dirty / updated)</td><td>❌ No (Exclusive to this cache)</td><td>✅ Yes</td><td>✅ Yes (Zero bus traffic required)</td></tr><tr><td>E (Exclusive)</td><td>✅ Clean (Identical to DRAM)</td><td>❌ No (Exclusive to this cache)</td><td>✅ Yes</td><td>✅ Yes (Transitions silently to Modified)</td></tr><tr><td>S (Shared)</td><td>✅ Clean (Identical to DRAM)</td><td>✅ Yes (May exist in other caches)</td><td>✅ Yes</td><td>❌ No (Must broadcast Read-For-Ownership / Invalidate bus request!)</td></tr><tr><td>I (Invalid)</td><td>N/A (Contains no valid data)</td><td>N/A</td><td>❌ Must fetch from bus</td><td>❌ Must fetch from bus</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="callout callout-important" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">IMPORTANT</span>
+    <span>False Sharing: The Silent Multicore Performance Killer</span>
+  </div>
+  <div class="callout-body">
+    **Definition**: False sharing occurs when two threads on different CPU cores modify completely independent variables that happen to reside on the **exact same 64-byte cache line**.
+• Core 0 writes `struct.a` → MESI invalidates the entire 64-byte cache line on Core 1!
+• Core 1 writes `struct.b` → MESI invalidates the entire 64-byte cache line on Core 0!
+• The cache line bounces ping-pong across the interconnect bus, degrading throughput by 10× to 50×!
+**Production Fix**: Align independent concurrent variables to distinct cache lines using C++17 `alignas(64)` or padding:
+`struct alignas(64) ThreadData { uint64_t counter; };`
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="ooo-tomasulo" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#ooo-tomasulo" class="heading-anchor" title="Direct link to this section">#</a>
+        🚀 Out-of-Order Execution & Tomasulo's Algorithm
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="ooo-tomasulo" onchange="toggleSectionDone('ooo-tomasulo', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="tomasulo-algorithm" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#tomasulo-algorithm" class="heading-anchor" title="Direct link">#</a>
+    Out-of-Order Execution (OoO) & Tomasulo's Algorithm
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Component</th><th>Role in Tomasulo's Microarchitecture</th><th>Eliminates Bottleneck</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Reservation Stations (RS)</td><td>Buffers holding decoded instructions and their operands at functional units until operands become ready</td><td>Decouples Instruction Decode from Execution; enables out-of-order dispatch</td></tr><tr><td>Common Data Bus (CDB)</td><td>High-speed internal broadcast bus transmitting computed results directly to waiting RS and Reorder Buffer</td><td>Bypasses register file write-read latency; forwards results instantly to all consumers</td></tr><tr><td>Register Renaming</td><td>Maps logical architectural registers (R0-R31) to physical tags in reservation stations / ROB</td><td>Completely eliminates WAR (anti) and WAW (output) name dependencies!</td></tr><tr><td>Reorder Buffer (ROB)</td><td>Maintains in-order instruction retirement queue at the end of the pipeline</td><td>Guarantees **Precise Exceptions** and safe speculative execution rollback on branch mispredictions</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="worked-coa-math" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#worked-coa-math" class="heading-anchor" title="Direct link to this section">#</a>
+        📐 Worked Numericals: Amdahl, AMAT & Cache Bits
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="worked-coa-math" onchange="toggleSectionDone('worked-coa-math', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="worked-cache-bits" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#worked-cache-bits" class="heading-anchor" title="Direct link">#</a>
+    Worked Numerical 1: Cache Address Bit Breakdown (Tag, Index, Offset)
+  </h3>
+  <div class="subsection-body">
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">System: 32-bit Address, 32 KB 4-Way Set Associative Cache, 64-Byte Cache Lines</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Calculate Block Offset Bits (b)</span>
+          </div>
+          <div class="we-step-body">Line size = $64\text{ bytes} = 2^6\text{ bytes} \implies b = 6\text{ bits}$.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Calculate Total Sets in Cache</span>
+          </div>
+          <div class="we-step-body">$$\text{Total Lines} = \frac{\text{Cache Size}}{\text{Line Size}} = \frac{32 \times 1024}{64} = 512\text{ lines}$$
+$$\text{Number of Sets (S)} = \frac{\text{Total Lines}}{\text{Associativity}} = \frac{512}{4} = 128\text{ sets}$$</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Calculate Set Index Bits (s)</span>
+          </div>
+          <div class="we-step-body">$128\text{ sets} = 2^7\text{ sets} \implies s = 7\text{ bits}$.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 4</span>
+            <span class="we-step-label">Calculate Tag Bits (t)</span>
+          </div>
+          <div class="we-step-body">$$\text{Tag Bits} = \text{Total Address Bits} - s - b = 32 - 7 - 6 = \mathbf{19\text{ bits}}$$</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      32-bit physical address is parsed by hardware into: Tag (19 bits) | Set Index (7 bits) | Byte Offset (6 bits).
+    </div>
+  </details>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="worked-amat" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#worked-amat" class="heading-anchor" title="Direct link">#</a>
+    Worked Numerical 2: 3-Level AMAT Calculation with Real Hardware Latencies
+  </h3>
+  <div class="subsection-body">
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">L1 Hit = 1 ns (miss rate 5%), L2 Hit = 4 ns (miss rate 20%), L3 Hit = 15 ns (miss rate 10%), DRAM = 80 ns</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Compute L3 Effective Miss Penalty</span>
+          </div>
+          <div class="we-step-body">$$\text{Penalty}_{\text{L3}} = t_{\text{L3\_hit}} + m_{\text{L3}} \times t_{\text{DRAM}} = 15 + (0.10 \times 80) = 15 + 8 = 23\text{ ns}$$</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Compute L2 Effective Miss Penalty</span>
+          </div>
+          <div class="we-step-body">$$\text{Penalty}_{\text{L2}} = t_{\text{L2\_hit}} + m_{\text{L2}} \times \text{Penalty}_{\text{L3}} = 4 + (0.20 \times 23) = 4 + 4.6 = 8.6\text{ ns}$$</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Compute Overall AMAT</span>
+          </div>
+          <div class="we-step-body">$$\text{AMAT} = t_{\text{L1\_hit}} + m_{\text{L1}} \times \text{Penalty}_{\text{L2}} = 1 + (0.05 \times 8.6) = 1 + 0.43 = \mathbf{1.43\text{ ns}}$$</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      Effective AMAT is 1.43 ns. The 3-level cache hierarchy reduces average memory access time from 80 ns down to 1.43 ns (a 56× acceleration!).
+    </div>
+  </details>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="worked-ieee754" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#worked-ieee754" class="heading-anchor" title="Direct link">#</a>
+    Worked Numerical 3: IEEE-754 Single-Precision Floating Point Representation
+  </h3>
+  <div class="subsection-body">
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Encode -13.625 into IEEE-754 32-Bit Single Precision Format</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Determine Sign Bit (S)</span>
+          </div>
+          <div class="we-step-body">Number is negative $\implies S = 1$ (1 bit).</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Convert Integer & Fraction to Binary</span>
+          </div>
+          <div class="we-step-body">$13_{10} = 1101_2$. $0.625_{10} = 0.5 + 0.125 = 2^{-1} + 2^{-3} = 0.101_2$. Total binary: $1101.101_2$.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Normalize into Scientific Notation</span>
+          </div>
+          <div class="we-step-body">$$1101.101_2 = 1.101101_2 \times 2^3$$ Mantissa fraction bits = $101101000...$ (23 bits).</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 4</span>
+            <span class="we-step-label">Compute Biased Exponent (E)</span>
+          </div>
+          <div class="we-step-body">Exponent = 3. Bias for single-precision is 127. $\text{Biased Exponent} = 3 + 127 = 130_{10} = 10000010_2$ (8 bits).</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 5</span>
+            <span class="we-step-label">Assemble 32-bit Hex Code</span>
+          </div>
+          <div class="we-step-body">Bits: `1 10000010 10110100000000000000000` → In Hex: `0xC15A0000`.</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      -13.625 in IEEE-754 single precision is represented as hex `0xC15A0000`.
+    </div>
+  </details>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="interview-flashcards" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-flashcards" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 Top Tech Interview Flashcards & Defenses
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-flashcards" onchange="toggleSectionDone('interview-flashcards', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="interview-flashcards" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#interview-flashcards" class="heading-anchor" title="Direct link">#</a>
+    🎯 High-Yield Computer Architecture Interview Flashcards
+  </h3>
+  <div class="subsection-body">
+<details class="faq-accordion" data-depth="sprint" data-qid="805412">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What are the 3 C's of Cache Misses (and the 4th Coherence Miss)?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">1</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">A</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">h</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">u</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">C</span><span class="pill pill-cyan">l</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">c</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      1. **Compulsory (Cold) Misses**: First-ever access to a memory block. Unavoidable unless hardware prefetching is used.
+2. **Capacity Misses**: Cache is simply too small to contain all working set blocks accessed by the program. Solved by increasing cache capacity.
+3. **Conflict Misses**: Multiple active blocks map to the exact same cache set in direct-mapped or set-associative caches. Solved by increasing associativity (e.g. 4-way to 8-way).
+4. **Coherence Misses**: In multicore systems, a cache line is invalidated because another core modified a shared variable on that line (MESI invalidation).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('805412', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('805412', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('805412', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="955133">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why is row-major matrix traversal ~10x faster than column-major in C/C++?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">1</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">P</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">f</span><span class="pill pill-cyan">o</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">E</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">g</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">g</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      In C and C++, 2D arrays are stored in **Row-Major Order** in memory (all elements of row 0 consecutively, followed by row 1). When you read `A[i][j]`, a 64-byte cache line is loaded into L1 containing 8 consecutive 64-bit doubles (`A[i][0]` through `A[i][7]`). Sequential row iteration hits L1 cache for the next 7 elements (100% spatial locality). Column-major iteration (`A[j][i]`) jumps by $N \times 8$ bytes on every iteration, causing a compulsory cache miss on every single access!
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('955133', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('955133', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('955133', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="554998">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How does Little-Endian differ from Big-Endian, and how do you test it in C?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">1</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">H</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">d</span><span class="pill pill-cyan">w</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">/</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">E</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">b</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">d</span><span class="pill pill-cyan">d</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">d</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      In Little-Endian systems (x86, ARM default), the Least Significant Byte (LSB) is stored at the lowest memory address. In Big-Endian (network byte order), the Most Significant Byte (MSB) is stored at the lowest address.
+C detection code: `uint16_t x = 0x0001; return *(char*)&x == 1;` (returns true for Little-Endian).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('554998', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('554998', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('554998', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="988065">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How does a 2-bit Saturating Counter Branch Predictor outperform a 1-bit predictor on loops?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">1</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">M</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">o</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">h</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">u</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">e</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      In a loop of 10 iterations, a 1-bit predictor mispredicts TWICE: once when exiting the loop (switches from Taken to Not Taken), and once when re-entering the loop in the next invocation (predicts Not Taken, but loop repeats). A 2-bit saturating counter has 4 states (Strongly Taken, Weakly Taken, Weakly Not Taken, Strongly Not Taken). A single exit condition only transitions Strongly Taken down to Weakly Taken! When the loop runs again, it still predicts Taken. A 2-bit predictor mispredicts only ONCE per loop.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('988065', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('988065', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('988065', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+</div>
+</div>
+
+  </div>
+</section>
+
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="cn.html" class="nav-btn">← Networks</a><a href="concurrency.html" class="nav-btn" style="margin-left: auto;">Concurrency →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('coa');
+  });
+</script>
+</body>
+</html>

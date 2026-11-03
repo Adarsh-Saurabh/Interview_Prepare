@@ -1,0 +1,1038 @@
+[
+  {
+    "module_id": "dsa",
+    "module_title": "Data Structures & Algorithms (DSA)",
+    "file": "dsa.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Decision Patterns & Triggers"
+  },
+  {
+    "module_id": "dsa",
+    "module_title": "Data Structures & Algorithms (DSA)",
+    "file": "dsa.html",
+    "anchor": "complexity-matrix",
+    "label": "\ud83d\udcca Master Complexity & Constraint Matrix"
+  },
+  {
+    "module_id": "dsa",
+    "module_title": "Data Structures & Algorithms (DSA)",
+    "file": "dsa.html",
+    "anchor": "pattern-templates",
+    "label": "\ud83e\udde9 9 Core Algorithmic Templates"
+  },
+  {
+    "module_id": "dsa",
+    "module_title": "Data Structures & Algorithms (DSA)",
+    "file": "dsa.html",
+    "anchor": "dp-mastery",
+    "label": "\ud83d\udc8e Dynamic Programming: 9 Canonical Shapes"
+  },
+  {
+    "module_id": "dsa",
+    "module_title": "Data Structures & Algorithms (DSA)",
+    "file": "dsa.html",
+    "anchor": "recurrence-analysis",
+    "label": "\ud83d\udcd0 Master Theorem & Amortized Analysis"
+  },
+  {
+    "module_id": "dsa",
+    "module_title": "Data Structures & Algorithms (DSA)",
+    "file": "dsa.html",
+    "anchor": "string-graph-depth",
+    "label": "\ud83c\udf10 Graphs, Strings & Greedy Validity"
+  },
+  {
+    "module_id": "dsa",
+    "module_title": "Data Structures & Algorithms (DSA)",
+    "file": "dsa.html",
+    "anchor": "interview-traps",
+    "label": "\u26a0\ufe0f High-Frequency Traps & Proofs"
+  },
+  {
+    "module_id": "dsa",
+    "module_title": "Data Structures & Algorithms (DSA)",
+    "file": "dsa.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 32 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "os",
+    "module_title": "Operating Systems (OS)",
+    "file": "os.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Process, Sync & Scheduling"
+  },
+  {
+    "module_id": "os",
+    "module_title": "Operating Systems (OS)",
+    "file": "os.html",
+    "anchor": "visual-memory-tlb",
+    "label": "\ud83d\udcca Memory Architecture: Layout & TLB Lookup"
+  },
+  {
+    "module_id": "os",
+    "module_title": "Operating Systems (OS)",
+    "file": "os.html",
+    "anchor": "sync-problems-bankers",
+    "label": "\ud83d\udd12 Synchronization, Peterson & Banker's Algorithm"
+  },
+  {
+    "module_id": "os",
+    "module_title": "Operating Systems (OS)",
+    "file": "os.html",
+    "anchor": "worked-numericals",
+    "label": "\ud83d\udcd0 Worked Numericals: Gantt Charts & Page Replacement"
+  },
+  {
+    "module_id": "os",
+    "module_title": "Operating Systems (OS)",
+    "file": "os.html",
+    "anchor": "memory-storage-internals",
+    "label": "\ud83e\udde0 Multi-Level Page Tables, CFS & File Systems"
+  },
+  {
+    "module_id": "os",
+    "module_title": "Operating Systems (OS)",
+    "file": "os.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf Top Tech Interview Flashcards & Defenses"
+  },
+  {
+    "module_id": "dbms",
+    "module_title": "DBMS & Storage Internals",
+    "file": "dbms.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: ACID, Isolation & Indexes"
+  },
+  {
+    "module_id": "dbms",
+    "module_title": "DBMS & Storage Internals",
+    "file": "dbms.html",
+    "anchor": "bplus-lsm-storage",
+    "label": "\ud83c\udf32 Storage Engines: B+ Trees vs LSM Trees"
+  },
+  {
+    "module_id": "dbms",
+    "module_title": "DBMS & Storage Internals",
+    "file": "dbms.html",
+    "anchor": "wal-aries-recovery",
+    "label": "\ud83d\udcbe WAL & ARIES Recovery Protocol (Durability)"
+  },
+  {
+    "module_id": "dbms",
+    "module_title": "DBMS & Storage Internals",
+    "file": "dbms.html",
+    "anchor": "concurrency-mvcc",
+    "label": "\ud83d\udd12 Concurrency Control, 2PL & Conflict Serializability"
+  },
+  {
+    "module_id": "dbms",
+    "module_title": "DBMS & Storage Internals",
+    "file": "dbms.html",
+    "anchor": "worked-dbms-math",
+    "label": "\ud83d\udcd0 Worked Derivations: Precedence Graphs & Normalization"
+  },
+  {
+    "module_id": "dbms",
+    "module_title": "DBMS & Storage Internals",
+    "file": "dbms.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf Top Tech Interview Flashcards & Defenses"
+  },
+  {
+    "module_id": "cn",
+    "module_title": "Computer Networks (CN)",
+    "file": "cn.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: OSI, TCP vs UDP & Congestion"
+  },
+  {
+    "module_id": "cn",
+    "module_title": "Computer Networks (CN)",
+    "file": "cn.html",
+    "anchor": "tcp-handshake-svg",
+    "label": "\ud83d\udcca TCP 3-Way Handshake & 4-Way Teardown"
+  },
+  {
+    "module_id": "cn",
+    "module_title": "Computer Networks (CN)",
+    "file": "cn.html",
+    "anchor": "dns-resolution-svg",
+    "label": "\ud83c\udf10 DNS Resolution Chain & URL Lifecycle"
+  },
+  {
+    "module_id": "cn",
+    "module_title": "Computer Networks (CN)",
+    "file": "cn.html",
+    "anchor": "sliding-window-routing",
+    "label": "\ud83d\udce6 Sliding Window Protocols & Routing Algorithms"
+  },
+  {
+    "module_id": "cn",
+    "module_title": "Computer Networks (CN)",
+    "file": "cn.html",
+    "anchor": "worked-cn-math",
+    "label": "\ud83d\udcd0 Worked Numericals: BDP, VLSM & Ethernet Framing"
+  },
+  {
+    "module_id": "cn",
+    "module_title": "Computer Networks (CN)",
+    "file": "cn.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf Top Tech Interview Flashcards & Defenses"
+  },
+  {
+    "module_id": "coa",
+    "module_title": "Computer Organization & Architecture (COA)",
+    "file": "coa.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: CPU Equations, Amdahl & AMAT"
+  },
+  {
+    "module_id": "coa",
+    "module_title": "Computer Organization & Architecture (COA)",
+    "file": "coa.html",
+    "anchor": "pipeline-hazards-svg",
+    "label": "\ud83d\udcca 5-Stage RISC Pipeline & Forwarding"
+  },
+  {
+    "module_id": "coa",
+    "module_title": "Computer Organization & Architecture (COA)",
+    "file": "coa.html",
+    "anchor": "cache-hierarchy-mesi",
+    "label": "\ud83e\udde0 Cache Coherence MESI & False Sharing"
+  },
+  {
+    "module_id": "coa",
+    "module_title": "Computer Organization & Architecture (COA)",
+    "file": "coa.html",
+    "anchor": "ooo-tomasulo",
+    "label": "\ud83d\ude80 Out-of-Order Execution & Tomasulo's Algorithm"
+  },
+  {
+    "module_id": "coa",
+    "module_title": "Computer Organization & Architecture (COA)",
+    "file": "coa.html",
+    "anchor": "worked-coa-math",
+    "label": "\ud83d\udcd0 Worked Numericals: Amdahl, AMAT & Cache Bits"
+  },
+  {
+    "module_id": "coa",
+    "module_title": "Computer Organization & Architecture (COA)",
+    "file": "coa.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf Top Tech Interview Flashcards & Defenses"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Concurrency Fundamentals"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "primitives-matrix",
+    "label": "\u2696\ufe0f Primitives Selection Matrix"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "memory-models",
+    "label": "\ud83e\udde0 Memory Models & Happens-Before"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "thread-sizing",
+    "label": "\ud83d\udcd0 Thread Pool Sizing & Latency"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "language-comparison",
+    "label": "\ud83c\udf10 Multi-Language Concurrency Matrix"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "classic-problems",
+    "label": "\ud83e\uddf5 Classic Coordination Problems Code"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "thread-safe-structures",
+    "label": "\ud83c\udfd7\ufe0f Production Thread-Safe Data Structures"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "lock-free-internals",
+    "label": "\ud83d\ude80 Lock-Free & Atomics Deep Dive"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "debugging-concurrency",
+    "label": "\ud83d\udd0d Race Detectors & Concurrency Debugging"
+  },
+  {
+    "module_id": "concurrency",
+    "module_title": "Concurrency & Parallelism",
+    "file": "concurrency.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 32 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "lld",
+    "module_title": "Low-Level Design & Design Patterns (LLD / OOD)",
+    "file": "lld_design_patterns.html",
+    "anchor": "rapid-recall",
+    "label": "\u26a1 10-Min Rapid Recall Sheet"
+  },
+  {
+    "module_id": "lld",
+    "module_title": "Low-Level Design & Design Patterns (LLD / OOD)",
+    "file": "lld_design_patterns.html",
+    "anchor": "visual-diagrams",
+    "label": "\ud83d\udcca Visual UML Class Diagrams"
+  },
+  {
+    "module_id": "lld",
+    "module_title": "Low-Level Design & Design Patterns (LLD / OOD)",
+    "file": "lld_design_patterns.html",
+    "anchor": "core-deep-dives",
+    "label": "\ud83e\udde0 SOLID, LRU Cache & Design Patterns"
+  },
+  {
+    "module_id": "lld",
+    "module_title": "Low-Level Design & Design Patterns (LLD / OOD)",
+    "file": "lld_design_patterns.html",
+    "anchor": "interview-traps",
+    "label": "\u26a0\ufe0f High-Frequency LLD & OOD Traps"
+  },
+  {
+    "module_id": "lld",
+    "module_title": "Low-Level Design & Design Patterns (LLD / OOD)",
+    "file": "lld_design_patterns.html",
+    "anchor": "flashcards",
+    "label": "\ud83c\udfaf 10 High-Frequency GFG Interview Q&As"
+  },
+  {
+    "module_id": "system_design",
+    "module_title": "System Design & Distributed Systems (HLD)",
+    "file": "system_design.html",
+    "anchor": "rapid-recall",
+    "label": "\u26a1 10-Min Rapid Recall Sheet"
+  },
+  {
+    "module_id": "system_design",
+    "module_title": "System Design & Distributed Systems (HLD)",
+    "file": "system_design.html",
+    "anchor": "visual-diagrams",
+    "label": "\ud83d\udcca Visual HLD & Distributed Architectures"
+  },
+  {
+    "module_id": "system_design",
+    "module_title": "System Design & Distributed Systems (HLD)",
+    "file": "system_design.html",
+    "anchor": "core-deep-dives",
+    "label": "\ud83e\udde0 Consistent Hashing, Rate Limiting & TinyURL"
+  },
+  {
+    "module_id": "system_design",
+    "module_title": "System Design & Distributed Systems (HLD)",
+    "file": "system_design.html",
+    "anchor": "interview-traps",
+    "label": "\u26a0\ufe0f High-Frequency Distributed Systems Traps"
+  },
+  {
+    "module_id": "system_design",
+    "module_title": "System Design & Distributed Systems (HLD)",
+    "file": "system_design.html",
+    "anchor": "flashcards",
+    "label": "\ud83c\udfaf 10 High-Frequency GFG Interview Q&As"
+  },
+  {
+    "module_id": "api_security",
+    "module_title": "API Design, Auth & Security",
+    "file": "api_security.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: REST Semantics & Idempotency"
+  },
+  {
+    "module_id": "api_security",
+    "module_title": "API Design, Auth & Security",
+    "file": "api_security.html",
+    "anchor": "protocols-matrix",
+    "label": "\u2696\ufe0f Protocols Decision Matrix: REST vs gRPC vs GraphQL"
+  },
+  {
+    "module_id": "api_security",
+    "module_title": "API Design, Auth & Security",
+    "file": "api_security.html",
+    "anchor": "auth-jwt-oauth",
+    "label": "\ud83d\udd11 Authentication & Tokens: JWT, OAuth 2.0 & PKCE"
+  },
+  {
+    "module_id": "api_security",
+    "module_title": "API Design, Auth & Security",
+    "file": "api_security.html",
+    "anchor": "owasp-security",
+    "label": "\ud83d\udee1\ufe0f OWASP Top 10 & API Attack Vectors"
+  },
+  {
+    "module_id": "api_security",
+    "module_title": "API Design, Auth & Security",
+    "file": "api_security.html",
+    "anchor": "multi-tenancy-fde",
+    "label": "\ud83c\udfe2 Multi-Tenancy & Data Isolation (FDE Core)"
+  },
+  {
+    "module_id": "api_security",
+    "module_title": "API Design, Auth & Security",
+    "file": "api_security.html",
+    "anchor": "idempotency-protocol",
+    "label": "\ud83d\udd01 Production Idempotency Key Engine"
+  },
+  {
+    "module_id": "api_security",
+    "module_title": "API Design, Auth & Security",
+    "file": "api_security.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 30 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "cpp_systems",
+    "module_title": "C++ Internals & Low-Latency Systems",
+    "file": "cpp_systems.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: OOP Internals, Move & Memory Orders"
+  },
+  {
+    "module_id": "cpp_systems",
+    "module_title": "C++ Internals & Low-Latency Systems",
+    "file": "cpp_systems.html",
+    "anchor": "vtable-memory-svg",
+    "label": "\ud83d\udcca VTable Layout, Smart Pointers & Control Blocks"
+  },
+  {
+    "module_id": "cpp_systems",
+    "module_title": "C++ Internals & Low-Latency Systems",
+    "file": "cpp_systems.html",
+    "anchor": "move-perfect-forwarding",
+    "label": "\u26a1 Move Semantics, Universal References & Forwarding"
+  },
+  {
+    "module_id": "cpp_systems",
+    "module_title": "C++ Internals & Low-Latency Systems",
+    "file": "cpp_systems.html",
+    "anchor": "lockfree-spsc-buffer",
+    "label": "\ud83d\ude80 Lock-Free SPSC Ring Buffer & Memory Models"
+  },
+  {
+    "module_id": "cpp_systems",
+    "module_title": "C++ Internals & Low-Latency Systems",
+    "file": "cpp_systems.html",
+    "anchor": "hft-low-latency-toolkit",
+    "label": "\u26a1 Low-Latency & HFT Systems Toolkit (Pace \u20b941L)"
+  },
+  {
+    "module_id": "cpp_systems",
+    "module_title": "C++ Internals & Low-Latency Systems",
+    "file": "cpp_systems.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf Top Tech Interview Flashcards & Defenses"
+  },
+  {
+    "module_id": "python_internals",
+    "module_title": "Python Internals, GIL & Concurrency",
+    "file": "python_internals.html",
+    "anchor": "rapid-recall",
+    "label": "\u26a1 10-Min Rapid Recall Sheet"
+  },
+  {
+    "module_id": "python_internals",
+    "module_title": "Python Internals, GIL & Concurrency",
+    "file": "python_internals.html",
+    "anchor": "visual-diagrams",
+    "label": "\ud83d\udcca Visual GIL & Garbage Collection"
+  },
+  {
+    "module_id": "python_internals",
+    "module_title": "Python Internals, GIL & Concurrency",
+    "file": "python_internals.html",
+    "anchor": "core-deep-dives",
+    "label": "\ud83e\udde0 GIL Mechanics, Memory & AsyncIO"
+  },
+  {
+    "module_id": "python_internals",
+    "module_title": "Python Internals, GIL & Concurrency",
+    "file": "python_internals.html",
+    "anchor": "interview-traps",
+    "label": "\u26a0\ufe0f High-Frequency Python Traps"
+  },
+  {
+    "module_id": "python_internals",
+    "module_title": "Python Internals, GIL & Concurrency",
+    "file": "python_internals.html",
+    "anchor": "flashcards",
+    "label": "\ud83c\udfaf 10 High-Frequency GFG Interview Q&As"
+  },
+  {
+    "module_id": "math_ml",
+    "module_title": "Math Foundations for Machine Learning",
+    "file": "math_ml.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Linear Algebra & SVD"
+  },
+  {
+    "module_id": "math_ml",
+    "module_title": "Math Foundations for Machine Learning",
+    "file": "math_ml.html",
+    "anchor": "bayes-probability",
+    "label": "\ud83c\udfb2 Bayes' Theorem & Base-Rate Fallacy"
+  },
+  {
+    "module_id": "math_ml",
+    "module_title": "Math Foundations for Machine Learning",
+    "file": "math_ml.html",
+    "anchor": "mle-map-derivation",
+    "label": "\ud83d\udcd0 MLE vs MAP & Regularization Equivalences"
+  },
+  {
+    "module_id": "math_ml",
+    "module_title": "Math Foundations for Machine Learning",
+    "file": "math_ml.html",
+    "anchor": "info-theory-kl",
+    "label": "\u2211 Information Theory: Forward vs Reverse KL"
+  },
+  {
+    "module_id": "math_ml",
+    "module_title": "Math Foundations for Machine Learning",
+    "file": "math_ml.html",
+    "anchor": "signal-ml-bridge",
+    "label": "\ud83d\udce1 Signal Processing to ML Bridge (M.Tech Edge)"
+  },
+  {
+    "module_id": "math_ml",
+    "module_title": "Math Foundations for Machine Learning",
+    "file": "math_ml.html",
+    "anchor": "numerical-stability",
+    "label": "\ud83d\udd22 Numerical Stability & Log-Sum-Exp"
+  },
+  {
+    "module_id": "math_ml",
+    "module_title": "Math Foundations for Machine Learning",
+    "file": "math_ml.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 30 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "ml_core",
+    "module_title": "Classical ML & Deep Learning Core",
+    "file": "ml_core.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: ML Map, Bias-Variance & Optimizers"
+  },
+  {
+    "module_id": "ml_core",
+    "module_title": "Classical ML & Deep Learning Core",
+    "file": "ml_core.html",
+    "anchor": "bias-variance-svg",
+    "label": "\ud83d\udcd0 Bias-Variance Decomposition & Learning Curves"
+  },
+  {
+    "module_id": "ml_core",
+    "module_title": "Classical ML & Deep Learning Core",
+    "file": "ml_core.html",
+    "anchor": "l1-l2-geometry",
+    "label": "\ud83c\udfaf L1 vs L2 Regularization & Sparsity Geometry"
+  },
+  {
+    "module_id": "ml_core",
+    "module_title": "Classical ML & Deep Learning Core",
+    "file": "ml_core.html",
+    "anchor": "numpy-backprop",
+    "label": "\ud83d\udcbb NumPy 2-Layer Neural Network From Scratch"
+  },
+  {
+    "module_id": "ml_core",
+    "module_title": "Classical ML & Deep Learning Core",
+    "file": "ml_core.html",
+    "anchor": "tree-methods-xgboost",
+    "label": "\ud83c\udf32 Trees, Ensembles & XGBoost Second-Order Math"
+  },
+  {
+    "module_id": "ml_core",
+    "module_title": "Classical ML & Deep Learning Core",
+    "file": "ml_core.html",
+    "anchor": "normalization-dynamics",
+    "label": "\u26a1 BatchNorm vs LayerNorm vs RMSNorm Dynamics"
+  },
+  {
+    "module_id": "ml_core",
+    "module_title": "Classical ML & Deep Learning Core",
+    "file": "ml_core.html",
+    "anchor": "ml-system-design",
+    "label": "\ud83c\udfd7\ufe0f 9-Step ML System Design Framework (Recite Out Loud)"
+  },
+  {
+    "module_id": "ml_core",
+    "module_title": "Classical ML & Deep Learning Core",
+    "file": "ml_core.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf Top Tech Interview Flashcards & Defenses"
+  },
+  {
+    "module_id": "ml_cv",
+    "module_title": "Computer Vision & Signal Processing",
+    "file": "ml_cv.html",
+    "anchor": "rapid-recall",
+    "label": "\u26a1 10-Min Rapid Recall Sheet"
+  },
+  {
+    "module_id": "ml_cv",
+    "module_title": "Computer Vision & Signal Processing",
+    "file": "ml_cv.html",
+    "anchor": "visual-diagrams",
+    "label": "\ud83d\udcca Visual CNN & HOG Architecture"
+  },
+  {
+    "module_id": "ml_cv",
+    "module_title": "Computer Vision & Signal Processing",
+    "file": "ml_cv.html",
+    "anchor": "core-deep-dives",
+    "label": "\ud83e\udde0 Vision Math, Normalization & ResNet"
+  },
+  {
+    "module_id": "ml_cv",
+    "module_title": "Computer Vision & Signal Processing",
+    "file": "ml_cv.html",
+    "anchor": "interview-traps",
+    "label": "\u26a0\ufe0f High-Frequency ML & CV Traps"
+  },
+  {
+    "module_id": "ml_cv",
+    "module_title": "Computer Vision & Signal Processing",
+    "file": "ml_cv.html",
+    "anchor": "flashcards",
+    "label": "\ud83c\udfaf Interview Q&A Flashcards"
+  },
+  {
+    "module_id": "llm_internals",
+    "module_title": "LLM & Transformer Internals",
+    "file": "llm_internals.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Transformer Anatomy & Attention"
+  },
+  {
+    "module_id": "llm_internals",
+    "module_title": "LLM & Transformer Internals",
+    "file": "llm_internals.html",
+    "anchor": "attention-architectures",
+    "label": "\ud83e\udde0 Attention Matrix: MHA vs MQA vs GQA"
+  },
+  {
+    "module_id": "llm_internals",
+    "module_title": "LLM & Transformer Internals",
+    "file": "llm_internals.html",
+    "anchor": "kv-cache-math",
+    "label": "\ud83d\udcd0 KV Cache Memory Scaling & Inference Latency"
+  },
+  {
+    "module_id": "llm_internals",
+    "module_title": "LLM & Transformer Internals",
+    "file": "llm_internals.html",
+    "anchor": "post-training-matrix",
+    "label": "\ud83c\udfaf Post-Training: SFT, DPO, GRPO & RLVR"
+  },
+  {
+    "module_id": "llm_internals",
+    "module_title": "LLM & Transformer Internals",
+    "file": "llm_internals.html",
+    "anchor": "peft-quantization",
+    "label": "\u26a1 LoRA, QLoRA & Serving Optimization"
+  },
+  {
+    "module_id": "llm_internals",
+    "module_title": "LLM & Transformer Internals",
+    "file": "llm_internals.html",
+    "anchor": "info-theory-corner",
+    "label": "\u2211 Information Theory Corner (Candidate Edge)"
+  },
+  {
+    "module_id": "llm_internals",
+    "module_title": "LLM & Transformer Internals",
+    "file": "llm_internals.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 35 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "ai_agents",
+    "module_title": "RAG, Agents & GenAI System Design",
+    "file": "ai_agents.html",
+    "anchor": "rapid-recall",
+    "label": "\u26a1 10-Min Rapid Recall Sheet"
+  },
+  {
+    "module_id": "ai_agents",
+    "module_title": "RAG, Agents & GenAI System Design",
+    "file": "ai_agents.html",
+    "anchor": "visual-diagrams",
+    "label": "\ud83d\udcca Visual RAG & LangGraph Architecture"
+  },
+  {
+    "module_id": "ai_agents",
+    "module_title": "RAG, Agents & GenAI System Design",
+    "file": "ai_agents.html",
+    "anchor": "core-deep-dives",
+    "label": "\ud83e\udde0 Core RAG, Vector Search & Agent Internals"
+  },
+  {
+    "module_id": "ai_agents",
+    "module_title": "RAG, Agents & GenAI System Design",
+    "file": "ai_agents.html",
+    "anchor": "interview-traps",
+    "label": "\u26a0\ufe0f High-Frequency GenAI & Agent Traps"
+  },
+  {
+    "module_id": "ai_agents",
+    "module_title": "RAG, Agents & GenAI System Design",
+    "file": "ai_agents.html",
+    "anchor": "flashcards",
+    "label": "\ud83c\udfaf Interview Q&A Flashcards"
+  },
+  {
+    "module_id": "ai_evals",
+    "module_title": "AI Evaluation, Observability & MLOps",
+    "file": "ai_evals.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Evaluation Hierarchy & Graders"
+  },
+  {
+    "module_id": "ai_evals",
+    "module_title": "AI Evaluation, Observability & MLOps",
+    "file": "ai_evals.html",
+    "anchor": "pass-metrics",
+    "label": "\ud83d\udcd0 pass@k vs pass^k: Production Reliability"
+  },
+  {
+    "module_id": "ai_evals",
+    "module_title": "AI Evaluation, Observability & MLOps",
+    "file": "ai_evals.html",
+    "anchor": "rag-triad",
+    "label": "\ud83c\udfaf RAG Triad & Retrieval Metrics (nDCG / MRR)"
+  },
+  {
+    "module_id": "ai_evals",
+    "module_title": "AI Evaluation, Observability & MLOps",
+    "file": "ai_evals.html",
+    "anchor": "llm-as-judge",
+    "label": "\u2696\ufe0f LLM-as-a-Judge & Alignment Verification"
+  },
+  {
+    "module_id": "ai_evals",
+    "module_title": "AI Evaluation, Observability & MLOps",
+    "file": "ai_evals.html",
+    "anchor": "drift-observability",
+    "label": "\ud83d\udcc9 Drift Detection (PSI) & Production MLOps"
+  },
+  {
+    "module_id": "ai_evals",
+    "module_title": "AI Evaluation, Observability & MLOps",
+    "file": "ai_evals.html",
+    "anchor": "eval-harness-code",
+    "label": "\ud83d\udee0\ufe0f Production Eval Harness Implementation"
+  },
+  {
+    "module_id": "ai_evals",
+    "module_title": "AI Evaluation, Observability & MLOps",
+    "file": "ai_evals.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 32 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "sql_data",
+    "module_title": "SQL Mastery & Data Engineering",
+    "file": "sql_data.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Logical Query Order & Joins"
+  },
+  {
+    "module_id": "sql_data",
+    "module_title": "SQL Mastery & Data Engineering",
+    "file": "sql_data.html",
+    "anchor": "window-functions",
+    "label": "\ud83e\ude9f Window Functions & Frame Clauses"
+  },
+  {
+    "module_id": "sql_data",
+    "module_title": "SQL Mastery & Data Engineering",
+    "file": "sql_data.html",
+    "anchor": "query-patterns",
+    "label": "\ud83d\udc8e 12 Standard SQL Interview Query Templates"
+  },
+  {
+    "module_id": "sql_data",
+    "module_title": "SQL Mastery & Data Engineering",
+    "file": "sql_data.html",
+    "anchor": "data-modeling",
+    "label": "\u2b50 Data Modeling: Star vs Snowflake Schemas"
+  },
+  {
+    "module_id": "sql_data",
+    "module_title": "SQL Mastery & Data Engineering",
+    "file": "sql_data.html",
+    "anchor": "spark-engineering",
+    "label": "\u26a1 Big Data Engineering & Skew Salting"
+  },
+  {
+    "module_id": "sql_data",
+    "module_title": "SQL Mastery & Data Engineering",
+    "file": "sql_data.html",
+    "anchor": "unexecutable-sql",
+    "label": "\ud83e\udded Writing SQL You Cannot Execute (Palantir Drill)"
+  },
+  {
+    "module_id": "sql_data",
+    "module_title": "SQL Mastery & Data Engineering",
+    "file": "sql_data.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 33 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "linux_git",
+    "module_title": "Linux, Git & CLI Debugging",
+    "file": "linux_git.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Server Diagnosis & Git Mental Model"
+  },
+  {
+    "module_id": "linux_git",
+    "module_title": "Linux, Git & CLI Debugging",
+    "file": "linux_git.html",
+    "anchor": "cli-pipelines",
+    "label": "\ud83d\udee0\ufe0f Top 10 CLI Text-Processing One-Liners"
+  },
+  {
+    "module_id": "linux_git",
+    "module_title": "Linux, Git & CLI Debugging",
+    "file": "linux_git.html",
+    "anchor": "git-mechanics",
+    "label": "\ud83d\udc19 Git Internals, Merge vs Rebase & Surgery"
+  },
+  {
+    "module_id": "linux_git",
+    "module_title": "Linux, Git & CLI Debugging",
+    "file": "linux_git.html",
+    "anchor": "performance-strace",
+    "label": "\ud83d\udd0d Performance Profiling: strace & perf"
+  },
+  {
+    "module_id": "linux_git",
+    "module_title": "Linux, Git & CLI Debugging",
+    "file": "linux_git.html",
+    "anchor": "disk-inodes",
+    "label": "\ud83d\udcbe Inode Exhaustion & Disk Space Anomalies"
+  },
+  {
+    "module_id": "linux_git",
+    "module_title": "Linux, Git & CLI Debugging",
+    "file": "linux_git.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 28 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "docker",
+    "module_title": "Docker, Kubernetes & CI/CD",
+    "file": "docker.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Containers vs VMs, CLI & Linux Primitives"
+  },
+  {
+    "module_id": "docker",
+    "module_title": "Docker, Kubernetes & CI/CD",
+    "file": "docker.html",
+    "anchor": "container-storage-svg",
+    "label": "\ud83d\udcca Container Architecture & OverlayFS Union Mounts"
+  },
+  {
+    "module_id": "docker",
+    "module_title": "Docker, Kubernetes & CI/CD",
+    "file": "docker.html",
+    "anchor": "kubernetes-core",
+    "label": "\u2638\ufe0f Kubernetes Architecture, Objects & Control Plane"
+  },
+  {
+    "module_id": "docker",
+    "module_title": "Docker, Kubernetes & CI/CD",
+    "file": "docker.html",
+    "anchor": "probes-resource-qos",
+    "label": "\u26a1 Probes, Resource Limits & OOMKill vs CPU Throttling"
+  },
+  {
+    "module_id": "docker",
+    "module_title": "Docker, Kubernetes & CI/CD",
+    "file": "docker.html",
+    "anchor": "production-manifests",
+    "label": "\ud83d\udcbb Production Manifests: Compose & K8s Deployment"
+  },
+  {
+    "module_id": "docker",
+    "module_title": "Docker, Kubernetes & CI/CD",
+    "file": "docker.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf Top Tech Interview Flashcards & Defenses"
+  },
+  {
+    "module_id": "fde_decomp",
+    "module_title": "FDE Decomposition & Client-Facing Engineering",
+    "file": "fde_decomp.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: The Decomposition Framework"
+  },
+  {
+    "module_id": "fde_decomp",
+    "module_title": "FDE Decomposition & Client-Facing Engineering",
+    "file": "fde_decomp.html",
+    "anchor": "scoping-questions",
+    "label": "\u2753 15-Question Client Scoping Bank"
+  },
+  {
+    "module_id": "fde_decomp",
+    "module_title": "FDE Decomposition & Client-Facing Engineering",
+    "file": "fde_decomp.html",
+    "anchor": "workflow-spine",
+    "label": "\ud83e\uddb4 The FDE Workflow Spine: Data to Operational Impact"
+  },
+  {
+    "module_id": "fde_decomp",
+    "module_title": "FDE Decomposition & Client-Facing Engineering",
+    "file": "fde_decomp.html",
+    "anchor": "worked-decompositions",
+    "label": "\ud83e\udded 10 Verbatim Worked Client Decompositions"
+  },
+  {
+    "module_id": "fde_decomp",
+    "module_title": "FDE Decomposition & Client-Facing Engineering",
+    "file": "fde_decomp.html",
+    "anchor": "constraint-breaks",
+    "label": "\ud83d\udea8 Mid-Round Constraint Breaks: How to Re-Plan"
+  },
+  {
+    "module_id": "fde_decomp",
+    "module_title": "FDE Decomposition & Client-Facing Engineering",
+    "file": "fde_decomp.html",
+    "anchor": "re-engineering-red-herrings",
+    "label": "\ud83d\udd0d Re-Engineering Round & Red Herrings"
+  },
+  {
+    "module_id": "fde_decomp",
+    "module_title": "FDE Decomposition & Client-Facing Engineering",
+    "file": "fde_decomp.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 30 Top Tech Interview Q&As"
+  },
+  {
+    "module_id": "behavioral",
+    "module_title": "Behavioral, STAR & Project Defense",
+    "file": "behavioral.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Action-Weighted STAR Framework"
+  },
+  {
+    "module_id": "behavioral",
+    "module_title": "Behavioral, STAR & Project Defense",
+    "file": "behavioral.html",
+    "anchor": "story-bank",
+    "label": "\ud83c\udfe6 The 12-Story Competency Master Bank"
+  },
+  {
+    "module_id": "behavioral",
+    "module_title": "Behavioral, STAR & Project Defense",
+    "file": "behavioral.html",
+    "anchor": "project-defense-dossiers",
+    "label": "\ud83d\udee1\ufe0f Project Defense Dossiers: Adarsh's Master Projects"
+  },
+  {
+    "module_id": "behavioral",
+    "module_title": "Behavioral, STAR & Project Defense",
+    "file": "behavioral.html",
+    "anchor": "anthropic-values",
+    "label": "\ud83d\udd4a\ufe0f Anthropic Values & Ethical Friction"
+  },
+  {
+    "module_id": "behavioral",
+    "module_title": "Behavioral, STAR & Project Defense",
+    "file": "behavioral.html",
+    "anchor": "palantir-conviction",
+    "label": "\ud83c\udfaf Palantir Mission Conviction & Failure Traps"
+  },
+  {
+    "module_id": "behavioral",
+    "module_title": "Behavioral, STAR & Project Defense",
+    "file": "behavioral.html",
+    "anchor": "spoken-rehearsal",
+    "label": "\ud83c\udf99\ufe0f Spoken Rehearsal Protocols & Timing Drills"
+  },
+  {
+    "module_id": "behavioral",
+    "module_title": "Behavioral, STAR & Project Defense",
+    "file": "behavioral.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 40 Top Behavioral Interview Q&As"
+  },
+  {
+    "module_id": "quant",
+    "module_title": "Aptitude, Probability & Puzzles",
+    "file": "quant.html",
+    "anchor": "sprint-core",
+    "label": "\u26a1 15-Min Sprint: Probability & Linearity of Expectation"
+  },
+  {
+    "module_id": "quant",
+    "module_title": "Aptitude, Probability & Puzzles",
+    "file": "quant.html",
+    "anchor": "classic-paradoxes",
+    "label": "\ud83c\udfb2 Classic Probability Families & Paradoxes"
+  },
+  {
+    "module_id": "quant",
+    "module_title": "Aptitude, Probability & Puzzles",
+    "file": "quant.html",
+    "anchor": "brainteasers-bounds",
+    "label": "\ud83e\udde0 Classic Brainteasers & Information Bounds"
+  },
+  {
+    "module_id": "quant",
+    "module_title": "Aptitude, Probability & Puzzles",
+    "file": "quant.html",
+    "anchor": "fermi-estimation",
+    "label": "\ud83d\udcca Fermi Problems & Back-of-the-Envelope Estimation"
+  },
+  {
+    "module_id": "quant",
+    "module_title": "Aptitude, Probability & Puzzles",
+    "file": "quant.html",
+    "anchor": "probabilistic-coding",
+    "label": "\ud83d\udcbb Probabilistic Coding: Reservoir & Fisher-Yates"
+  },
+  {
+    "module_id": "quant",
+    "module_title": "Aptitude, Probability & Puzzles",
+    "file": "quant.html",
+    "anchor": "interview-flashcards",
+    "label": "\ud83c\udfaf 45 Top Quant & OA Interview Q&As"
+  }
+]

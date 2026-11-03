@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>LLM & Transformer Internals · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html">🧩 Data Structures & Algorithms (DSA)</option><option value="os.html">⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html">🌐 Computer Networks (CN)</option><option value="coa.html">💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html">🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html">🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html" selected>🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html">📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html">🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Transformer Anatomy & Attention</a></li>
+<li><a href="#attention-architectures" class="toc-link">🧠 Attention Matrix: MHA vs MQA vs GQA</a></li>
+<li><a href="#kv-cache-math" class="toc-link">📐 KV Cache Memory Scaling & Inference Latency</a></li>
+<li><a href="#post-training-matrix" class="toc-link">🎯 Post-Training: SFT, DPO, GRPO & RLVR</a></li>
+<li><a href="#peft-quantization" class="toc-link">⚡ LoRA, QLoRA & Serving Optimization</a></li>
+<li><a href="#info-theory-corner" class="toc-link">∑ Information Theory Corner (Candidate Edge)</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 35 Top Tech Interview Q&As</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track C: AI / Machine Learning</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">LLM Internals</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 15 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Transformer Anatomy & Attention</a></li>
+<li><a href="#attention-architectures" class="toc-link">🧠 Attention Matrix: MHA vs MQA vs GQA</a></li>
+<li><a href="#kv-cache-math" class="toc-link">📐 KV Cache Memory Scaling & Inference Latency</a></li>
+<li><a href="#post-training-matrix" class="toc-link">🎯 Post-Training: SFT, DPO, GRPO & RLVR</a></li>
+<li><a href="#peft-quantization" class="toc-link">⚡ LoRA, QLoRA & Serving Optimization</a></li>
+<li><a href="#info-theory-corner" class="toc-link">∑ Information Theory Corner (Candidate Edge)</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 35 Top Tech Interview Q&As</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">🧠</div>
+              <div>
+                <h1 class="hero-title">LLM & Transformer Internals</h1>
+                <p class="hero-subtitle">Scaled Dot-Product Attention, MHA vs GQA, KV Cache Scaling, RoPE, Post-Training (SFT/DPO/GRPO), LoRA/PEFT, and PagedAttention Serving.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">Anthropic</span><span class="pill pill-blue">OpenAI</span><span class="pill pill-blue">Meta AI</span><span class="pill pill-blue">Perplexity</span><span class="pill pill-blue">Apple AI</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+<section class="section-block" id="sprint-core" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sprint-core" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ 15-Min Sprint: Transformer Anatomy & Attention
+      </h2>
+      <span class="pill pill-rose">Core Architecture</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sprint-core" onchange="toggleSectionDone('sprint-core', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="one-liner-box" data-depth="sprint">
+  <div class="ol-badge">🗣️ 15-SECOND INTERVIEW ANSWER</div>
+  <p class="ol-text">"Transformer generation is memory-bandwidth bound, not compute-bound: decoding one token requires loading all weights and the entire KV cache from GPU VRAM into SRAM, which is why PagedAttention and GQA define modern inference."</p>
+</div>
+
+
+    
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V$$</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>Attention equals softmax of query times key transpose divided by square root of key dimension, multiplied by values.</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>Q</code></td><td class='formula-def'>Queries matrix of shape [Batch, Sequence_Len, d_k]</td></tr><tr><td class='formula-sym'><code>K</code></td><td class='formula-def'>Keys matrix of shape [Batch, Sequence_Len, d_k]</td></tr><tr><td class='formula-sym'><code>V</code></td><td class='formula-def'>Values matrix of shape [Batch, Sequence_Len, d_v]</td></tr><tr><td class='formula-sym'><code>d_k</code></td><td class='formula-def'>Hidden dimension per attention head (typically 64 or 128)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> Dividing by sqrt(d_k) prevents dot products from growing excessively large for large dimensions. Without scaling, large dot products push the softmax function into regions with near-zero gradients (saturation), freezing backpropagation.</div>
+</div>
+
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Component / Stage</th><th>Legacy Architecture</th><th>Modern Frontier LLM (Llama 3 / Mistral)</th><th>Engineering Justification</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Normalization</td><td>Post-LayerNorm</td><td>Pre-RMSNorm</td><td>RMSNorm drops mean-centering, saving 7% GPU FLOPs; Pre-norm ensures stable gradient flow.</td></tr><tr><td>Positional Encoding</td><td>Absolute Learned / Sinusoidal</td><td>Rotary Position Embeddings (RoPE)</td><td>RoPE encodes relative token distances via complex 2D vector rotations; enables context extension (YaRN).</td></tr><tr><td>Activation Function</td><td>ReLU / Standard GELU</td><td>SwiGLU (Swish-Gated Linear Unit)</td><td>Gating mechanism provides smoother gradients and empirically higher benchmark accuracy.</td></tr><tr><td>Attention Mechanism</td><td>Full Multi-Head (MHA)</td><td>Grouped-Query Attention (GQA)</td><td>Sharing Key/Value heads across query groups cuts KV cache VRAM footprint by 75%.</td></tr><tr><td>Bias Terms</td><td>Linear layer biases included</td><td>No biases (bias=False on all projections)</td><td>Dropping biases reduces parameter footprint and improves training stability at scale.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="attention-architectures" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#attention-architectures" class="heading-anchor" title="Direct link to this section">#</a>
+        🧠 Attention Matrix: MHA vs MQA vs GQA
+      </h2>
+      <span class="pill pill-purple">Memory Optimization</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="attention-architectures" onchange="toggleSectionDone('attention-architectures', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>In auto-regressive text generation, previous tokens' Keys and Values are cached in GPU memory (the KV Cache) so they don't need recomputing at each decode step. MHA stores full KV heads for every query head, blowing past GPU VRAM limits at 32k context.</p>
+
+    
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    
+    <svg viewBox="0 0 880 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- MHA -->
+      <rect x="30" y="20" width="250" height="250" rx="8" fill="#111827" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="155" y="45" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">Multi-Head Attention (MHA)</text>
+      <text x="155" y="65" fill="#94a3b8" font-size="10" text-anchor="middle">8 Query Heads : 8 Key/Value Heads</text>
+      
+      <g transform="translate(45, 80)">
+        <rect x="0" y="0" width="220" height="30" rx="4" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" />
+        <text x="110" y="20" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">Q0 Q1 Q2 Q3 Q4 Q5 Q6 Q7</text>
+
+        <rect x="0" y="45" width="220" height="30" rx="4" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399" />
+        <text x="110" y="65" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">K0 K1 K2 K3 K4 K5 K6 K7</text>
+
+        <rect x="0" y="90" width="220" height="30" rx="4" fill="rgba(251, 191, 36, 0.2)" stroke="#fbbf24" />
+        <text x="110" y="110" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">V0 V1 V2 V3 V4 V5 V6 V7</text>
+
+        <text x="110" y="150" fill="#f43f5e" font-size="10" font-weight="700" text-anchor="middle">1:1 Ratio — Highest KV Cache RAM</text>
+      </g>
+
+      <!-- GQA -->
+      <rect x="315" y="20" width="250" height="250" rx="8" fill="#111827" stroke="#a855f7" stroke-width="2" />
+      <text x="440" y="45" fill="#c084fc" font-size="13" font-weight="800" text-anchor="middle">Grouped-Query (GQA - Llama 3)</text>
+      <text x="440" y="65" fill="#94a3b8" font-size="10" text-anchor="middle">8 Query Heads : 2 Key/Value Heads</text>
+
+      <g transform="translate(330, 80)">
+        <rect x="0" y="0" width="220" height="30" rx="4" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" />
+        <text x="110" y="20" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">Q0 Q1 Q2 Q3 | Q4 Q5 Q6 Q7</text>
+
+        <rect x="0" y="45" width="105" height="30" rx="4" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399" />
+        <text x="52" y="65" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">K_Group 0</text>
+        <rect x="115" y="45" width="105" height="30" rx="4" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399" />
+        <text x="167" y="65" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">K_Group 1</text>
+
+        <rect x="0" y="90" width="105" height="30" rx="4" fill="rgba(251, 191, 36, 0.2)" stroke="#fbbf24" />
+        <text x="52" y="110" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">V_Group 0</text>
+        <rect x="115" y="90" width="105" height="30" rx="4" fill="rgba(251, 191, 36, 0.2)" stroke="#fbbf24" />
+        <text x="167" y="110" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">V_Group 1</text>
+
+        <text x="110" y="150" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">4:1 Ratio — 75% KV RAM Cut (Gold Standard)</text>
+      </g>
+
+      <!-- MQA -->
+      <rect x="600" y="20" width="250" height="250" rx="8" fill="#111827" stroke="#34d399" stroke-width="1.5" />
+      <text x="725" y="45" fill="#34d399" font-size="13" font-weight="800" text-anchor="middle">Multi-Query Attention (MQA)</text>
+      <text x="725" y="65" fill="#94a3b8" font-size="10" text-anchor="middle">8 Query Heads : 1 Key/Value Head</text>
+
+      <g transform="translate(615, 80)">
+        <rect x="0" y="0" width="220" height="30" rx="4" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" />
+        <text x="110" y="20" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">Q0 Q1 Q2 Q3 Q4 Q5 Q6 Q7</text>
+
+        <rect x="0" y="45" width="220" height="30" rx="4" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399" />
+        <text x="110" y="65" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">Single Shared Key Head</text>
+
+        <rect x="0" y="90" width="220" height="30" rx="4" fill="rgba(251, 191, 36, 0.2)" stroke="#fbbf24" />
+        <text x="110" y="110" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">Single Shared Value Head</text>
+
+        <text x="110" y="150" fill="#fbbf24" font-size="10" font-weight="700" text-anchor="middle">8:1 Ratio — Minimal RAM but Quality Loss</text>
+      </g>
+    </svg>
+    
+  </div>
+  <div class="diagram-caption">🔍 Attention Head Topologies: MHA (Full), GQA (Grouped-Query), MQA (Multi-Query)</div>
+</div>
+
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Attention Variant</th><th>Query Heads</th><th>Key/Value Heads</th><th>KV Cache Size Relative to MHA</th><th>Production Adoption</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Multi-Head Attention (MHA)</td><td>$H$</td><td>$H$</td><td>$1.0\times$ (Baseline)</td><td>GPT-3, Original Transformer, ViT.</td></tr><tr><td>Grouped-Query Attention (GQA)</td><td>$H$</td><td>$G = H / 4$ or $H / 8$</td><td>$0.25\times$ (75% savings)</td><td>Llama 2/3 (70B), Mistral 7B, Gemma.</td></tr><tr><td>Multi-Query Attention (MQA)</td><td>$H$</td><td>$1$</td><td>$1 / H \approx 0.03\times$ (97% savings)</td><td>PaLM, StarCoder (slight perplexity degradation).</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="kv-cache-math" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#kv-cache-math" class="heading-anchor" title="Direct link to this section">#</a>
+        📐 KV Cache Memory Scaling & Inference Latency
+      </h2>
+      <span class="pill pill-emerald">Capacity Math</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="kv-cache-math" onchange="toggleSectionDone('kv-cache-math', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">$$\text{Memory}_{\text{KV}} = 2 \times n_{\text{layers}} \times n_{\text{KV\_heads}} \times d_{\text{head}} \times \text{seq\_len} \times \text{batch} \times \text{bytes\_per\_elem}$$</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>KV Cache memory equals two times layers times KV heads times head dimension times sequence length times batch size times precision bytes.</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>2</code></td><td class='formula-def'>Factor of 2 accounts for both Keys and Values</td></tr><tr><td class='formula-sym'><code>n_layers</code></td><td class='formula-def'>Total transformer layers in model (e.g. 80 layers in 70B)</td></tr><tr><td class='formula-sym'><code>n_KV_heads</code></td><td class='formula-def'>Number of distinct Key-Value heads (8 in GQA)</td></tr><tr><td class='formula-sym'><code>seq_len</code></td><td class='formula-def'>Context length in tokens (e.g. 8,192 tokens)</td></tr><tr><td class='formula-sym'><code>bytes_per_elem</code></td><td class='formula-def'>2 bytes for FP16 / BF16, 1 byte for FP8</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> KV Cache scales linearly with sequence length and batch size. For a 70B model with 8K context and batch 16, MHA requires 160 GB VRAM (exceeding an 80GB A100 GPU), while GQA drops this to ~20 GB!</div>
+</div>
+
+
+    
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Calculating KV Cache Memory for Llama 3 70B (8K Context, Batch 16 in FP16)</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Identify Model Parameters</span>
+          </div>
+          <div class="we-step-body">Layers $L = 80$, KV heads $n_{kv} = 8$ (GQA), Head dimension $d = 128$, Seq length $S = 8,192$, Batch $B = 16$, FP16 precision = 2 bytes.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Apply Formula</span>
+          </div>
+          <div class="we-step-body">$$\text{Memory} = 2 \times 80 \times 8 \times 128 \times 8,192 \times 16 \times 2$$</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Calculate Total Bytes</span>
+          </div>
+          <div class="we-step-body">$$\text{Memory} = 42,949,672,960\text{ bytes} \approx 40.0\text{ GB}$$</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      Under GQA, the KV cache requires exactly 40.0 GB of VRAM. If this model used MHA (64 KV heads), it would require 320 GB of VRAM, making inference impossible on a single node without tensor parallelism!
+    </div>
+  </details>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="post-training-matrix" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#post-training-matrix" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 Post-Training: SFT, DPO, GRPO & RLVR
+      </h2>
+      <span class="pill pill-indigo">Post-Training</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="post-training-matrix" onchange="toggleSectionDone('post-training-matrix', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="decision-matrix-card" data-depth="sprint">
+  <div class="dm-title">⚖️ Decision Matrix: Post-Training Alignment Algorithms</div>
+  <div class="table-container">
+    <table class="data-table dm-table">
+      <thead>
+        <tr><th>Option / Pattern</th><th>Prime Use-Cases (Best Choice)</th><th>Anti-Patterns / Failure Points</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="dm-name"><strong>Supervised Fine-Tuning (SFT)</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Teaching format adherence, system prompt compliance, tool schemas, and domain terminology.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Alleviating hallucinations or teaching reasoning (SFT causes model to overfit to output distribution).</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Direct Preference Optimization (DPO)</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> General preference alignment without running a separate reward model or RL critic network.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Mathematical and logical verification tasks (DPO can cause length bias and verbosity hacking).</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Group Relative Policy Optimization (GRPO)</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Verifiable reasoning domains (Math, Coding, Competitive Logic). Drops the critic network entirely by group-normalizing rewards.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Subjective creative writing where rule-based ground-truth verification is impossible.</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Reinforcement Learning with Verifiable Rewards (RLVR)</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Theorem proving and programming benchmarks where an automated compiler/test suite produces binary 0/1 correctness.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Ambiguous conversational interactions with human nuance.</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+    
+<div class="callout callout-ai" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">🤖 MODERN AI NUANCE</span>
+    <span>Why GRPO (DeepSeekMath / R1) Drops the Critic Network</span>
+  </div>
+  <div class="callout-body">
+    In standard PPO, a second 'Critic' neural network (value model) matching the policy model's size must be kept in VRAM to estimate state value baseline $V(s)$. GRPO samples a group of $G$ candidate outputs for the same prompt, computes their task reward, and normalizes advantage across the group: $A_i = \frac{R_i - \text{mean}(R)}{\text{std}(R)}$. This <strong>slashes training VRAM by ~50%</strong> and eliminates unstable value-function training!
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="peft-quantization" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#peft-quantization" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ LoRA, QLoRA & Serving Optimization
+      </h2>
+      <span class="pill pill-emerald">PEFT &amp; Code</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="peft-quantization" onchange="toggleSectionDone('peft-quantization', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="subsection-block" id="peft-lora-math" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#peft-lora-math" class="heading-anchor" title="Direct link">#</a>
+    Low-Rank Adaptation (LoRA) Architecture
+  </h3>
+  
+</div>
+
+    <p>LoRA freezes pretrained weight matrix $W_0 \in \mathbb{R}^{d \times k}$ and injects low-rank trainable matrices: $W = W_0 + \frac{\alpha}{r} (B \cdot A)$, where $A \sim \mathcal{N}(0, \sigma^2) \in \mathbb{R}^{r \times k}$ and $B = 0 \in \mathbb{R}^{d \times r}$ with rank $r \ll d$.</p>
+    
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 PyTorch Scaled Dot-Product Attention</span><span class="code-lang-tag">python</span></div>
+  <pre class="line-numbers"><code class="language-python"># Scaled Dot-Product Attention in Pure PyTorch with Causal Mask
+import torch
+import torch.nn.functional as F
+
+def scaled_dot_product_attention(Q, K, V, mask=None):
+    # Q, K, V shape: [batch, heads, seq_len, head_dim]
+    d_k = Q.size(-1)
+    
+    # Compute attention scores
+    scores = torch.matmul(Q, K.transpose(-2, -1)) / (d_k ** 0.5)
+    
+    if mask is not None:
+        # Apply -inf mask before softmax to prevent seeing future tokens
+        scores = scores.masked_fill(mask == 0, float(&#x27;-inf&#x27;))
+        
+    attn_weights = F.softmax(scores, dim=-1)
+    output = torch.matmul(attn_weights, V)
+    return output, attn_weights</code></pre>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="info-theory-corner" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#info-theory-corner" class="heading-anchor" title="Direct link to this section">#</a>
+        ∑ Information Theory Corner (Candidate Edge)
+      </h2>
+      <span class="pill pill-purple">M.Tech Differentiator</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="info-theory-corner" onchange="toggleSectionDone('info-theory-corner', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>OpenAI coding and deep-dive technical rounds frequently test <strong>information theory fundamentals</strong> (implementing continuous KL divergence, cross-entropy minimization, perplexity bounds). This directly maps to your M.Tech Signal Processing coursework.</p>
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Concept</th><th>Mathematical Formula</th><th>Engineering Interpretation in LLMs</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Entropy $H(X)$</td><td>$-\sum p(x) \log_2 p(x)$</td><td>Average information / uncertainty in the token distribution. A uniform distribution over vocabulary $V$ has $H = \log_2 |V|$.</td></tr><tr><td>Cross-Entropy</td><td>$-\sum y_i \log \hat{y}_i$</td><td>Training loss for predicting the next token. Equal to expected negative log-likelihood of ground-truth token.</td></tr><tr><td>KL Divergence $D_{\text{KL}}(P \parallel Q)$</td><td>$\sum P(x) \log \frac{P(x)}{Q(x)}$</td><td>Relative entropy. Measures penalty in RLHF/DPO to prevent policy model $\pi_\theta$ from drifting away from base model $\pi_{\text{ref}}$.</td></tr><tr><td>Perplexity (PPL)</td><td>$\exp(\text{Cross-EntropyLoss})$</td><td>Geometric average branching factor. PPL of 10 means the model is as confused as picking among 10 equally likely words.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 Continuous Empirical KL Divergence (OpenAI Drill)</span><span class="code-lang-tag">python</span></div>
+  <pre class="line-numbers"><code class="language-python">import numpy as np
+
+def kl_divergence_continuous(p_samples, q_samples, bins=100):
+    # Verbatim OpenAI drill: Compute KL divergence between two continuous empirical distributions
+    min_val = min(np.min(p_samples), np.min(q_samples))
+    max_val = max(np.max(p_samples), np.max(q_samples))
+    
+    p_hist, edges = np.histogram(p_samples, bins=bins, range=(min_val, max_val), density=True)
+    q_hist, _ = np.histogram(q_samples, bins=bins, range=(min_val, max_val), density=True)
+    
+    # Epsilon smoothing to prevent division by zero or log(0)
+    eps = 1e-12
+    p_prob = (p_hist + eps) / np.sum(p_hist + eps)
+    q_prob = (q_hist + eps) / np.sum(q_hist + eps)
+    
+    return np.sum(p_prob * np.log(p_prob / q_prob))</code></pre>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="interview-flashcards" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-flashcards" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 35 Top Tech Interview Q&As
+      </h2>
+      <span class="pill pill-rose">Assessment</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-flashcards" onchange="toggleSectionDone('interview-flashcards', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<details class="faq-accordion" data-depth="sprint" data-qid="951851">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why do we divide attention scores by sqrt(d_k)?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">Transformer</span><span class="pill pill-indigo">Anthropic</span><span class="pill pill-indigo">OpenAI</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      For large d_k, dot products grow large in magnitude, pushing the softmax function into regions with near-zero gradients (saturation), resulting in vanishing gradients during training.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('951851', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('951851', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('951851', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="729036">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the KV Cache and why does it matter for autoregressive generation?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">Inference</span><span class="pill pill-indigo">Meta</span><span class="pill pill-indigo">Apple</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      During token generation, tokens attend to all previous tokens. Caching previous Keys and Values prevents recomputing past activations, reducing per-token generation complexity from O(N^2) to O(N).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('729036', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('729036', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('729036', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="496087">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Compare MHA, MQA, and GQA. Why did Llama 3 adopt GQA?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Architecture</span><span class="pill pill-indigo">Meta</span><span class="pill pill-indigo">Mistral</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      MHA has 1 KV head per Query head (highest RAM). MQA has 1 KV head for all Query heads (lowest RAM, quality degradation). GQA groups Query heads to share KV heads, slashing KV cache memory by 75% with minimal quality loss.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('496087', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('496087', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('496087', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="158019">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is RoPE (Rotary Position Embedding) and why is it preferred over learned embeddings?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Embeddings</span><span class="pill pill-indigo">Anthropic</span><span class="pill pill-indigo">Google</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      RoPE multiplies 2D chunks of Query/Key vectors by a 2D rotation matrix. It preserves relative token distance naturally via dot product trigonometry, has zero trainable parameters, and enables context extrapolation.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('158019', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('158019', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('158019', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="390099">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why does GRPO drop the critic network, and how does it estimate advantage?</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Alignment</span><span class="pill pill-cyan">RL</span><span class="pill pill-indigo">DeepSeek</span><span class="pill pill-indigo">OpenAI</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      GRPO generates a group of G candidate answers for a single prompt, scores them, and computes advantage by normalizing rewards across the group: A_i = (R_i - mean(R)) / std(R). This eliminates the critic model, saving ~50% VRAM.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('390099', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('390099', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('390099', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="727068">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is LoRA and how does it achieve parameter-efficient fine-tuning?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">PEFT</span><span class="pill pill-indigo">Apple AI</span><span class="pill pill-indigo">Meta</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      LoRA freezes base weights W0 and decomposes weight updates into two low-rank matrices: delta_W = (alpha / r) * B * A, where r << d. This reduces trainable parameters by >99% and merges into W0 at inference with zero latency penalty.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('727068', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('727068', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('727068', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="276418">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is PagedAttention and what problem does it solve in vLLM?</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Serving</span><span class="pill pill-indigo">vLLM</span><span class="pill pill-indigo">Anyscale</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      In standard inference, KV cache requires contiguous virtual memory, causing 60-80% memory fragmentation and memory waste. PagedAttention divides the KV cache into non-contiguous fixed-size memory blocks (virtual memory paging), boosting serving throughput by 2x-4x.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('276418', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('276418', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('276418', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="161678">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the mathematical relationship between Perplexity and Cross-Entropy loss?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">Info Theory</span><span class="pill pill-indigo">OpenAI</span><span class="pill pill-indigo">DeepMind</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Perplexity is the exponentiated cross-entropy loss: PPL = exp(Loss). It represents the effective vocabulary size the model is uncertain between at each token.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('161678', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('161678', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('161678', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="83124">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is context rot in long-context LLMs?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Context</span><span class="pill pill-indigo">Anthropic</span><span class="pill pill-indigo">Perplexity</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      The phenomenon where an LLM's retrieval accuracy and reasoning degrade significantly as context size grows towards the maximum window limit, long before hitting the hard context boundary.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('83124', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('83124', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('83124', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="803934">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Explain the difference between Speculative Decoding draft and target models.</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Latency</span><span class="pill pill-indigo">Google</span><span class="pill pill-indigo">Apple</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      A small, fast 'draft model' speculatively generates K tokens autoregressively. The large 'target model' evaluates all K tokens in a single parallel forward pass, accepting valid tokens and regenerating on first mismatch, achieving 2x-3x speedup.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('803934', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('803934', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('803934', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+  </div>
+</section>
+
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="ml_cv.html" class="nav-btn">← CV & Signals</a><a href="ai_agents.html" class="nav-btn" style="margin-left: auto;">RAG & Agents →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('llm_internals');
+  });
+</script>
+</body>
+</html>

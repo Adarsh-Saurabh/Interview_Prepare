@@ -1,0 +1,2683 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Operating Systems (OS) · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html">🧩 Data Structures & Algorithms (DSA)</option><option value="os.html" selected>⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html">🌐 Computer Networks (CN)</option><option value="coa.html">💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html">🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html">🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html">🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html">📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html">🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Process, Sync & Scheduling</a></li>
+<li><a href="#visual-memory-tlb" class="toc-link">📊 Memory Architecture: Layout & TLB Lookup</a></li>
+<li><a href="#sync-problems-bankers" class="toc-link">🔒 Synchronization, Peterson & Banker's Algorithm</a></li>
+<li><a href="#worked-numericals" class="toc-link">📐 Worked Numericals: Gantt Charts & Page Replacement</a></li>
+<li><a href="#memory-storage-internals" class="toc-link">🧠 Multi-Level Page Tables, CFS & File Systems</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 Top Tech Interview Flashcards & Defenses</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track A: Core CS Fundamentals</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">Operating Systems</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 15 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Process, Sync & Scheduling</a></li>
+<li><a href="#visual-memory-tlb" class="toc-link">📊 Memory Architecture: Layout & TLB Lookup</a></li>
+<li><a href="#sync-problems-bankers" class="toc-link">🔒 Synchronization, Peterson & Banker's Algorithm</a></li>
+<li><a href="#worked-numericals" class="toc-link">📐 Worked Numericals: Gantt Charts & Page Replacement</a></li>
+<li><a href="#memory-storage-internals" class="toc-link">🧠 Multi-Level Page Tables, CFS & File Systems</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 Top Tech Interview Flashcards & Defenses</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">⚡</div>
+              <div>
+                <h1 class="hero-title">Operating Systems (OS)</h1>
+                <p class="hero-subtitle">Process Virtual Memory, TLB Paging Walk, Banker's Algorithm, Semaphore Classic Problems, and CFS Scheduling.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">Qualcomm</span><span class="pill pill-blue">Nvidia</span><span class="pill pill-blue">Texas Instruments</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Pace</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+<section class="section-block" id="sprint-core" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sprint-core" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ 15-Minute Sprint: Process, Sync & Scheduling
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sprint-core" onchange="toggleSectionDone('sprint-core', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    <span class="pill pill-rose">P0 Track A</span><span class="pill pill-indigo">Core Systems</span><span class="pill pill-amber">15-Min Sprint</span><span class="pill pill-emerald">NIT Rourkela Core</span>
+<div class="callout callout-important" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">IMPORTANT</span>
+    <span>Operating Systems Interview Ground Rules</span>
+  </div>
+  <div class="callout-body">
+    Top tech interviewers at Google, Microsoft, Apple, Qualcomm, and Media.net ruthlessly test two facets of Operating Systems: (1) low-level concurrency & synchronization mechanisms (mutexes, semaphores, Peterson's, deadlocks), and (2) quantitative system calculations (CPU scheduling Gantt charts, Page replacement traces, Effective Access Time, and page table sizing).
+  </div>
+</div>
+
+<div class="numbers-card" data-depth="sprint">
+  <div class="numbers-title">📊 Key Numbers to Know Cold: Operating System Latency Orders of Magnitude</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr><th>Operation / Quantity</th><th>Order of Magnitude</th><th>Engineering Implication</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td><strong>L1 Cache Access</strong></td>
+          <td><span class="num-highlight">~0.5 - 1 ns</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Fastest hardware cache on chip</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TLB Lookup</strong></td>
+          <td><span class="num-highlight">~0.5 - 1.5 ns</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Hardware MMU address translation hit</td>
+        </tr>
+        
+        <tr>
+          <td><strong>DRAM Main Memory Access</strong></td>
+          <td><span class="num-highlight">~50 - 100 ns</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Cache miss penalty requiring bus cycle</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Thread Context Switch (Same Process)</strong></td>
+          <td><span class="num-highlight">~100 - 300 ns</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Save registers, switch SP/PC, keep same MMU CR3</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Process Context Switch (Cross-Process)</strong></td>
+          <td><span class="num-highlight">~1 - 2 µs</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">Full MMU CR3 change, flush TLB, cache pollution</td>
+        </tr>
+        
+        <tr>
+          <td><strong>Hard Page Fault (Disk I/O)</strong></td>
+          <td><span class="num-highlight">~5 - 10 ms</span></td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">100,000× slower than DRAM! Blocks process completely</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="subsection-block" id="process-vs-thread" data-depth="sprint">
+  <h3 class="subsection-title">
+    <a href="#process-vs-thread" class="heading-anchor" title="Direct link">#</a>
+    Process vs Thread: The Deep Comparison
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Dimension</th><th>Process</th><th>Thread (Lightweight Process)</th><th>Interview Defense / Trap</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Address Space</td><td>Isolated virtual address space per process (private page tables)</td><td>Shares parent process address space (Code, Data, Heap, FDs)</td><td>Corruption in one thread can crash entire process</td></tr><tr><td>Resource Allocation</td><td>Heavy: allocated by kernel via `fork()`/`exec()`. Separate PID, memory maps</td><td>Lightweight: created via `pthread_create()` or `clone()`. Shares resources</td><td>Threads have private Stack, Registers, Program Counter</td></tr><tr><td>Context Switch Overhead</td><td>~1,000 - 2,000 ns (1-2 µs). Must flush/invalidate TLB (CR3 switch)</td><td>~100 - 300 ns. Same page table; TLB remains warm!</td><td>L1/L2 cache pollution is the hidden cost of process switches</td></tr><tr><td>Inter-Communication</td><td>IPC required (Pipes, Sockets, Shared Memory, Message Queues)</td><td>Direct memory read/write via shared Heap (needs synchronization)</td><td>Shared memory is fastest IPC; threads need mutexes to prevent data races</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="classic-sync-problems" data-depth="sprint">
+  <h3 class="subsection-title">
+    <a href="#classic-sync-problems" class="heading-anchor" title="Direct link">#</a>
+    Classic Synchronization Problems & Semaphore Allocations
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Problem</th><th>Shared Resources & Buffers</th><th>Required Semaphores / Mutexes</th><th>Key Invariants & Deadlock Pitfall</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Producer-Consumer (Bounded Buffer)</td><td>Queue of size N</td><td>`mutex = 1`, `empty = N`, `full = 0`</td><td>Producer waits on `empty`, then locks `mutex`. Inverting wait order causes deadlock!</td></tr><tr><td>Readers-Writers (Reader-Preference)</td><td>Shared file or database</td><td>`rw_mutex = 1`, `mutex = 1`, `read_count = 0`</td><td>First reader locks `rw_mutex`; last reader releases it. Trap: can starve writers indefinitely!</td></tr><tr><td>Readers-Writers (Writer-Preference)</td><td>Shared file, read & write queues</td><td>`rw_mutex = 1`, `r_mutex = 1`, `w_mutex = 1`, `read_try = 1`</td><td>Writers queue up and block incoming readers once pending, preventing writer starvation.</td></tr><tr><td>Dining Philosophers</td><td>5 philosophers, 5 forks (shared array)</td><td>5 semaphores `fork[5] = {1}`</td><td>Deadlock occurs if all pick left fork simultaneously. Fix: resource ordering or asymmetric pickup.</td></tr><tr><td>Sleeping Barber</td><td>1 barber, N waiting chairs</td><td>`customers = 0`, `barbers = 0`, `mutex = 1`</td><td>Barber sleeps on `customers`; arriving customer checks waiting chairs count under `mutex`.</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="scheduling-matrix" data-depth="sprint">
+  <h3 class="subsection-title">
+    <a href="#scheduling-matrix" class="heading-anchor" title="Direct link">#</a>
+    CPU Scheduling Algorithms Comparison
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Algorithm</th><th>Preemptive?</th><th>Criteria / Formula</th><th>Advantages</th><th>Disadvantages / Traps</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>FCFS</td><td>No</td><td>Arrival Time</td><td>Simplest implementation; no starvation</td><td>Convoy Effect: short jobs stuck behind long CPU burst</td></tr><tr><td>SJF (Shortest Job First)</td><td>No</td><td>Burst Time (predicted via exponential smoothing)</td><td>Minimizes average waiting time theoretically</td><td>Starvation of long jobs; impossible to know exact future burst length</td></tr><tr><td>SRTF (Shortest Remaining Time First)</td><td>Yes</td><td>Remaining Burst Time</td><td>Optimal average turnaround time for preemptive systems</td><td>High context-switch overhead; severe starvation for long processes</td></tr><tr><td>Round Robin (RR)</td><td>Yes</td><td>Time Quantum (q)</td><td>Fair CPU allocation, responsive for interactive users</td><td>If q is too small → thrashing context switches; if q too large → degrades to FCFS</td></tr><tr><td>Priority Scheduling</td><td>Both</td><td>Static or Dynamic Priority</td><td>Important real-time tasks get CPU instantly</td><td>Starvation of low-priority jobs. Fix: Aging (gradually increase priority)</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="visual-memory-tlb" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#visual-memory-tlb" class="heading-anchor" title="Direct link to this section">#</a>
+        📊 Memory Architecture: Layout & TLB Lookup
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="visual-memory-tlb" onchange="toggleSectionDone('visual-memory-tlb', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="process-memory-svg" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#process-memory-svg" class="heading-anchor" title="Direct link">#</a>
+    Process Virtual Memory Layout (32-bit vs 64-bit)
+  </h3>
+  <div class="subsection-body">
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    Process Address Space Segments (High to Low Memory)
+  </div>
+  <div class="diagram-caption">🔍 
+    <svg viewBox="0 0 800 460" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+        <marker id="arrow-up" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+        </marker>
+      </defs>
+      <rect x="200" y="20" width="400" height="420" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2" />
+      <text x="120" y="45" fill="#f43f5e" font-size="11" font-family="monospace">0xFFFFFFFF (High)</text>
+      <line x1="190" y1="40" x2="200" y2="40" stroke="#f43f5e" stroke-width="1.5" />
+
+      <!-- Kernel Space -->
+      <rect x="210" y="30" width="380" height="50" rx="6" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5" />
+      <text x="400" y="55" fill="#f43f5e" font-size="12" font-weight="700" text-anchor="middle">Kernel Space (1GB on 32-bit / Upper Canonical on 64-bit)</text>
+      <text x="400" y="70" fill="#94a3b8" font-size="10" text-anchor="middle">Protected from User Ring 3 (Page Fault SIGSEGV on illegal access)</text>
+
+      <!-- Stack -->
+      <rect x="210" y="90" width="380" height="65" rx="6" fill="#0369a1" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="400" y="115" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">STACK (Local Variables, Function Call Frames, Return Addrs)</text>
+      <text x="400" y="132" fill="#bae6fd" font-size="10" text-anchor="middle">Grows Downward ↓ (High → Low Memory)</text>
+
+      <line x1="400" y1="160" x2="400" y2="190" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-down)" />
+
+      <!-- Free / Dynamic Space -->
+      <rect x="210" y="195" width="380" height="60" rx="4" fill="#090d16" stroke="#1e293b" stroke-dasharray="4" />
+      <text x="400" y="230" fill="#64748b" font-size="11" font-weight="600" text-anchor="middle">↑ ↓ Dynamic Growth Zone (mmap libraries, shared memory, guard pages)</text>
+
+      <line x1="400" y1="290" x2="400" y2="260" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-up)" />
+
+      <!-- Heap -->
+      <rect x="210" y="295" width="380" height="50" rx="6" fill="#065f46" stroke="#34d399" stroke-width="1.5" />
+      <text x="400" y="318" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">HEAP (malloc, new, dynamic memory)</text>
+      <text x="400" y="335" fill="#a7f3d0" font-size="10" text-anchor="middle">Grows Upward ↑ (via brk / sbrk system calls)</text>
+
+      <!-- BSS Segment -->
+      <rect x="210" y="350" width="380" height="30" rx="4" fill="#1e293b" stroke="#fbbf24" stroke-width="1" />
+      <text x="400" y="370" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">BSS Segment (Uninitialized / Zero-initialized Globals &amp; Statics)</text>
+
+      <!-- Data Segment -->
+      <rect x="210" y="385" width="380" height="25" rx="4" fill="#1e293b" stroke="#c084fc" stroke-width="1" />
+      <text x="400" y="402" fill="#c084fc" font-size="11" font-weight="700" text-anchor="middle">Data Segment (Initialized Globals &amp; Statics, e.g. int x = 42)</text>
+
+      <!-- Text Segment -->
+      <rect x="210" y="415" width="380" height="20" rx="4" fill="#334155" />
+      <text x="400" y="429" fill="#f1f5f9" font-size="10" font-weight="700" text-anchor="middle">Text / Code Segment (Read-Only Machine Binary Instructions)</text>
+
+      <text x="120" y="430" fill="#34d399" font-size="11" font-family="monospace">0x00000000 (Low)</text>
+      <line x1="190" y1="425" x2="200" y2="425" stroke="#34d399" stroke-width="1.5" />
+    </svg>
+    </div>
+</div>
+
+<div class="callout callout-tip" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">TIP</span>
+    <span>Why the Stack and Heap Grow Toward Each Other</span>
+  </div>
+  <div class="callout-body">
+    Stack grows downwards (from high address to low) because function frames are temporary and bounded by stack limits (default 8MB on Linux). Heap grows upwards (via `brk()` / `sbrk()` and `mmap()`). Placing them at opposite ends of the user space maximizes the contiguous unallocated dynamic growth zone without requiring rigid compile-time size partitions.
+  </div>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="tlb-paging-svg" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#tlb-paging-svg" class="heading-anchor" title="Direct link">#</a>
+    Paging & Hardware TLB Translation Flow
+  </h3>
+  <div class="subsection-body">
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    MMU Hardware TLB Translation and Page Table Walk
+  </div>
+  <div class="diagram-caption">🔍 
+    <svg viewBox="0 0 840 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="tlb-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+        <marker id="tlb-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
+        </marker>
+        <marker id="tlb-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+        </marker>
+      </defs>
+      <!-- Virtual Address -->
+      <rect x="20" y="80" width="160" height="60" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+      <text x="100" y="105" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Virtual Address</text>
+      <text x="60" y="125" fill="#38bdf8" font-size="10" font-family="monospace">VPN (p)</text>
+      <text x="140" y="125" fill="#94a3b8" font-size="10" font-family="monospace">Offset (d)</text>
+      <line x1="100" y1="112" x2="100" y2="135" stroke="#334155" />
+
+      <!-- TLB Unit -->
+      <rect x="230" y="60" width="140" height="100" rx="8" fill="#0369a1" stroke="#38bdf8" stroke-width="2" />
+      <text x="300" y="95" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle">TLB (MMU Cache)</text>
+      <text x="300" y="115" fill="#e0f2fe" font-size="10" text-anchor="middle">Latency: ~0.5 - 1 ns</text>
+      <text x="300" y="135" fill="#bae6fd" font-size="9" text-anchor="middle">Fully associative HW lookup</text>
+
+      <line x1="180" y1="110" x2="225" y2="110" stroke="#38bdf8" stroke-width="2" marker-end="url(#tlb-arrow)" />
+
+      <!-- Hit Path -->
+      <line x1="370" y1="90" x2="650" y2="90" stroke="#34d399" stroke-width="2.5" marker-end="url(#tlb-green)" />
+      <rect x="440" y="70" width="120" height="20" rx="4" fill="#065f46" />
+      <text x="500" y="84" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">TLB HIT (~99%)</text>
+
+      <!-- Miss Path -->
+      <line x1="300" y1="160" x2="300" y2="210" stroke="#f43f5e" stroke-width="2" marker-end="url(#tlb-red)" />
+      <rect x="245" y="175" width="110" height="20" rx="4" fill="#881337" />
+      <text x="300" y="189" fill="#f43f5e" font-size="10" font-weight="700" text-anchor="middle">TLB MISS (~1%)</text>
+
+      <!-- Page Table in RAM -->
+      <rect x="230" y="215" width="170" height="55" rx="6" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="315" y="238" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">Page Table in RAM</text>
+      <text x="315" y="255" fill="#94a3b8" font-size="9" text-anchor="middle">CR3 Register / Latency ~50ns</text>
+
+      <line x1="400" y1="240" x2="670" y2="160" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#tlb-arrow)" />
+
+      <!-- Physical Address -->
+      <rect x="660" y="80" width="160" height="75" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+      <text x="740" y="105" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Physical Address</text>
+      <text x="700" y="130" fill="#34d399" font-size="11" font-family="monospace">PFN (f)</text>
+      <text x="780" y="130" fill="#94a3b8" font-size="11" font-family="monospace">Offset (d)</text>
+      <line x1="740" y1="115" x2="740" y2="145" stroke="#047857" />
+    </svg>
+    </div>
+</div>
+
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">\text{EAT} = (1 - p) \cdot t_{\text{mem}} + p \cdot t_{\text{fault}}</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>Effective Access Time equals probability of no fault times memory access plus fault rate times page fault penalty</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>p</code></td><td class='formula-def'>Page fault rate (probability between 0.0 and 1.0).</td></tr><tr><td class='formula-sym'><code>t_{mem}</code></td><td class='formula-def'>Normal physical memory access latency (~100 ns).</td></tr><tr><td class='formula-sym'><code>t_{fault}</code></td><td class='formula-def'>Full page fault service time including disk I/O seek, rotational latency, and OS context switch (~8 ms = 8,000,000 ns).</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> Even a tiny page fault rate of p = 0.001 (0.1%) increases Effective Access Time by 80×! Memory thrashing degrades CPU utilization to near zero.</div>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="sync-problems-bankers" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sync-problems-bankers" class="heading-anchor" title="Direct link to this section">#</a>
+        🔒 Synchronization, Peterson & Banker's Algorithm
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sync-problems-bankers" onchange="toggleSectionDone('sync-problems-bankers', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="petersons-algo" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#petersons-algo" class="heading-anchor" title="Direct link">#</a>
+    Peterson's Algorithm: 3 Requirements of Critical Section
+  </h3>
+  <div class="subsection-body">
+<div class="callout callout-important" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">IMPORTANT</span>
+    <span>The 3 Non-Negotiable Critical Section Requirements</span>
+  </div>
+  <div class="callout-body">
+    1. **Mutual Exclusion**: If process Pi is executing in its critical section, no other process can be in its critical section.
+2. **Progress**: If no process is in its critical section and some wish to enter, only those not in their remainder section can participate in deciding who enters next, and this selection cannot be postponed indefinitely.
+3. **Bounded Waiting**: There must be a bound on the number of times other processes are allowed to enter their critical sections after a process has made a request to enter and before that request is granted (prevents starvation).
+  </div>
+</div>
+
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 petersons_algorithm.c</span><span class="code-lang-tag">c</span></div>
+  <pre class="line-numbers"><code class="language-c">// Peterson&#x27;s Algorithm for 2 processes P0 and P1
+volatile bool flag[2] = {false, false};
+volatile int turn = 0;
+
+void process(int i) {
+    int j = 1 - i; // Other process
+    
+    // Entry Section
+    flag[i] = true;          // Declare intent to enter
+    turn = j;                // Generously yield turn to other process
+    
+    // Busy wait while other process wants to enter and it&#x27;s their turn
+    while (flag[j] &amp;&amp; turn == j) {
+        // Wait (Spinlock)
+    }
+    
+    // --- CRITICAL SECTION ---
+    // Safe access to shared resources
+    
+    // Exit Section
+    flag[i] = false;         // Release intent
+    
+    // Remainder Section
+}</code></pre>
+</div>
+
+<div class="callout callout-tip" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">TIP</span>
+    <span>Modern Hardware Warning: Why Peterson's Fails on x86/ARM Without Memory Barriers</span>
+  </div>
+  <div class="callout-body">
+    Modern CPUs feature Out-of-Order Execution and Store Buffers. Without memory fences, the CPU or compiler can reorder `flag[i] = true;` and `turn = j;`, or delay making the write visible to the other core. Both processes can read `flag = false` simultaneously and enter the critical section together! In modern C++, `std::atomic` with `std::memory_order_seq_cst` is mandatory.
+  </div>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="coffman-deadlock" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#coffman-deadlock" class="heading-anchor" title="Direct link">#</a>
+    The 4 Coffman Conditions & Deadlock Strategies
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Coffman Condition</th><th>What It Means</th><th>How to Prevent It (Break Condition)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1. Mutual Exclusion</td><td>Resources cannot be shared simultaneously</td><td>Make resources shareable (e.g. read-only files). Usually impossible for printers/writers.</td></tr><tr><td>2. Hold and Wait</td><td>Process holds resources while requesting more</td><td>Require process to request ALL resources upfront, or release held resources before requesting.</td></tr><tr><td>3. No Preemption</td><td>Resources cannot be forcibly taken from a process</td><td>If request cannot be granted immediately, OS preempts all currently held resources.</td></tr><tr><td>4. Circular Wait</td><td>P0 waits for P1, P1 waits for P2... Pn waits for P0</td><td>Impose a global total ordering on all resources (e.g., $F: R \to \mathbb{N}$). A process can only request resource $R_j$ if $F(R_j) > F(R_i)$.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="decision-matrix-card" data-depth="sprint">
+  <div class="dm-title">⚖️ Decision Matrix: Deadlock Handling Strategies</div>
+  <div class="table-container">
+    <table class="data-table dm-table">
+      <thead>
+        <tr><th>Option / Pattern</th><th>Prime Use-Cases (Best Choice)</th><th>Anti-Patterns / Failure Points</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="dm-name"><strong>Deadlock Prevention</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Enforce strict compile/runtime protocols that break at least one of the 4 Coffman conditions.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Low resource utilization and possible starvation.</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Deadlock Avoidance (Banker's)</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> OS dynamically inspects resource allocation state before granting requests to ensure system stays in a Safe State.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> Requires processes to declare their MAXIMUM resource claim in advance, which is rarely known in general OS applications.</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Deadlock Detection & Recovery</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Allow deadlocks to occur; periodically run cycle detection on Resource Allocation Graph (Wait-For Graph) and abort processes.</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> High recovery overhead; aborting processes can corrupt external state or waste CPU hours.</td>
+        </tr>
+        
+        <tr>
+          <td class="dm-name"><strong>Ostrich Algorithm (Ignore)</strong></td>
+          <td class="dm-use"><span class="badge-use">USE WHEN:</span> Stick head in sand and pretend deadlock never happens (used by Linux, Windows, macOS).</td>
+          <td class="dm-avoid"><span class="badge-avoid">AVOID WHEN:</span> When deadlocks are exceedingly rare and cost of prevention exceeds reboot cost.</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="worked-numericals" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#worked-numericals" class="heading-anchor" title="Direct link to this section">#</a>
+        📐 Worked Numericals: Gantt Charts & Page Replacement
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="worked-numericals" onchange="toggleSectionDone('worked-numericals', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="worked-gantt" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#worked-gantt" class="heading-anchor" title="Direct link">#</a>
+    Worked Numerical 1: CPU Scheduling Gantt Charts Compared
+  </h3>
+  <div class="subsection-body">
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Scheduling Comparison on Identical Process Set: P1(0, 8), P2(1, 4), P3(2, 9), P4(3, 5)</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">FCFS Execution</span>
+          </div>
+          <div class="we-step-body">Order: P1(0-8) → P2(8-12) → P3(12-21) → P4(21-26). Turnaround Times: P1=8, P2=11, P3=19, P4=23. Avg Turnaround = 15.25 ms. Waiting Times: P1=0, P2=7, P3=10, P4=18. Avg Waiting Time = 8.75 ms.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">SJF (Non-Preemptive)</span>
+          </div>
+          <div class="we-step-body">At t=0, only P1 arrives → executes P1(0-8). At t=8, P2, P3, P4 are ready. Shortest burst is P2(4) → executes P2(8-12). Next shortest is P4(5) → P4(12-17). Finally P3(9) → P3(17-26). Avg Waiting Time = (0 + 7 + 15 + 9)/4 = 7.75 ms.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">SRTF (Preemptive SJF)</span>
+          </div>
+          <div class="we-step-body">At t=0: P1 runs. At t=1: P2 arrives (burst 4 < remaining P1 7) → preempts P1! P2 runs (1-5). At t=5: remaining bursts are P4(5), P1(7), P3(9). P4 runs (5-10). P1 runs (10-17). P3 runs (17-26). Avg Waiting Time = (9 + 0 + 15 + 2)/4 = 6.5 ms (Optimal!).</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 4</span>
+            <span class="we-step-label">Round Robin (q = 4 ms)</span>
+          </div>
+          <div class="we-step-body">Gantt timeline: P1(0-4) → P2(4-8, finishes!) → P3(8-12) → P4(12-16) → P1(16-20, finishes!) → P3(20-24) → P4(24-25, finishes!) → P3(25-26, finishes!). Avg Waiting Time = (12 + 3 + 15 + 17)/4 = 11.75 ms.</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      SRTF achieves the minimal average waiting time (6.5 ms), while Round Robin provides the highest interactive responsiveness with fair time slicing.
+    </div>
+  </details>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="worked-page-replacement" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#worked-page-replacement" class="heading-anchor" title="Direct link">#</a>
+    Worked Numerical 2: Page Replacement Traces & Belady's Anomaly
+  </h3>
+  <div class="subsection-body">
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Page Reference String: [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5] across 3 vs 4 Frames</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">FIFO with 3 Frames</span>
+          </div>
+          <div class="we-step-body">Initial faults on 1, 2, 3 (3 frames filled). Fault on 4 replaces 1. Fault on 1 replaces 2. Fault on 2 replaces 3. Fault on 5 replaces 4. Hits on 1, 2. Fault on 3 replaces 1. Fault on 4 replaces 2. Fault on 5 replaces 5. Total Page Faults = 9 faults.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">FIFO with 4 Frames (Belady's Anomaly!)</span>
+          </div>
+          <div class="we-step-body">Frame capacity increased from 3 to 4. Tracing FIFO on the exact same string yields: Faults on 1, 2, 3, 4. Hits on 1, 2. Fault on 5 replaces 1. Fault on 1 replaces 2. Fault on 2 replaces 3. Fault on 3 replaces 4. Fault on 4 replaces 5. Fault on 5 replaces 1. Total Page Faults = 10 faults! (More memory caused MORE page faults!).</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">LRU with 3 Frames</span>
+          </div>
+          <div class="we-step-body">Evicts page not used for the longest period. Stack-based algorithm. Total Faults = 10 faults. Proven immune to Belady's Anomaly because it is a Stack Algorithm ($M(k) \subseteq M(k+1)$).</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 4</span>
+            <span class="we-step-label">Optimal (Bélády's Algorithm)</span>
+          </div>
+          <div class="we-step-body">Evicts page whose next reference is furthest in the future (theoretical lower bound). Total Page Faults = 7 faults.</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      Belady's anomaly occurs under FIFO because FIFO is not a stack algorithm; increasing memory frames from 3 to 4 paradoxically increases page faults from 9 to 10.
+    </div>
+  </details>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="worked-bankers" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#worked-bankers" class="heading-anchor" title="Direct link">#</a>
+    Worked Numerical 3: Banker's Algorithm Safety Sequence Check
+  </h3>
+  <div class="subsection-body">
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">5 Processes (P0-P4) with 3 Resource Types A(10), B(5), C(7)</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Allocation & Max State</span>
+          </div>
+          <div class="we-step-body">Allocation sum: A=7, B=2, C=5. Available vector = [10-7, 5-2, 7-5] = [3, 3, 2]. Need matrix = Max - Allocation: P0: [7,4,3], P1: [1,2,2], P2: [6,0,0], P3: [0,1,1], P4: [4,3,1].</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Step 1: Check P1</span>
+          </div>
+          <div class="we-step-body">Need P1 [1,2,2] <= Available [3,3,2] → TRUE! P1 executes, releases resources. New Available = [3,3,2] + [2,0,0] = [5,3,2].</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Step 2: Check P3</span>
+          </div>
+          <div class="we-step-body">Need P3 [0,1,1] <= Available [5,3,2] → TRUE! P3 executes. New Available = [5,3,2] + [2,1,1] = [7,4,3].</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 4</span>
+            <span class="we-step-label">Step 3: Check P4, P0, P2</span>
+          </div>
+          <div class="we-step-body">Need P4 [4,3,1] <= [7,4,3] → TRUE! Available becomes [7,4,5]. Need P0 [7,4,3] <= [7,4,5] → TRUE! Available becomes [7,5,5]. Need P2 [6,0,0] <= [7,5,5] → TRUE! P2 finishes.</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      System is in a SAFE STATE with safe execution sequence: <P1, P3, P4, P0, P2>. Deadlock is completely avoidable.
+    </div>
+  </details>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="memory-storage-internals" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#memory-storage-internals" class="heading-anchor" title="Direct link to this section">#</a>
+        🧠 Multi-Level Page Tables, CFS & File Systems
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="memory-storage-internals" onchange="toggleSectionDone('memory-storage-internals', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="paging-math" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#paging-math" class="heading-anchor" title="Direct link">#</a>
+    Virtual Memory & Multi-Level Page Table Size Arithmetic
+  </h3>
+  <div class="subsection-body">
+<div class="callout callout-important" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">IMPORTANT</span>
+    <span>Standard Interview Weeder Problem: 48-bit Virtual Address Space Size</span>
+  </div>
+  <div class="callout-body">
+    Question: 'In a 64-bit architecture with 48-bit virtual address space, 4KB page size, and 8-byte Page Table Entries (PTE), how much memory does a single-level page table require per process?'
+• Page Size = $4\text{KB} = 2^{12}\text{ bytes}$, so Offset = 12 bits.
+• Virtual Page Number (VPN) = $48 - 12 = 36\text{ bits}$.
+• Number of Pages = $2^{36} \approx 68.7\text{ billion pages}$.
+• Size of Single-Level Page Table = $2^{36} \times 8\text{ bytes} = 2^{39}\text{ bytes} = \mathbf{512\text{ GB}}$ per process!
+Conclusion: A single-level page table is completely impossible. Modern x86-64 uses a 4-Level Page Table (PML4 → PDPT → PD → PT) where levels are allocated dynamically on-demand, consuming only a few megabytes for typical processes.
+  </div>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="file-systems-inodes" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#file-systems-inodes" class="heading-anchor" title="Direct link">#</a>
+    File System Architecture: Inodes, Links & Disk Scheduling
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>File System Concept</th><th>Internal Mechanism</th><th>Engineering Implication / Trap</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Inode Structure</td><td>Metadata record containing mode, owner, size, timestamps, and 12 direct block pointers, 1 single-indirect, 1 double-indirect, 1 triple-indirect.</td><td>Filenames are NOT stored in the inode! Filenames are stored in directory data blocks mapping names to inode numbers.</td></tr><tr><td>Hard Link</td><td>Additional directory entry pointing directly to the exact same inode number. Increments inode `link_count`.</td><td>Cannot span across different file systems/partitions. If original file is deleted, data remains accessible until `link_count == 0`.</td></tr><tr><td>Symbolic (Soft) Link</td><td>Independent file with its own unique inode, whose data block contains the pathname string of the target file.</td><td>Can cross filesystem boundaries. If target file is deleted, symlink becomes a 'dangling / broken pointer'.</td></tr><tr><td>Disk Scheduling (SCAN / Elevator)</td><td>Disk arm moves in one direction servicing requests until it hits the end, then reverses direction.</td><td>Prevents starvation; balances seek latency. C-SCAN only services in one direction, then immediately jumps back to start.</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+<div class="subsection-block" id="linux-cfs" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#linux-cfs" class="heading-anchor" title="Direct link">#</a>
+    Linux Completely Fair Scheduler (CFS) Internals
+  </h3>
+  <div class="subsection-body">
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>CFS Architecture Dimension</th><th>Implementation Detail</th><th>Why It Replaced the O(1) Scheduler</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Core Metric</td><td>`vruntime` (Virtual Runtime)</td><td>Tracks the normalized CPU time spent by a task: $vruntime += \Delta exec\_time \times \frac{NICE\_0\_LOAD}{weight}$.</td></tr><tr><td>Data Structure</td><td>Self-Balancing Red-Black Tree (`rb_node`)</td><td>Tasks ordered by `vruntime`. The leftmost node `rb_leftmost` has the lowest `vruntime` and is picked next in $O(1)$ time.</td></tr><tr><td>Fairness Principle</td><td>Proportional CPU share based on task `nice` value</td><td>A high-priority task (lower nice value) accumulates `vruntime` slower, receiving more physical CPU execution time.</td></tr><tr><td>Handling Sleep / I/O</td><td>`vruntime = \max(vruntime, min\_vruntime)`</td><td>Prevents I/O-bound tasks that slept for a long time from monopolizing the CPU when they wake up!</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+  </div>
+</section>
+
+<section class="section-block" id="interview-flashcards" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-flashcards" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 Top Tech Interview Flashcards & Defenses
+      </h2>
+      
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-flashcards" onchange="toggleSectionDone('interview-flashcards', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<div class="subsection-block" id="interview-flashcards" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#interview-flashcards" class="heading-anchor" title="Direct link">#</a>
+    🎯 High-Yield Operating Systems Interview Flashcards
+  </h3>
+  <div class="subsection-body">
+<details class="faq-accordion" data-depth="sprint" data-qid="608971">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why is a system call (~100x) more expensive than a regular function call?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">0</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">C</span><span class="pill pill-cyan">o</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">S</span><span class="pill pill-cyan">y</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">s</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      A standard function call executes a `call` instruction, pushing the return address onto the stack and jumping within the same address space (takes ~1-2 ns). A system call requires an explicit CPU ring transition from User Mode (Ring 3) to Kernel Mode (Ring 0) via the `syscall` instruction. The CPU hardware switches to the kernel stack, saves user registers, verifies security boundaries, loads the kernel interrupt descriptor table (IDT), executes the privileged handler, and transitions back via `sysret`. This costs ~100-200 ns.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('608971', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('608971', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('608971', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="552185">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What causes Thrashing in virtual memory, and how does the OS detect and resolve it?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">0</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">V</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">u</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">l</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">M</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">o</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">y</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Thrashing occurs when the sum of working set sizes of all active processes exceeds available physical RAM. The OS spends more time servicing page faults and swapping pages in/out of disk than executing actual CPU instructions, causing CPU utilization to plummet to near 0%. The OS detects this via Page Fault Frequency (PFF). Resolution: Suspend or terminate some processes (reduce degree of multiprogramming) to allow the remaining processes to fit their working sets into RAM.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('552185', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('552185', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('552185', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="570565">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the difference between a Zombie Process and an Orphan Process?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">0</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">P</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">o</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">M</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">g</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">t</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      A Zombie Process is a process that has completed execution via `exit()`, but its entry remains in the Process Table because its parent has not yet called `wait()` or `waitpid()` to read its exit status code. Consumes process IDs (PIDs). An Orphan Process is a process whose parent terminated while the child was still running. It is automatically adopted by `init` / `systemd` (PID 1), which periodically reaps its exit status when it finishes.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('570565', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('570565', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('570565', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="914362">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Explain Priority Inversion and the Priority Inheritance solution (Mars Pathfinder bug).</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">0</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">C</span><span class="pill pill-cyan">o</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">u</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">c</span><span class="pill pill-cyan">y</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">&amp;</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">R</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">l</span><span class="pill pill-cyan">-</span><span class="pill pill-cyan">T</span><span class="pill pill-cyan">i</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">e</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Priority Inversion occurs when a low-priority task (L) holds a shared mutex needed by a high-priority task (H), but a medium-priority task (M) preempts L (because M has higher priority than L). H is now indirectly starved by M! In the 1997 Mars Pathfinder mission, this caused system watchdog resets. Solution: Priority Inheritance Protocol — when high-priority task H blocks on a lock held by low-priority task L, L temporarily inherits the priority of H until it releases the lock.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('914362', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('914362', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('914362', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="231244">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why can a spinlock cause deadlock on a uniprocessor system if interrupts are enabled?</div>
+    <div class="faq-pills"><span class="pill pill-cyan">P</span><span class="pill pill-cyan">0</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">S</span><span class="pill pill-cyan">y</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">m</span><span class="pill pill-cyan">s</span><span class="pill pill-cyan"> </span><span class="pill pill-cyan">I</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">t</span><span class="pill pill-cyan">e</span><span class="pill pill-cyan">r</span><span class="pill pill-cyan">n</span><span class="pill pill-cyan">a</span><span class="pill pill-cyan">l</span><span class="pill pill-cyan">s</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      On a single CPU core, if a process running in user mode acquires a spinlock, and an interrupt handler triggers on the same CPU that attempts to acquire the exact same spinlock, the interrupt handler will busy-wait (spin) forever waiting for the lock to be released. But the lock holder can never run to release the lock because the interrupt handler has preempted it on the only CPU! Solution: Spinlocks in kernel space must always disable local interrupts before acquiring the lock.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('231244', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('231244', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('231244', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+</div>
+</div>
+
+  </div>
+</section>
+
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="dsa.html" class="nav-btn">← DSA & Patterns</a><a href="dbms.html" class="nav-btn" style="margin-left: auto;">DBMS & Storage →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('os');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="sprint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Data Structures & Algorithms (DSA) · Fast Interview Cheat Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX Formula Support (§1.2 Fix) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- PrismJS Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+  
+  <style>
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Dark Theme (Default) */
+  --bg-primary: #090d16;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-card-hover: #1c283c;
+  --bg-header: rgba(9, 13, 22, 0.94);
+  --bg-subtle: #1e293b;
+  --bg-code: #0b111e;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-focus: #38bdf8;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+
+  --header-height: 4rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-subtle: #f1f5f9;
+  --bg-code: #f8fafc;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #0284c7;
+  
+  --accent-blue: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --accent-orange: #ea580c;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dual-Mode Runtime Filtering (Sprint vs Deep Dive) */
+html[data-mode="sprint"] [data-depth="deep"] {
+  display: none !important;
+}
+
+/* Test Mode Styling */
+html[data-test-mode="active"] details.faq-accordion:not([open]) summary {
+  border-left: 4px solid var(--accent-amber);
+  background-color: var(--bg-subtle);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3px Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-emerald), var(--accent-purple));
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Dual-Mode Toggle */
+.mode-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.test-mode-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.test-mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+}
+
+.nav-select {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+/* Layout */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+  width: 100%;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none !important;
+  }
+  .hamburger-btn {
+    display: block !important;
+  }
+  .nav-select {
+    display: none !important;
+  }
+}
+
+/* Sticky Sidebar TOC */
+.sidebar-toc {
+  position: sticky;
+  top: calc(var(--header-height) + 1.25rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.toc-link:hover {
+  color: var(--accent-blue);
+  background: var(--bg-subtle);
+  transform: translateX(2px);
+}
+
+.toc-link.active {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 700;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.5rem;
+}
+
+/* Mobile Slide-out Drawer */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 2001;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transition: transform 0.25s ease-out;
+}
+
+.mobile-drawer.active {
+  transform: translateX(320px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Fixed Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+.bottom-nav-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  min-width: 48px;
+}
+
+.bottom-nav-item span:first-child {
+  font-size: 1.1rem;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 900;
+  font-size: 1.1rem;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Main Content Area */
+.main-body {
+  min-width: 0;
+}
+
+/* Hero Banner */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hero-icon {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  max-width: 800px;
+}
+
+/* Pill Badges - Complete 9 Colors (§1.3 Fix) */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.pill-blue    { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);   border-color: rgba(56, 189, 248, 0.3); }
+.pill-emerald { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);border-color: rgba(52, 211, 153, 0.3); }
+.pill-amber   { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);  border-color: rgba(251, 191, 36, 0.3); }
+.pill-rose    { background: rgba(244, 63, 94, 0.12);  color: var(--accent-rose);   border-color: rgba(244, 63, 94, 0.3); }
+.pill-purple  { background: rgba(192, 132, 252, 0.12);color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.pill-cyan    { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);   border-color: rgba(34, 211, 238, 0.3); }
+.pill-indigo  { background: rgba(129, 140, 248, 0.12);color: var(--accent-indigo); border-color: rgba(129, 140, 248, 0.3); }
+.pill-teal    { background: rgba(45, 212, 191, 0.12); color: var(--accent-teal);   border-color: rgba(45, 212, 191, 0.3); }
+.pill-orange  { background: rgba(251, 146, 60, 0.12); color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+
+/* Section Blocks */
+.section-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-anchor {
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+.heading-anchor:hover {
+  opacity: 1;
+  color: var(--accent-blue);
+}
+
+.section-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--bg-card);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.section-body p {
+  margin-bottom: 1rem;
+}
+
+/* Subsections */
+.subsection-block {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Dense Data Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--bg-card);
+}
+
+.table-caption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.6rem 1rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* SVGs & Diagram Containers */
+.svg-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.svg-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  cursor: zoom-in;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+/* Formula Box (KaTeX + Spoken Reading + Meaning) */
+.formula-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(56, 189, 248, 0.04));
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.formula-katex {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.formula-reading {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.formula-symbols-wrapper {
+  margin: 0.75rem 0;
+}
+
+.formula-symbols-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.formula-symbols-table th, .formula-symbols-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formula-symbols-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.formula-sym {
+  width: 25%;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.formula-meaning {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+/* Worked Example Card */
+.worked-example {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.we-header {
+  margin-bottom: 1rem;
+}
+
+.we-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+}
+
+.we-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.we-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.we-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.we-step-num {
+  background: var(--accent-purple);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.we-step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.we-answer-details {
+  margin-top: 1rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.we-answer-summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+}
+
+.we-answer-body {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Callouts */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  border: 1px solid transparent;
+}
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.callout-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  text-transform: uppercase;
+}
+
+.callout-info   { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--text-primary); }
+.callout-info .callout-badge { background: var(--accent-blue); color: #000; }
+
+.callout-trap   { background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); color: var(--text-primary); }
+.callout-trap .callout-badge { background: var(--accent-rose); color: #fff; }
+
+.callout-pro    { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--text-primary); }
+.callout-pro .callout-badge { background: var(--accent-emerald); color: #000; }
+
+.callout-hft    { background: rgba(129, 140, 248, 0.08); border-color: rgba(129, 140, 248, 0.3); color: var(--text-primary); }
+.callout-hft .callout-badge { background: var(--accent-indigo); color: #fff; }
+
+.callout-math   { background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+.callout-math .callout-badge { background: var(--accent-purple); color: #000; }
+
+.callout-fde    { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.3); color: var(--text-primary); }
+.callout-fde .callout-badge { background: var(--accent-teal); color: #000; }
+
+.callout-ai     { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); color: var(--text-primary); }
+.callout-ai .callout-badge { background: var(--accent-orange); color: #000; }
+
+.callout-warn   { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--text-primary); }
+.callout-warn .callout-badge { background: var(--accent-amber); color: #000; }
+
+.callout-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Decision Matrix */
+.decision-matrix-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dm-table td {
+  font-size: 0.85rem;
+}
+
+.badge-use {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.badge-avoid {
+  color: var(--accent-rose);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Anti-Pattern Side-by-Side */
+.anti-pattern-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.ap-header {
+  margin-bottom: 0.85rem;
+}
+
+.ap-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-rose);
+}
+
+.ap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.ap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ap-col-header {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ap-bad .ap-col-header { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.ap-good .ap-col-header { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
+
+.ap-failure-mode {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Follow-up Chains (Drill Ladder) */
+.followup-chain {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-indigo);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.fc-header {
+  margin-bottom: 1rem;
+}
+
+.fc-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-indigo);
+  letter-spacing: 0.05em;
+}
+
+.fc-root-q {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.fc-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-level {
+  margin-left: 1rem;
+  border-left: 2px dashed var(--accent-indigo);
+  padding-left: 1rem;
+}
+
+.fc-connector {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  margin-bottom: 0.25rem;
+}
+
+.fc-accordion {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fc-summary {
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fc-answer {
+  padding: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Numbers Card */
+.numbers-card {
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.numbers-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.num-highlight {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+/* One-Liner Spoken Answer */
+.one-liner-box {
+  margin: 1.25rem 0;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent-blue);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.ol-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.ol-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Mnemonic Card */
+.mnemonic-box {
+  margin: 1.25rem 0;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid var(--accent-purple);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.mnemonic-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.mnemonic-hook {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.hook-text {
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.mnemonic-expansion {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* See Also Links */
+.see-also-box {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.see-also-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.see-also-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.see-also-link {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-color);
+}
+
+.see-also-link:hover {
+  border-color: var(--accent-blue);
+}
+
+/* Code Blocks & Prism */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-code);
+}
+
+.code-title-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-lang-tag {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
+  background: var(--bg-subtle);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+pre[class*="language-"] {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+/* FAQ / Flashcard Accordions */
+.faq-accordion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.faq-accordion[open] {
+  border-color: var(--accent-blue);
+}
+
+.faq-summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.faq-question-text {
+  flex: 1;
+}
+
+.faq-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.faq-answer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: var(--bg-surface);
+}
+
+/* Spaced Repetition Rating Strip */
+.rating-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.rating-prompt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rating-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-got-it:hover, .rating-btn.rated-got-it {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+.btn-shaky:hover, .rating-btn.rated-shaky {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.btn-no-idea:hover, .rating-btn.rated-no-idea {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+/* Navigation Footer */
+.page-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Print Styles */
+@media print {
+  header, .sidebar-toc, .bottom-nav, .back-to-top-btn, .page-nav-footer, .rating-strip {
+    display: none !important;
+  }
+  body, .app-container, .main-body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .section-block, .hero-card, .table-container, .callout {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Top 3px Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation Drawer">☰</button>
+        <a href="index.html" class="brand">
+          <span>⚡ PrepPortal</span>
+          <span class="brand-badge">Study Suite</span>
+        </a>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Dual-Mode Switch (Sprint 15m vs Deep 60m) -->
+        <div class="mode-toggle-group">
+          <button id="sprintModeBtn" class="mode-btn active" onclick="setStudyMode('sprint')">⚡ Sprint (15m)</button>
+          <button id="deepModeBtn" class="mode-btn" onclick="setStudyMode('deep')">🧠 Deep (60m)</button>
+        </div>
+
+        <button id="testModeBtn" class="test-mode-btn" onclick="toggleTestMode()" title="Toggle Test Mode (Collapses answers)">🎓 Test Mode</button>
+        
+        <select id="quickNavSelect" class="nav-select">
+          <option value="">⚡ Switch Topic...</option><option value="dsa.html" selected>🧩 Data Structures & Algorithms (DSA)</option><option value="os.html">⚡ Operating Systems (OS)</option><option value="dbms.html">🗄️ DBMS & Storage Internals</option><option value="cn.html">🌐 Computer Networks (CN)</option><option value="coa.html">💻 Computer Organization & Architecture (COA)</option><option value="concurrency.html">🧵 Concurrency & Parallelism</option><option value="lld_design_patterns.html">📐 Low-Level Design & Design Patterns (LLD / OOD)</option><option value="system_design.html">🏗️ System Design & Distributed Systems (HLD)</option><option value="api_security.html">🔐 API Design, Auth & Security</option><option value="cpp_systems.html">🚀 C++ Internals & Low-Latency Systems</option><option value="python_internals.html">🐍 Python Internals, GIL & Concurrency</option><option value="math_ml.html">∑ Math Foundations for Machine Learning</option><option value="ml_core.html">📊 Classical ML & Deep Learning Core</option><option value="ml_cv.html">👁️ Computer Vision & Signal Processing</option><option value="llm_internals.html">🧠 LLM & Transformer Internals</option><option value="ai_agents.html">🤖 RAG, Agents & GenAI System Design</option><option value="ai_evals.html">📈 AI Evaluation, Observability & MLOps</option><option value="sql_data.html">🔎 SQL Mastery & Data Engineering</option><option value="linux_git.html">🐧 Linux, Git & CLI Debugging</option><option value="docker.html">🐳 Docker, Kubernetes & CI/CD</option><option value="fde_decomp.html">🧭 FDE Decomposition & Client-Facing Engineering</option><option value="behavioral.html">🎤 Behavioral, STAR & Project Defense</option><option value="quant.html">🎲 Aptitude, Probability & Puzzles</option>
+        </select>
+        
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Content -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">📑 Sections Navigation</span>
+      <button class="drawer-close-btn" onclick="toggleMobileDrawer()">✕</button>
+    </div>
+    <ul class="toc-list" onclick="toggleMobileDrawer()">
+      <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Decision Patterns & Triggers</a></li>
+<li><a href="#complexity-matrix" class="toc-link">📊 Master Complexity & Constraint Matrix</a></li>
+<li><a href="#pattern-templates" class="toc-link">🧩 9 Core Algorithmic Templates</a></li>
+<li><a href="#dp-mastery" class="toc-link">💎 Dynamic Programming: 9 Canonical Shapes</a></li>
+<li><a href="#recurrence-analysis" class="toc-link">📐 Master Theorem & Amortized Analysis</a></li>
+<li><a href="#string-graph-depth" class="toc-link">🌐 Graphs, Strings & Greedy Validity</a></li>
+<li><a href="#interview-traps" class="toc-link">⚠️ High-Frequency Traps & Proofs</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 32 Top Tech Interview Q&As</a></li>
+
+    </ul>
+    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">← Return to Master Hub</a>
+    </div>
+  </div>
+
+  <!-- Container -->
+  <div class="app-container">
+    
+    <!-- Breadcrumb Orientation -->
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Master Hub</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Track A: Core CS Fundamentals</span>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color: var(--text-primary); font-weight: 600;">DSA & Patterns</span>
+    </nav>
+
+    <div class="content-wrapper">
+      
+      <!-- Sticky Sidebar TOC (Desktop) -->
+      <aside class="sidebar-toc">
+        <div class="toc-title">
+          <span>Module Sections</span>
+          <span style="font-size: 0.75rem;">⏱️ 15 min / 60 min</span>
+        </div>
+        <ul class="toc-list">
+          <li><a href="#sprint-core" class="toc-link">⚡ 15-Min Sprint: Decision Patterns & Triggers</a></li>
+<li><a href="#complexity-matrix" class="toc-link">📊 Master Complexity & Constraint Matrix</a></li>
+<li><a href="#pattern-templates" class="toc-link">🧩 9 Core Algorithmic Templates</a></li>
+<li><a href="#dp-mastery" class="toc-link">💎 Dynamic Programming: 9 Canonical Shapes</a></li>
+<li><a href="#recurrence-analysis" class="toc-link">📐 Master Theorem & Amortized Analysis</a></li>
+<li><a href="#string-graph-depth" class="toc-link">🌐 Graphs, Strings & Greedy Validity</a></li>
+<li><a href="#interview-traps" class="toc-link">⚠️ High-Frequency Traps & Proofs</a></li>
+<li><a href="#interview-flashcards" class="toc-link">🎯 32 Top Tech Interview Q&As</a></li>
+
+        </ul>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <a href="index.html" style="text-decoration: none; font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+            ← Return to Dashboard
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="main-body">
+        
+        <!-- Hero Header -->
+        <div class="hero-card">
+          <div class="hero-header">
+            <div class="hero-title-group">
+              <div class="hero-icon">🧩</div>
+              <div>
+                <h1 class="hero-title">Data Structures & Algorithms (DSA)</h1>
+                <p class="hero-subtitle">Master Complexity Matrix, 9 Decision Patterns, Monotonic Stacks, DP Shapes, DSU, and Binary Search on Answer.</p>
+              </div>
+            </div>
+          </div>
+          <div class="meta-pills">
+            <span class="pill pill-emerald">⚡ 15-Min Sprint</span>
+            <span class="pill pill-indigo">🧠 60-Min Deep Dive</span>
+            <span class="pill pill-amber">Target Companies:</span>
+            <span class="pill pill-blue">Media.net</span><span class="pill pill-blue">Apple</span><span class="pill pill-blue">Swiggy</span><span class="pill pill-blue">Juspay</span><span class="pill pill-blue">Cred</span>
+          </div>
+        </div>
+
+        <!-- Rendered Content -->
+        
+<section class="section-block" id="sprint-core" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#sprint-core" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚡ 15-Min Sprint: Decision Patterns & Triggers
+      </h2>
+      <span class="pill pill-purple">High Yield</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="sprint-core" onchange="toggleSectionDone('sprint-core', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="one-liner-box" data-depth="sprint">
+  <div class="ol-badge">🗣️ 15-SECOND INTERVIEW ANSWER</div>
+  <p class="ol-text">"In coding interviews, problems rarely announce their algorithm. Your first job is recognizing the problem's trigger phrase and mapping it instantly to its complexity bound."</p>
+</div>
+
+
+    <p>A topic is only mastered when you can name its trigger phrase in a single sentence without prompting. Below is the master pattern-to-trigger mapping table:</p>
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Algorithmic Pattern</th><th>Trigger Phrase in Problem Statement</th><th>Target Template</th><th>Time & Space Bound</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Binary Search on Answer</td><td><em>'Find the minimum maximum...'</em> or <em>'Find the maximum minimum capacity/speed'</em></td><td>Monotonic predicate <code>check(mid)</code></td><td>Time: $O(N \log(\text{Range}))$, Space: $O(1)$</td></tr><tr><td>Two Pointers (Opposite)</td><td>Sorted array, pair with target sum, palindrome verification, trapping water</td><td>Left & Right pointers moving inward</td><td>Time: $O(N)$, Space: $O(1)$</td></tr><tr><td>Sliding Window (Variable)</td><td><em>'Longest / shortest contiguous subarray / substring satisfying condition K'</em></td><td>Right expands window, Left shrinks while invalid</td><td>Time: $O(N)$, Space: $O(K)$ hash table</td></tr><tr><td>Monotonic Stack</td><td><em>'Next greater element'</em>, <em>'previous smaller element'</em>, <em>'largest rectangle in histogram'</em></td><td>Stack maintaining strictly increasing/decreasing order</td><td>Time: $O(N)$, Space: $O(N)$</td></tr><tr><td>Disjoint Set Union (DSU)</td><td>Dynamic connectivity, connected components, Kruskal's MST, cycle in undirected graph</td><td>Parent array with Path Compression & Union by Rank</td><td>Time: $O(\alpha(N)) \approx O(1)$, Space: $O(N)$</td></tr><tr><td>Topological Sort (Kahn's)</td><td>Task dependencies, course prerequisites, build order, cycle in directed graph</td><td>Indegree array + Queue of zero-indegree nodes</td><td>Time: $O(V + E)$, Space: $O(V + E)$</td></tr><tr><td>Min/Max Heap</td><td><em>'Top K frequent'</em>, <em>'K-th largest element'</em>, streaming data median</td><td>Size-K Priority Queue (evict root when size > K)</td><td>Time: $O(N \log K)$, Space: $O(K)$</td></tr><tr><td>BFS (Multi-Source)</td><td>Rotting oranges, distance to nearest 0/1 in grid, shortest path in unweighted graph</td><td>Queue initialized with ALL sources simultaneously</td><td>Time: $O(R \times C)$, Space: $O(R \times C)$</td></tr><tr><td>Backtracking</td><td><em>'Generate all valid subsets / permutations / combinations'</em> ($N \le 15$)</td><td>Recursive decision tree: choose, recurse, backtrack</td><td>Time: $O(2^N)$ or $O(N!)$, Space: $O(N)$</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+    
+<div class="callout callout-pro" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">⚡ PRO TIP</span>
+    <span>Grid Problems are Graph Problems Wearing a Matrix Costume!</span>
+  </div>
+  <div class="callout-body">
+    Whenever an interview presents an $M \times N$ grid with cells (islands, rotting oranges, shortest maze path), <strong>treat every cell $(r, c)$ as a graph vertex</strong> with up to 4 edges: $(r\pm 1, c)$ and $(r, c\pm 1)$. If edges are unweighted, the shortest path is ALWAYS BFS with a Queue, never DFS or Dijkstra!
+  </div>
+</div>
+
+
+    
+<div class="callout callout-info" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">💡</span>
+    <span>DP Priority Reality Check for Campus Interviews</span>
+  </div>
+  <div class="callout-body">
+    Two independent placement audits confirm: <strong>candidates dramatically over-invest in advanced Dynamic Programming</strong> while campus panels test Arrays, Two Pointers, Hashing, Binary Search on Answer, Trees, and Graphs 4× more frequently. What DP is asked clusters strictly into 9 canonical shapes—memoization is accepted almost universally.
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="complexity-matrix" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#complexity-matrix" class="heading-anchor" title="Direct link to this section">#</a>
+        📊 Master Complexity & Constraint Matrix
+      </h2>
+      <span class="pill pill-blue">Interview Cheat Sheet</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="complexity-matrix" onchange="toggleSectionDone('complexity-matrix', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>In timed Online Assessments and interviews, input constraints ($N$) dictate the required algorithmic complexity before you write a single line of code:</p>
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>Input Size ($N$)</th><th>Permissible Time Complexity</th><th>Expected Algorithms / Data Structures</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>$N \le 10..12$</td><td>$O(N!)$ or $O(N^2 \cdot 2^N)$</td><td>TSP, Travelling Salesperson DP, Permutations, Exact Brute Force.</td></tr><tr><td>$N \le 20..25$</td><td>$O(2^N)$ or $O(N \cdot 2^N)$</td><td>Bitmask Dynamic Programming, Subsets Backtracking, Meet-in-the-Middle.</td></tr><tr><td>$N \le 100..400$</td><td>$O(N^3)$</td><td>Floyd-Warshall all-pairs shortest paths, Matrix Chain Multiplication DP.</td></tr><tr><td>$N \le 1,000..2,000$</td><td>$O(N^2)$</td><td>2D Grid DP, 0/1 Knapsack, All pairs comparison, Bubble/Insertion sort.</td></tr><tr><td>$N \le 100,000..200,000$</td><td>$O(N \log N)$</td><td>Sorting, Divide & Conquer, Heap / PriorityQueue, Segment Tree, Binary Search.</td></tr><tr><td>$N \le 1,000,000$</td><td>$O(N)$</td><td>Two Pointers, Sliding Window, Monotonic Stack, Kadane's, Hash Table, DSU.</td></tr><tr><td>$N \ge 10^9$ (Large range)</td><td>$O(\log N)$ or $O(1)$</td><td>Binary Search on Answer Space, Math / Matrix Exponentiation, Bitwise tricks.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+    
+<div class="svg-diagram-card" data-depth="sprint">
+  <div class="svg-container" onclick="openSvgFullscreen(this)" title="Click to view full screen">
+    
+    <svg viewBox="0 0 880 440" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="dsa-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+        </marker>
+      </defs>
+
+      <!-- Root Box -->
+      <rect x="340" y="15" width="200" height="45" rx="8" fill="#0369a1" stroke="#38bdf8" stroke-width="2" />
+      <text x="440" y="42" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle">Given Coding Problem</text>
+
+      <!-- Branches -->
+      <line x1="370" y1="60" x2="140" y2="110" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#dsa-arrow)" />
+      <line x1="420" y1="60" x2="330" y2="110" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#dsa-arrow)" />
+      <line x1="460" y1="60" x2="550" y2="110" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#dsa-arrow)" />
+      <line x1="510" y1="60" x2="740" y2="110" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#dsa-arrow)" />
+
+      <!-- Nodes -->
+      <rect x="50" y="110" width="180" height="40" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.5" />
+      <text x="140" y="135" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">Array / String Input</text>
+
+      <rect x="250" y="110" width="160" height="40" rx="6" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="330" y="135" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">Search / Range / K-th</text>
+
+      <rect x="470" y="110" width="160" height="40" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1.5" />
+      <text x="550" y="135" fill="#c084fc" font-size="11" font-weight="700" text-anchor="middle">Tree / Graph / Grid</text>
+
+      <rect x="660" y="110" width="160" height="40" rx="6" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5" />
+      <text x="740" y="135" fill="#f43f5e" font-size="11" font-weight="700" text-anchor="middle">Max / Min / Choice DP</text>
+
+      <!-- Sub Branches Array -->
+      <line x1="100" y1="150" x2="60" y2="200" stroke="#34d399" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+      <line x1="140" y1="150" x2="140" y2="200" stroke="#34d399" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+      <line x1="180" y1="150" x2="220" y2="200" stroke="#34d399" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+
+      <rect x="10" y="200" width="100" height="50" rx="4" fill="#064e3b" />
+      <text x="60" y="222" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">Two Pointers</text>
+      <text x="60" y="238" fill="#a7f3d0" font-size="8" text-anchor="middle">Sorted / Palindromes</text>
+
+      <rect x="100" y="200" width="95" height="50" rx="4" fill="#064e3b" />
+      <text x="147" y="222" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">Sliding Window</text>
+      <text x="147" y="238" fill="#a7f3d0" font-size="8" text-anchor="middle">Subarray Contiguous</text>
+
+      <rect x="185" y="200" width="100" height="50" rx="4" fill="#064e3b" />
+      <text x="235" y="222" fill="#34d399" font-size="9" font-weight="700" text-anchor="middle">Monotonic Stack</text>
+      <text x="235" y="238" fill="#a7f3d0" font-size="8" text-anchor="middle">Next Greater / Range</text>
+
+      <!-- Sub Branches Search -->
+      <line x1="310" y1="150" x2="280" y2="280" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+      <line x1="350" y1="150" x2="380" y2="280" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+
+      <rect x="230" y="280" width="110" height="50" rx="4" fill="#78350f" />
+      <text x="285" y="302" fill="#fbbf24" font-size="10" font-weight="700" text-anchor="middle">Binary Search</text>
+      <text x="285" y="318" fill="#fde68a" font-size="8" text-anchor="middle">On Answer / Monotonic</text>
+
+      <rect x="350" y="280" width="105" height="50" rx="4" fill="#78350f" />
+      <text x="402" y="302" fill="#fbbf24" font-size="10" font-weight="700" text-anchor="middle">Heap / PQ</text>
+      <text x="402" y="318" fill="#fde68a" font-size="8" text-anchor="middle">Top K / Streaming</text>
+
+      <!-- Sub Branches Graph -->
+      <line x1="520" y1="150" x2="490" y2="200" stroke="#c084fc" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+      <line x1="570" y1="150" x2="600" y2="200" stroke="#c084fc" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+
+      <rect x="440" y="200" width="100" height="50" rx="4" fill="#4c1d95" />
+      <text x="490" y="222" fill="#c084fc" font-size="10" font-weight="700" text-anchor="middle">BFS (Shortest Path)</text>
+      <text x="490" y="238" fill="#ddd6fe" font-size="8" text-anchor="middle">Unweighted Edges</text>
+
+      <rect x="550" y="200" width="105" height="50" rx="4" fill="#4c1d95" />
+      <text x="602" y="222" fill="#c084fc" font-size="10" font-weight="700" text-anchor="middle">DFS / Backtracking</text>
+      <text x="602" y="238" fill="#ddd6fe" font-size="8" text-anchor="middle">Paths, Subsets, Perms</text>
+
+      <!-- Sub Branches DP -->
+      <line x1="710" y1="150" x2="690" y2="280" stroke="#f43f5e" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+      <line x1="770" y1="150" x2="790" y2="280" stroke="#f43f5e" stroke-width="1.2" marker-end="url(#dsa-arrow)" />
+
+      <rect x="650" y="280" width="105" height="50" rx="4" fill="#881337" />
+      <text x="702" y="302" fill="#f43f5e" font-size="10" font-weight="700" text-anchor="middle">1D / 2D Grid DP</text>
+      <text x="702" y="318" fill="#fecdd3" font-size="8" text-anchor="middle">Knapsack, Paths, LIS</text>
+
+      <rect x="765" y="280" width="105" height="50" rx="4" fill="#881337" />
+      <text x="817" y="302" fill="#f43f5e" font-size="10" font-weight="700" text-anchor="middle">Interval / String DP</text>
+      <text x="817" y="318" fill="#fecdd3" font-size="8" text-anchor="middle">LCS, Edit Dist, MCM</text>
+    </svg>
+    
+  </div>
+  <div class="diagram-caption">🔍 Master Problem-Solving Decision Tree: From Problem Nature to Optimal Algorithm</div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="pattern-templates" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#pattern-templates" class="heading-anchor" title="Direct link to this section">#</a>
+        🧩 9 Core Algorithmic Templates
+      </h2>
+      <span class="pill pill-emerald">Code Templates</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="pattern-templates" onchange="toggleSectionDone('pattern-templates', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="subsection-block" id="template-bsearch" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#template-bsearch" class="heading-anchor" title="Direct link">#</a>
+    1. Binary Search on Answer Space (The #1 High-Yield Pattern)
+  </h3>
+  
+</div>
+
+    <p>Trigger: The problem asks for the minimum maximum (or maximum minimum), and whether a given candidate value $X$ is feasible is monotonic: if $X$ works, all $Y &gt; X$ work.</p>
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 Binary Search on Answer Space</span><span class="code-lang-tag">cpp</span></div>
+  <pre class="line-numbers"><code class="language-cpp">// C++ Binary Search on Answer Template
+bool isValid(const vector&lt;int&gt;&amp; weights, int maxCap, int days) {
+    int currentDayLoad = 0, requiredDays = 1;
+    for (int w : weights) {
+        if (currentDayLoad + w &gt; maxCap) {
+            requiredDays++;
+            currentDayLoad = 0;
+        }
+        currentDayLoad += w;
+    }
+    return requiredDays &lt;= days;
+}
+
+int shipWithinDays(vector&lt;int&gt;&amp; weights, int days) {
+    int low = *max_element(weights.begin(), weights.end());
+    int high = accumulate(weights.begin(), weights.end(), 0);
+    int optimalAns = high;
+
+    while (low &lt;= high) {
+        int mid = low + (high - low) / 2; // Prevents 32-bit overflow!
+        if (isValid(weights, mid, days)) {
+            optimalAns = mid;      // Mid is feasible, try smaller capacity
+            high = mid - 1;
+        } else {
+            low = mid + 1;         // Mid too small, must expand capacity
+        }
+    }
+    return optimalAns;
+}</code></pre>
+</div>
+
+
+    
+<div class="subsection-block" id="template-monotonic-stack" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#template-monotonic-stack" class="heading-anchor" title="Direct link">#</a>
+    2. Monotonic Stack (Next Greater Element & Daily Temperatures)
+  </h3>
+  
+</div>
+
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 Monotonic Stack Template</span><span class="code-lang-tag">cpp</span></div>
+  <pre class="line-numbers"><code class="language-cpp">// C++ Monotonic Decreasing Stack Template
+vector&lt;int&gt; dailyTemperatures(vector&lt;int&gt;&amp; temperatures) {
+    int n = temperatures.size();
+    vector&lt;int&gt; result(n, 0);
+    stack&lt;int&gt; st; // Stores indices
+
+    for (int i = 0; i &lt; n; i++) {
+        // While stack not empty and current element is warmer than stack top
+        while (!st.empty() &amp;&amp; temperatures[i] &gt; temperatures[st.top()]) {
+            int prevIdx = st.top();
+            st.pop();
+            result[prevIdx] = i - prevIdx;
+        }
+        st.push(i);
+    }
+    return result;
+}</code></pre>
+</div>
+
+
+    
+<div class="subsection-block" id="template-dsu" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#template-dsu" class="heading-anchor" title="Direct link">#</a>
+    3. Disjoint Set Union (DSU with Path Compression & Rank)
+  </h3>
+  
+</div>
+
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 DSU with Path Compression</span><span class="code-lang-tag">cpp</span></div>
+  <pre class="line-numbers"><code class="language-cpp">class DSU {
+public:
+    vector&lt;int&gt; parent, rank;
+    DSU(int n) : parent(n), rank(n, 0) {
+        for (int i = 0; i &lt; n; i++) parent[i] = i;
+    }
+
+    int find(int i) {
+        if (parent[i] == i) return i;
+        return parent[i] = find(parent[i]); // Path compression: O(alpha(N))
+    }
+
+    bool unite(int i, int j) {
+        int rootI = find(i), rootJ = find(j);
+        if (rootI == rootJ) return false; // Cycle detected!
+        if (rank[rootI] &lt; rank[rootJ]) parent[rootI] = rootJ;
+        else if (rank[rootI] &gt; rank[rootJ]) parent[rootJ] = rootI;
+        else { parent[rootJ] = rootI; rank[rootI]++; }
+        return true;
+    }
+};</code></pre>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="dp-mastery" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#dp-mastery" class="heading-anchor" title="Direct link to this section">#</a>
+        💎 Dynamic Programming: 9 Canonical Shapes
+      </h2>
+      <span class="pill pill-rose">DP Shapes</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="dp-mastery" onchange="toggleSectionDone('dp-mastery', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    <p>Campus and tech interviews test the same 9 DP structural shapes repeatedly. Master the transition from 2D table to 1D space optimization.</p>
+
+    
+<div class="table-container" data-depth="sprint">
+  
+  <table class="data-table">
+    <thead>
+      <tr><th>DP Canonical Shape</th><th>State Representation ($dp[i]$ or $dp[i][j]$)</th><th>Recurrence Relation</th><th>Space Optimization Trick</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>0/1 Knapsack</td><td>$dp[i][w]$ = max value using items $1..i$ with capacity $w$</td><td>$dp[i][w] = \max(dp[i-1][w], \text{val}[i] + dp[i-1][w-\text{wt}[i]])$</td><td>1D array traversed <strong>backwards</strong> ($W \dots \text{wt}[i]$).</td></tr><tr><td>Unbounded Knapsack</td><td>$dp[w]$ = max value with weight limit $w$</td><td>$dp[w] = \max(dp[w], \text{val}[i] + dp[w-\text{wt}[i]])$</td><td>1D array traversed <strong>forwards</strong> (re-using items).</td></tr><tr><td>Longest Common Subseq (LCS)</td><td>$dp[i][j]$ = LCS length of $s_1[0..i]$ and $s_2[0..j]$</td><td>If match: $1 + dp[i-1][j-1]$; Else: $\max(dp[i-1][j], dp[i][j-1])$</td><td>Rolling 2 rows ($dp[2][N]$) or 1D array with prev diagonal.</td></tr><tr><td>Longest Increasing Subseq (LIS)</td><td>$dp[i]$ = length of LIS ending at index $i$</td><td>$dp[i] = 1 + \max_{j < i, a[j] < a[i]} dp[j]$ ($O(N^2)$)</td><td>Patience Sorting + Binary Search ($O(N \log N)$).</td></tr><tr><td>Grid Minimum Path Sum</td><td>$dp[r][c]$ = min cost to reach cell $(r, c)$</td><td>$dp[r][c] = \text{grid}[r][c] + \min(dp[r-1][c], dp[r][c-1])$</td><td>In-place grid update or 1D array of size $C$.</td></tr><tr><td>Coin Change (Min Coins)</td><td>$dp[a]$ = min coins to make amount $a$</td><td>$dp[a] = 1 + \min_{c \in \text{coins}} dp[a - c]$</td><td>1D array initialized to $\infty$, $dp[0] = 0$.</td></tr><tr><td>Edit Distance (Levenshtein)</td><td>$dp[i][j]$ = min edits between $w_1[0..i]$ and $w_2[0..j]$</td><td>Insert: $dp[i][j-1]$, Delete: $dp[i-1][j]$, Replace: $dp[i-1][j-1]$</td><td>Rolling 2 rows.</td></tr><tr><td>House Robber (Linear)</td><td>$dp[i]$ = max loot up to house $i$</td><td>$dp[i] = \max(dp[i-1], \text{nums}[i] + dp[i-2])$</td><td>2 variables: <code>prev1</code>, <code>prev2</code> ($O(1)$ space).</td></tr><tr><td>Bitmask DP (Travelling Salesman)</td><td>$dp[mask][u]$ = min cost visiting mask ending at $u$</td><td>$dp[mask | (1 \ll v)][v] = \min(dp[mask][u] + \text{dist}[u][v])$</td><td>$O(2^N \cdot N)$ space, for $N \le 20$.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+    
+<div class="subsection-block" id="dp-knapsack-code" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#dp-knapsack-code" class="heading-anchor" title="Direct link">#</a>
+    0/1 Knapsack: From 2D Matrix to Space-Optimized 1D Array
+  </h3>
+  
+</div>
+
+    
+<div class="code-block-wrapper" data-depth="deep">
+  <div class="code-title-bar"><span>📄 Space-Optimized 0/1 Knapsack</span><span class="code-lang-tag">cpp</span></div>
+  <pre class="line-numbers"><code class="language-cpp">// Space-Optimized 0/1 Knapsack in O(W) Space
+int knapsack(int W, const vector&lt;int&gt;&amp; weights, const vector&lt;int&gt;&amp; values) {
+    int n = weights.size();
+    vector&lt;int&gt; dp(W + 1, 0);
+
+    for (int i = 0; i &lt; n; i++) {
+        // CRITICAL: Iterate BACKWARDS from W down to weights[i]
+        // This ensures each item is used AT MOST ONCE!
+        for (int w = W; w &gt;= weights[i]; w--) {
+            dp[w] = max(dp[w], values[i] + dp[w - weights[i]]);
+        }
+    }
+    return dp[W];
+}</code></pre>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="recurrence-analysis" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#recurrence-analysis" class="heading-anchor" title="Direct link to this section">#</a>
+        📐 Master Theorem & Amortized Analysis
+      </h2>
+      <span class="pill pill-amber">Analysis</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="recurrence-analysis" onchange="toggleSectionDone('recurrence-analysis', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="formula-box" data-depth="sprint">
+  <div class="formula-katex">$$T(n) = a T(n/b) + f(n), \quad \text{compare } f(n) \text{ with } n^{\log_b a}$$</div>
+  <div class="formula-reading"><strong>🗣️ Spoken Reading:</strong> <em>Master Theorem compares non-recursive work f(n) with critical exponent n to the power of log base b of a.</em></div>
+  <div class="formula-symbols-wrapper">
+    <table class="formula-symbols-table">
+      <thead>
+        <tr><th>Symbol</th><th>Meaning & Units</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class='formula-sym'><code>a</code></td><td class='formula-def'>Number of subproblems generated in recursion (a >= 1)</td></tr><tr><td class='formula-sym'><code>b</code></td><td class='formula-def'>Factor by which problem size is divided (b > 1)</td></tr><tr><td class='formula-sym'><code>f(n)</code></td><td class='formula-def'>Work done outside recursive calls (divide and merge steps)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula-meaning"><strong>🎯 Practical System Takeaway:</strong> Case 1: If f(n) = O(n^(log_b a - epsilon)), leaves dominate -> T(n) = Theta(n^(log_b a)). Case 2: If f(n) = Theta(n^(log_b a)), balanced work -> T(n) = Theta(n^(log_b a) * log n). Case 3: If f(n) = Omega(n^(log_b a + epsilon)), root dominates -> T(n) = Theta(f(n)).</div>
+</div>
+
+
+    
+<div class="worked-example" data-depth="deep">
+  <div class="we-header">
+    <span class="we-badge">📐 WORKED PROBLEM</span>
+    <h4 class="we-title">Amortized Analysis of std::vector push_back (Dynamic Array Resizing)</h4>
+  </div>
+  <div class="we-steps-list">
+    
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 1</span>
+            <span class="we-step-label">Identify Doubling Strategy</span>
+          </div>
+          <div class="we-step-body">Vector starts at capacity 1. When full, it allocates an array of size 2C, copies C elements, and inserts the new element.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 2</span>
+            <span class="we-step-label">Compute Aggregate Cost over N Insertions</span>
+          </div>
+          <div class="we-step-body">Total normal insertions: N * 1 = N. Copying cost occurs at powers of 2: 1 + 2 + 4 + 8 + ... + N/2 + N = 2N - 1.</div>
+        </div>
+        
+        <div class="we-step">
+          <div class="we-step-header">
+            <span class="we-step-num">Step 3</span>
+            <span class="we-step-label">Derive Amortized Cost per Operation</span>
+          </div>
+          <div class="we-step-body">$$\text{Amortized Cost} = \frac{\text{Total Cost}}{N} = \frac{N + (2N - 1)}{N} = \frac{3N - 1}{N} \approx 3 = O(1)$$</div>
+        </div>
+        
+  </div>
+  <details class="we-answer-details">
+    <summary class="we-answer-summary">👁️ Click to Reveal Final Verification & Answer</summary>
+    <div class="we-answer-body">
+      Even though an individual push_back takes O(N) when resizing, the amortized cost per operation is provably O(1)!
+    </div>
+  </details>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="string-graph-depth" data-depth="deep">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#string-graph-depth" class="heading-anchor" title="Direct link to this section">#</a>
+        🌐 Graphs, Strings & Greedy Validity
+      </h2>
+      <span class="pill pill-teal">Advanced CS</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="string-graph-depth" onchange="toggleSectionDone('string-graph-depth', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="subsection-block" id="graph-dijkstra-fails" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#graph-dijkstra-fails" class="heading-anchor" title="Direct link">#</a>
+    Why Dijkstra's Algorithm Fails on Negative Edges
+  </h3>
+  
+</div>
+
+    <p>Dijkstra is a <strong>greedy algorithm</strong> that relies on the invariant that once a vertex's distance is extracted from the PriorityQueue, its shortest path is permanently settled. If an edge with a negative weight exists later in the graph, it can retroactively shorten the distance of an already-settled vertex, violating the invariant! <em>Use Bellman-Ford or SPFA instead.</em></p>
+
+    
+<div class="subsection-block" id="greedy-exchange" data-depth="deep">
+  <h3 class="subsection-title">
+    <a href="#greedy-exchange" class="heading-anchor" title="Direct link">#</a>
+    Greedy Validity & The Exchange Argument
+  </h3>
+  
+</div>
+
+    <p>A greedy choice is only valid if taking the local optimum never prevents reaching the global optimum. For instance, Coin Change is greedy for canonical US denominations ((1, 5, 10, 25)), but <strong>fails completely</strong> for denominations <code>(1, 3, 4)</code> to make target <code>6</code>: Greedy picks <code>4 + 1 + 1</code> (3 coins), whereas the global optimum is <code>3 + 3</code> (2 coins)!</p>
+    
+  </div>
+</section>
+
+<section class="section-block" id="interview-traps" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-traps" class="heading-anchor" title="Direct link to this section">#</a>
+        ⚠️ High-Frequency Traps & Proofs
+      </h2>
+      <span class="pill pill-rose">Interview Traps</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-traps" onchange="toggleSectionDone('interview-traps', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+    
+<div class="callout callout-trap" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">⚠️ INTERVIEW TRAP</span>
+    <span>Trap #1: Integer Overflow in Binary Search</span>
+  </div>
+  <div class="callout-body">
+    Writing <code>int mid = (low + high) / 2;</code> leads to signed 32-bit integer overflow when <code>low + high &gt; 2,147,483,647</code>, causing a negative index and immediate segfault. Always write <code>int mid = low + (high - low) / 2;</code>.
+  </div>
+</div>
+
+
+    
+<div class="callout callout-pro" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">⚡ PRO TIP</span>
+    <span>Trap #2: Why Building a Binary Heap is O(N) and NOT O(N log N)</span>
+  </div>
+  <div class="callout-body">
+    Inserting $N$ elements into an empty heap sequentially takes $N \times O(\log N) = O(N \log N)$. However, bottom-up <code>std::make_heap()</code> takes $O(N)$ because the majority of nodes reside at the bottom: $N/2$ leaves require 0 swaps, $N/4$ nodes require at most 1 swap. The sum evaluates to $\sum_{{h=0}}^{{\log N}} \frac{{N}}{{2^{{h+1}}}} \times h = N \times 1 = O(N)$.
+  </div>
+</div>
+
+
+    
+<div class="callout callout-math" data-depth="sprint">
+  <div class="callout-title">
+    <span class="callout-badge">∑ MATHEMATICAL GROUNDING</span>
+    <span>Trap #3: Floyd's Tortoise and Hare Algebraic Proof</span>
+  </div>
+  <div class="callout-body">
+    When Slow and Fast meet in a linked list loop, resetting Slow to the head and advancing both by 1 step guarantees they meet at the cycle entrance. Proof: $2(F + a) = F + a + nC \implies F = nC - a$. Walking $F$ steps from head and $F$ steps from the meeting point lands both pointers exactly at the entrance.
+  </div>
+</div>
+
+    
+  </div>
+</section>
+
+<section class="section-block" id="interview-flashcards" data-depth="sprint">
+  <div class="section-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <h2 class="section-title">
+        <a href="#interview-flashcards" class="heading-anchor" title="Direct link to this section">#</a>
+        🎯 32 Top Tech Interview Q&As
+      </h2>
+      <span class="pill pill-rose">Assessment</span>
+    </div>
+    <label class="section-progress-label">
+      <input type="checkbox" class="section-check" data-anchor="interview-flashcards" onchange="toggleSectionDone('interview-flashcards', this.checked)">
+      <span>Reviewed</span>
+    </label>
+  </div>
+  <div class="section-body">
+    
+<details class="faq-accordion" data-depth="sprint" data-qid="471491">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why does (low + high) / 2 overflow and what is the fix?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">Binary Search</span><span class="pill pill-indigo">Google</span><span class="pill pill-indigo">Apple</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      If low + high exceeds 2^31 - 1, it overflows to a negative integer in signed 32-bit systems, resulting in an out-of-bounds segfault. The fix is: mid = low + (high - low) / 2.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('471491', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('471491', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('471491', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="110148">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Prove that building a Binary Heap takes O(N) time instead of O(N log N).</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Heaps</span><span class="pill pill-cyan">Math</span><span class="pill pill-indigo">Microsoft</span><span class="pill pill-indigo">Amazon</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Bottom-up heap construction (make_heap) runs heapify starting from non-leaf nodes. Since N/2 nodes are at height 0 (0 swaps), N/4 at height 1 (1 swap), N/8 at height 2 (2 swaps), the total swaps sum to N * sum(h / 2^(h+1)) = N * 1 = O(N).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('110148', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('110148', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('110148', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="692048">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How do you detect cycles in a Directed vs Undirected graph?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Graphs</span><span class="pill pill-indigo">Media.net</span><span class="pill pill-indigo">Cred</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Undirected: BFS/DFS (if neighbor is visited and not parent) or Disjoint Set Union (DSU). Directed: DSU does NOT work! Must use 3-Color DFS (recursion stack back-edge) or Kahn's Algorithm (Topological Sort BFS: if processed nodes < V, cycle exists).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('692048', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('692048', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('692048', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="95435">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is the time complexity of QuickSelect for K-th largest element vs a Min-Heap?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Sorting</span><span class="pill pill-indigo">Adobe</span><span class="pill pill-indigo">Swiggy</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      QuickSelect is average O(N) time and O(1) auxiliary space (ideal for arrays in memory). Min-Heap is O(N log K) time and O(K) space (ideal for unbounded streaming data).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('95435', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('95435', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('95435', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="613132">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How does std::unordered_map resolve hash collisions and what is its worst case?</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">Hashing</span><span class="pill pill-indigo">Apple</span><span class="pill pill-indigo">Qualcomm</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Uses separate chaining (array of buckets pointing to linked lists). Average O(1), worst-case O(N) when all keys hash to the same bucket. In Java 8+, buckets with >= 8 elements convert to Red-Black Trees for O(log N) worst-case.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('613132', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('613132', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('613132', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="633338">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Why does Dijkstra's algorithm fail on graphs with negative edge weights?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Graphs</span><span class="pill pill-indigo">Cisco</span><span class="pill pill-indigo">Nokia</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Dijkstra is greedy: it marks a vertex permanently finalized once extracted from the priority queue, assuming all future paths will be longer. A negative edge can make a subsequent path shorter, violating this invariant.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('633338', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('633338', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('633338', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="249272">
+  <summary class="faq-summary">
+    <div class="faq-question-text">When is a Greedy algorithm provably optimal? Give a case where it fails.</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">Greedy</span><span class="pill pill-indigo">Juspay</span><span class="pill pill-indigo">Media.net</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Optimal when it possesses the Greedy Choice Property and Optimal Substructure (verified via the exchange argument). Fails for Coin Change with non-canonical denominations like {1, 3, 4} for target 6 (greedy picks 4+1+1 = 3 coins; optimal is 3+3 = 2 coins).
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('249272', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('249272', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('249272', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="654433">
+  <summary class="faq-summary">
+    <div class="faq-question-text">How do you find the Longest Increasing Subsequence (LIS) in O(N log N)?</div>
+    <div class="faq-pills"><span class="pill pill-rose">Hard</span><span class="pill pill-cyan">DP</span><span class="pill pill-indigo">Google</span><span class="pill pill-indigo">Meta</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Using Patience Sorting and binary search (std::lower_bound). Maintain a tails array where tails[len] stores the smallest tail of all increasing subsequences of length len + 1.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('654433', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('654433', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('654433', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="733121">
+  <summary class="faq-summary">
+    <div class="faq-question-text">What is Monotonic Stack and what class of problems does it solve in O(N)?</div>
+    <div class="faq-pills"><span class="pill pill-amber">Medium</span><span class="pill pill-cyan">Stack</span><span class="pill pill-indigo">Swiggy</span><span class="pill pill-indigo">Cred</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      A stack maintaining strictly increasing or decreasing order. Solves range-bound queries like Next Greater Element, Daily Temperatures, and Largest Rectangle in Histogram in linear time.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('733121', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('733121', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('733121', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+<details class="faq-accordion" data-depth="sprint" data-qid="886172">
+  <summary class="faq-summary">
+    <div class="faq-question-text">Explain the difference between Memoization (Top-Down) and Tabulation (Bottom-Up).</div>
+    <div class="faq-pills"><span class="pill pill-emerald">Easy</span><span class="pill pill-cyan">DP</span><span class="pill pill-indigo">Amazon</span><span class="pill pill-indigo">Flipkart</span></div>
+  </summary>
+  <div class="faq-answer">
+    <div class="faq-answer-content">
+      Memoization uses recursion with a lookup cache, evaluating only reachable subproblems. Tabulation iteratively fills an array from base cases up, eliminating recursion stack overhead and enabling space optimization.
+    </div>
+    <div class="rating-strip">
+      <span class="rating-prompt">Rate Recall:</span>
+      <button class="rating-btn btn-got-it" onclick="rateFlashcard('886172', 'got_it', this)" title="Solid comprehension - review in 14 days">✅ Got it</button>
+      <button class="rating-btn btn-shaky" onclick="rateFlashcard('886172', 'shaky', this)" title="Fumbled or hesitant - review in 3 days">⚠️ Shaky</button>
+      <button class="rating-btn btn-no-idea" onclick="rateFlashcard('886172', 'no_idea', this)" title="Blanked out - add to urgent review">❌ No idea</button>
+    </div>
+  </div>
+</details>
+
+  </div>
+</section>
+
+
+        <!-- Bottom Page Navigation -->
+        <div class="page-nav-footer"><a href="index.html" class="nav-btn">← Dashboard Hub</a><a href="os.html" class="nav-btn" style="margin-left: auto;">Operating Systems →</a></div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item"><span>🏠</span><span>Hub</span></a>
+    <button onclick="toggleMobileDrawer()" class="bottom-nav-item"><span>📑</span><span>Sections</span></button>
+    <button onclick="cycleStudyMode()" class="bottom-nav-item"><span>⚡</span><span id="bottomNavModeLabel">Sprint</span></button>
+    <button onclick="toggleTheme()" class="bottom-nav-item"><span>🌙</span><span>Theme</span></button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bottom-nav-item"><span>↑</span><span>Top</span></button>
+  </nav>
+
+  <!-- Back to Top FAB -->
+  <button id="backToTopBtn" class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// Study Material Suite - Interactive Engine & Learning System
+// Implements Dual-Mode, Self-Test, Spaced Repetition, ScrollSpy & Mobile Drawer
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('study_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('study_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+}
+
+// Dual-Mode Study Engine (Sprint vs Deep Dive)
+function initMode() {
+  const savedMode = localStorage.getItem('study_mode') || 'sprint';
+  setStudyMode(savedMode, false);
+}
+
+function setStudyMode(mode, save = true) {
+  document.documentElement.setAttribute('data-mode', mode);
+  if (save) localStorage.setItem('study_mode', mode);
+
+  const sprintBtns = document.querySelectorAll('#sprintModeBtn');
+  const deepBtns = document.querySelectorAll('#deepModeBtn');
+  
+  if (mode === 'sprint') {
+    sprintBtns.forEach(b => b.classList.add('active'));
+    deepBtns.forEach(b => b.classList.remove('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Sprint';
+  } else {
+    sprintBtns.forEach(b => b.classList.remove('active'));
+    deepBtns.forEach(b => b.classList.add('active'));
+    const bottomLbl = document.getElementById('bottomNavModeLabel');
+    if (bottomLbl) bottomLbl.innerText = 'Deep';
+  }
+}
+
+function cycleStudyMode() {
+  const cur = document.documentElement.getAttribute('data-mode') || 'sprint';
+  const next = cur === 'sprint' ? 'deep' : 'sprint';
+  setStudyMode(next);
+}
+
+// Test Mode (Collapse all Q&A and prompt recall)
+function initTestMode() {
+  const isTest = localStorage.getItem('study_test_mode') === 'active';
+  if (isTest) applyTestMode(true);
+}
+
+function toggleTestMode() {
+  const current = document.documentElement.getAttribute('data-test-mode');
+  const next = current === 'active' ? 'normal' : 'active';
+  applyTestMode(next === 'active');
+  localStorage.setItem('study_test_mode', next);
+}
+
+function applyTestMode(active) {
+  const btn = document.getElementById('testModeBtn');
+  if (active) {
+    document.documentElement.setAttribute('data-test-mode', 'active');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.faq-accordion').forEach(el => el.removeAttribute('open'));
+  } else {
+    document.documentElement.removeAttribute('data-test-mode');
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+// Mobile Slide-out Drawer
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  if (!drawer || !overlay) return;
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// ScrollSpy & Reading Progress
+function initReadingProgress() {
+  const progressBar = document.getElementById('readingProgressBar');
+  const backToTop = document.getElementById('backToTopBtn');
+  
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    
+    if (progressBar) progressBar.style.width = scrolled + '%';
+    if (backToTop) {
+      if (winScroll > 500) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+function initScrollSpy() {
+  const sections = document.querySelectorAll('.section-block[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  if (!sections.length || !tocLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+// Section Progress Tracking
+function initSectionProgress(moduleId) {
+  const checks = document.querySelectorAll('.section-check');
+  checks.forEach(check => {
+    const anchor = check.dataset.anchor;
+    const key = `sect_${moduleId}_${anchor}`;
+    if (localStorage.getItem(key) === 'done') {
+      check.checked = true;
+    }
+  });
+}
+
+function toggleSectionDone(anchor, isDone) {
+  const path = window.location.pathname;
+  const modFile = path.substring(path.lastIndexOf('/') + 1);
+  const moduleId = modFile.replace('.html', '');
+  const key = `sect_${moduleId}_${anchor}`;
+  if (isDone) localStorage.setItem(key, 'done');
+  else localStorage.removeItem(key);
+}
+
+// Spaced Repetition Rating Engine
+function rateFlashcard(qid, rating, btn) {
+  const now = Date.now();
+  const queue = JSON.parse(localStorage.getItem('study_review_queue') || '{}');
+  queue[qid] = { rating, timestamp: now };
+  localStorage.setItem('study_review_queue', JSON.stringify(queue));
+
+  const parentStrip = btn.closest('.rating-strip');
+  if (parentStrip) {
+    parentStrip.querySelectorAll('.rating-btn').forEach(b => {
+      b.classList.remove('rated-got-it', 'rated-shaky', 'rated-no-idea');
+    });
+    btn.classList.add(`rated-${rating.replace('_', '-')}`);
+  }
+}
+
+// QuickNav Select
+function initQuickNav() {
+  const select = document.getElementById('quickNavSelect');
+  if (select) {
+    select.addEventListener('change', (e) => {
+      if (e.target.value) window.location.href = e.target.value;
+    });
+  }
+}
+
+// Copy Buttons for Code
+function initCopyButtons() {
+  document.querySelectorAll('pre[class*="language-"]').forEach(pre => {
+    const wrapper = pre.closest('.code-block-wrapper');
+    if (!wrapper) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerText = 'Copy';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 2000);
+      });
+    });
+  });
+}
+
+// KaTeX Auto-Render Initializer (§1.2 Fix)
+function initKatex() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Keyboard Navigation Shortcuts
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 't') toggleTheme();
+    else if (e.key === 'm') cycleStudyMode();
+    else if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      // focus search if on index or open quicknav
+      const qn = document.getElementById('quickNavSelect');
+      if (qn) qn.focus();
+    }
+  });
+}
+
+// DOM Readiness Bootloader
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMode();
+  initTestMode();
+  initQuickNav();
+  initCopyButtons();
+  initReadingProgress();
+  initScrollSpy();
+  initKeyboardShortcuts();
+  
+  // Render math when KaTeX is loaded
+  if (window.renderMathInElement) {
+    initKatex();
+  } else {
+    window.addEventListener('load', initKatex);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initSectionProgress('dsa');
+  });
+</script>
+</body>
+</html>
