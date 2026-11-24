@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#b45309">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>07: Rapid CheatSheet · Gullak Prep</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #fefce8;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #fef3c7;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #fde68a;
+  --border-focus: #d97706;
+  
+  --accent-primary: #d97706;
+  --accent-primary-hover: #b45309;
+  --accent-light: rgba(217, 119, 6, 0.08);
+  
+  --tag-bg: #fef3c7;
+  --tag-border: #f59e0b;
+  --tag-text: #b45309;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0b0f19;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1e293b;
+  --bg-inline-code: #2e2616;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #2d2616;
+  --border-focus: #f59e0b;
+  
+  --accent-primary: #f59e0b;
+  --accent-primary-hover: #fbbf24;
+  --accent-light: rgba(245, 158, 11, 0.12);
+  
+  --tag-bg: rgba(245, 158, 11, 0.15);
+  --tag-border: #f59e0b;
+  --tag-text: #fbbf24;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #b45309, #f59e0b, #fbbf24);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #b45309, #f59e0b);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-grow: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-primary);
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--border-color);
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.nav-link.active .nav-badge {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--border-focus);
+  color: var(--accent-primary);
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.top-breadcrumb {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.top-breadcrumb a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.content-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 32px 100px 32px;
+}
+
+/* Typography inside content */
+.content-container h1 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.content-container h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.content-container h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-container p {
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.content-container ul, .content-container ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+  color: var(--text-secondary);
+}
+
+.content-container li {
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.content-container hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 32px 0;
+}
+
+.content-container blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 12px 18px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Tables */
+.content-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+  background: var(--bg-surface);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: block;
+  overflow-x: auto;
+}
+
+.content-container th, .content-container td {
+  padding: 11px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-container th {
+  background-color: var(--bg-card);
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.content-container tr:last-child td {
+  border-bottom: none;
+}
+
+/* Code Blocks & Inline Code */
+.content-container code:not([class*="language-"]) {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--bg-inline-code);
+  color: var(--accent-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.content-container pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow-x: auto;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+.content-container pre code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Callouts / Alerts */
+.callout {
+  padding: 16px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border-left: 4px solid;
+}
+
+.callout-info {
+  background-color: var(--accent-light);
+  border-color: var(--accent-primary);
+}
+
+.callout-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+}
+
+.callout-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+}
+
+.module-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13.5px;
+  transition: all 0.15s;
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Bottom Nav Bar for Mobile */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1030;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.bottom-nav-item.active, .bottom-nav-item:hover {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-icon {
+  font-size: 18px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .drawer-close-btn {
+    display: block;
+  }
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+  .bottom-nav {
+    display: flex;
+  }
+  .content-container {
+    padding: 24px 18px 80px 18px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">G</div>
+          <div class="brand-text">
+            <h2>Gullak Prep Hub</h2>
+            <span>Backend Engineer • ₹20 LPA</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn">✕</button>
+      </div>
+
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Executive Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test_and_Algorithms.html" class="nav-link">
+            <span>01: Signature DSA & Puzzles</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds_CS_Core.html" class="nav-link">
+            <span>02: OS, Concurrency & Networks</span>
+            <span class="nav-badge">CS Core</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Database_Internals_and_Transactions.html" class="nav-link">
+            <span>03: DBMS, ACID & Redis</span>
+            <span class="nav-badge">Databases</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_System_Design_LLD_and_HLD.html" class="nav-link">
+            <span>04: Fintech LLD & HLD</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>05: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR_Culture.html" class="nav-link">
+            <span>06: Startup Culture & HR</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference_CheatSheet.html" class="nav-link active">
+            <span>07: Rapid CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Emergency Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">☰ Modules</button>
+          <div class="top-breadcrumb">
+            <a href="../index.html">← All Companies</a>
+            <span>/</span>
+            <a href="index.html">Gullak</a>
+            <span>/</span>
+            <span>07: Rapid CheatSheet · Gullak Prep</span>
+          </div>
+        </div>
+        
+        <div class="top-bar-right">
+          <a href="index.html" class="footer-btn" style="padding: 5px 10px; font-size: 12px;">
+            <span>🏠 Hub</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 id="module-07-rapid-recall-cheatsheet-flashcards">Module 07: Rapid Recall CheatSheet &amp; Flashcards</h1>
+<p>Keep this sheet open for emergency 15-minute revision right before stepping into the interview call.</p>
+<hr />
+<h2 id="1-twenty-five-rapid-fire-technical-flashcards">1. Twenty-Five Rapid-Fire Technical Flashcards</h2>
+<ol>
+<li><strong>What is ACID?</strong> Atomicity (all-or-nothing via WAL), Consistency (invariants/constraints preserved), Isolation (concurrent independence via MVCC/locks), Durability (persisted to disk via fsync).</li>
+<li><strong>What is PostgreSQL MVCC?</strong> Multi-Version Concurrency Control where readers never block writers and writers never block readers. Rows have hidden <code>xmin</code> and <code>xmax</code> headers. Updates create new row versions.</li>
+<li><strong>What is VACUUM in Postgres?</strong> Reclaims dead tuples left behind by updates/deletes and freezes transaction IDs to prevent transaction wraparound.</li>
+<li><strong>What is a Dirty Read?</strong> Reading uncommitted data from another concurrent transaction that might subsequently rollback.</li>
+<li><strong>What is a Non-Repeatable Read?</strong> Re-reading the same row within a transaction and seeing modified data because another transaction committed in between.</li>
+<li><strong>What is a Phantom Read?</strong> Re-running a range query and seeing new rows added or deleted by another committed transaction.</li>
+<li><strong>What is Pessimistic Locking?</strong> Acquiring exclusive locks upfront using <code>SELECT ... FOR UPDATE</code> to block concurrent writes until commit.</li>
+<li><strong>What is Optimistic Concurrency Control (OCC)?</strong> Proceeding without locks, checking a <code>version</code> or timestamp column during <code>UPDATE</code>, and aborting/retrying if version changed.</li>
+<li><strong>How does Redis implement distributed locking?</strong> <code>SET key token NX PX ttl</code>. Released atomically via a Lua script verifying <code>GET(key) == token</code>.</li>
+<li><strong>What is a Fencing Token in distributed locks?</strong> A monotonically increasing number issued with each lock lease to prevent delayed/stale requests from writing after TTL expiry.</li>
+<li><strong>What is an Idempotency Key?</strong> A unique UUID passed in the request header allowing the client to safely retry network calls without duplicating operations (e.g., payments).</li>
+<li><strong>What is the 3-Way TCP Handshake?</strong> SYN $\to$ SYN-ACK $\to$ ACK.</li>
+<li><strong>Why does the TCP <code>TIME_WAIT</code> state exist?</strong> Ensures the final ACK is received by the server and allows duplicate lingering packets to die out (lasts $2 \times \text{MSL} \approx 60\text{s}$).</li>
+<li><strong>How do you avoid socket exhaustion under high loads?</strong> Enable HTTP Keep-Alive connection pooling (<code>MaxIdleConns</code>), reuse TCP connections, or tune <code>tcp_tw_reuse</code>.</li>
+<li><strong>What is the difference between Epoll and Select/Poll?</strong> Select/Poll scan all $N$ file descriptors in $O(N)$ time. Epoll uses an OS callback ready list, returning active fds in $O(1)$ time.</li>
+<li><strong>What is an OS Process vs Thread?</strong> Processes have private virtual address spaces and isolated resources. Threads share memory (heap, code, globals) but have private stacks and registers.</li>
+<li><strong>What is a Goroutine?</strong> A user-space lightweight thread managed by the Go runtime scheduler ($M:N$). Starts with only 2KB stack vs 2MB–8MB for an OS thread.</li>
+<li><strong>What is a Mutex vs Spinlock?</strong> A mutex puts the waiting thread to sleep via kernel futex syscalls. A spinlock busy-waits in a CPU loop, best for ultra-short critical sections.</li>
+<li><strong>What is the Transactional Outbox Pattern?</strong> Writing business data and event records to the same database transaction, ensuring zero loss when publishing events to Kafka/RabbitMQ.</li>
+<li><strong>Why are financial balances stored as double-entry ledgers?</strong> Eliminates arbitrary mutable balance updates. Balance is derived from the algebraic sum of immutable debits and credits, ensuring verifiable audits.</li>
+<li><strong>What is B-Tree Index complexity?</strong> Search, insert, and delete are $O(\log N)$. Leaf nodes are linked as a doubly-linked list for fast sequential range scans.</li>
+<li><strong>What is the 100-Locker Puzzle answer?</strong> Lockers with numbers that are perfect squares (1, 4, 9, 16, 25, 36, 49, 64, 81, 100) remain open because only perfect squares have an odd number of positive divisors.</li>
+<li><strong>What is the QR-code login sequence?</strong> Web generates UUID $\to$ Web opens WebSocket $\to$ Mobile scans QR $\to$ Mobile authenticates via biometrics $\to$ Backend verifies and pushes JWT over WebSocket to Web.</li>
+<li><strong>How to prevent dual-scan on a QR code?</strong> Use a Redis atomic Lua script checking <code>status == 'PENDING'</code>; if true, set <code>CLAIMED</code>, else reject immediately.</li>
+<li><strong>What is your 30-second background pitch?</strong> "I am an engineer with a B.Tech in CSE and M.Tech in Signal Processing at NIT Rourkela, combining deep algorithmic optimization—like routing 10,000 points in 0.5s in Warehouse PathMapper—with real-world gold fintech experience building Apna Gold Solutions."</li>
+</ol>
+<hr />
+<h2 id="2-http-status-codes-in-financial-systems">2. HTTP Status Codes in Financial Systems</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Code</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Fintech Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>200 OK</strong></td>
+<td style="text-align: left;">OK</td>
+<td style="text-align: left;">Synchronous operation completed successfully.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>202 Accepted</strong></td>
+<td style="text-align: left;">Accepted</td>
+<td style="text-align: left;">Transaction received and queued asynchronously for bank settlement.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>400 Bad Request</strong></td>
+<td style="text-align: left;">Bad Request</td>
+<td style="text-align: left;">Malformed payload, invalid account number or currency format.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>401 Unauthorized</strong></td>
+<td style="text-align: left;">Unauthorized</td>
+<td style="text-align: left;">Missing or expired JWT token.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>403 Forbidden</strong></td>
+<td style="text-align: left;">Forbidden</td>
+<td style="text-align: left;">Valid user, but unauthorized for this tenant or account resource.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>409 Conflict</strong></td>
+<td style="text-align: left;">Conflict</td>
+<td style="text-align: left;">Duplicate idempotency key or optimistic concurrency version mismatch.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>422 Unprocessable</strong></td>
+<td style="text-align: left;">Unprocessable Entity</td>
+<td style="text-align: left;">Valid JSON syntax, but business logic violation (e.g., balance &lt; amount).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>429 Too Many Req</strong></td>
+<td style="text-align: left;">Rate Limited</td>
+<td style="text-align: left;">Exceeded API rate limit; backed off via Redis Token Bucket.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>502 Bad Gateway</strong></td>
+<td style="text-align: left;">Bad Gateway</td>
+<td style="text-align: left;">Upstream banking gateway or NPCI partner returned network timeout.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>504 Gateway Timeout</strong></td>
+<td style="text-align: left;">Gateway Timeout</td>
+<td style="text-align: left;">Downstream settlement call timed out; transaction must enter PENDING check.</td>
+</tr>
+</tbody>
+</table>
+
+        <nav class="module-footer-nav">
+          <a href="06_Managerial_and_HR_Culture.html" class="footer-btn">← 06: Startup Culture & HR</a><a href="README.html" class="footer-btn">Emergency Study Roadmap →</a>
+        </nav>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-modules">
+      <span class="bottom-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference_CheatSheet.html" class="bottom-nav-item active">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-theme">
+      <span class="bottom-nav-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="bottom-nav-item" id="b-nav-top">
+      <span class="bottom-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+    if (bNavTheme) {
+      bNavTheme.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+
+    // Mobile Drawer Management
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      sidebarBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      sidebarBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Indicator
+    const progressBar = document.getElementById('reading-progress');
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.pageYOffset / totalHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+    });
+
+    // Code Copy Buttons
+    document.querySelectorAll('pre').forEach(block => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = block.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.innerText).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.style.background = '';
+            }, 2000);
+          });
+        }
+      });
+      block.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

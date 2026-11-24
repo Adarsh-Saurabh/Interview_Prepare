@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#b45309">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>02: OS, Concurrency & Networks · Gullak Prep</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+
+  <!-- PrismJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <style>
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+  
+  /* Light Theme */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #fefce8;
+  --bg-code-header: #f1f5f9;
+  --bg-inline-code: #fef3c7;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --border-color: #e2e8f0;
+  --border-subtle: #fde68a;
+  --border-focus: #d97706;
+  
+  --accent-primary: #d97706;
+  --accent-primary-hover: #b45309;
+  --accent-light: rgba(217, 119, 6, 0.08);
+  
+  --tag-bg: #fef3c7;
+  --tag-border: #f59e0b;
+  --tag-text: #b45309;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0b0f19;
+  --bg-surface: #111827;
+  --bg-card: #151e2e;
+  --bg-sidebar: #0d1322;
+  --bg-code-header: #1e293b;
+  --bg-inline-code: #2e2616;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #1e293b;
+  --border-subtle: #2d2616;
+  --border-focus: #f59e0b;
+  
+  --accent-primary: #f59e0b;
+  --accent-primary-hover: #fbbf24;
+  --accent-light: rgba(245, 158, 11, 0.12);
+  
+  --tag-bg: rgba(245, 158, 11, 0.15);
+  --tag-border: #f59e0b;
+  --tag-text: #fbbf24;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #b45309, #f59e0b, #fbbf24);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.08s ease;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 310px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1050;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #b45309, #f59e0b);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-grow: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-primary);
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.nav-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--border-color);
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.nav-link.active .nav-badge {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--border-focus);
+  color: var(--accent-primary);
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 56px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.top-breadcrumb {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.top-breadcrumb a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.content-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 32px 100px 32px;
+}
+
+/* Typography inside content */
+.content-container h1 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.content-container h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.content-container h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.content-container p {
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.content-container ul, .content-container ol {
+  margin-bottom: 18px;
+  padding-left: 24px;
+  color: var(--text-secondary);
+}
+
+.content-container li {
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.content-container hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 32px 0;
+}
+
+.content-container blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background-color: var(--accent-light);
+  padding: 12px 18px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Tables */
+.content-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+  background: var(--bg-surface);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: block;
+  overflow-x: auto;
+}
+
+.content-container th, .content-container td {
+  padding: 11px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-container th {
+  background-color: var(--bg-card);
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.content-container tr:last-child td {
+  border-bottom: none;
+}
+
+/* Code Blocks & Inline Code */
+.content-container code:not([class*="language-"]) {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--bg-inline-code);
+  color: var(--accent-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.content-container pre {
+  position: relative;
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow-x: auto;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+.content-container pre code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Callouts / Alerts */
+.callout {
+  padding: 16px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border-left: 4px solid;
+}
+
+.callout-info {
+  background-color: var(--accent-light);
+  border-color: var(--accent-primary);
+}
+
+.callout-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+}
+
+.callout-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+}
+
+.module-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13.5px;
+  transition: all 0.15s;
+}
+
+.footer-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Bottom Nav Bar for Mobile */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  z-index: 1030;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.bottom-nav-item.active, .bottom-nav-item:hover {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-icon {
+  font-size: 18px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .drawer-close-btn {
+    display: block;
+  }
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+  .bottom-nav {
+    display: flex;
+  }
+  .content-container {
+    padding: 24px 18px 80px 18px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="reading-progress"></div>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-left">
+          <div class="brand-icon">G</div>
+          <div class="brand-text">
+            <h2>Gullak Prep Hub</h2>
+            <span>Backend Engineer • ₹20 LPA</span>
+          </div>
+        </a>
+        <button class="drawer-close-btn" id="drawer-close-btn">✕</button>
+      </div>
+
+      <ul class="sidebar-nav">
+        
+        <li>
+          <a href="index.html" class="nav-link">
+            <span>Overview & Hub</span>
+            <span class="nav-badge">Portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="00_START_HERE.html" class="nav-link">
+            <span>00: Executive Intel</span>
+            <span class="nav-badge">Strategy</span>
+          </a>
+        </li>
+        <li>
+          <a href="01_Online_Test_and_Algorithms.html" class="nav-link">
+            <span>01: Signature DSA & Puzzles</span>
+            <span class="nav-badge">Algorithms</span>
+          </a>
+        </li>
+        <li>
+          <a href="02_Technical_Rounds_CS_Core.html" class="nav-link active">
+            <span>02: OS, Concurrency & Networks</span>
+            <span class="nav-badge">CS Core</span>
+          </a>
+        </li>
+        <li>
+          <a href="03_Database_Internals_and_Transactions.html" class="nav-link">
+            <span>03: DBMS, ACID & Redis</span>
+            <span class="nav-badge">Databases</span>
+          </a>
+        </li>
+        <li>
+          <a href="04_System_Design_LLD_and_HLD.html" class="nav-link">
+            <span>04: Fintech LLD & HLD</span>
+            <span class="nav-badge">Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a href="05_Candidate_Resume_Grilling.html" class="nav-link">
+            <span>05: Resume Defense & Traps</span>
+            <span class="nav-badge">Defense</span>
+          </a>
+        </li>
+        <li>
+          <a href="06_Managerial_and_HR_Culture.html" class="nav-link">
+            <span>06: Startup Culture & HR</span>
+            <span class="nav-badge">Behavioral</span>
+          </a>
+        </li>
+        <li>
+          <a href="07_Quick_Reference_CheatSheet.html" class="nav-link">
+            <span>07: Rapid CheatSheet</span>
+            <span class="nav-badge">CheatSheet</span>
+          </a>
+        </li>
+        <li>
+          <a href="README.html" class="nav-link">
+            <span>Emergency Study Roadmap</span>
+            <span class="nav-badge">Roadmap</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="theme-toggle">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">☰ Modules</button>
+          <div class="top-breadcrumb">
+            <a href="../index.html">← All Companies</a>
+            <span>/</span>
+            <a href="index.html">Gullak</a>
+            <span>/</span>
+            <span>02: OS, Concurrency & Networks · Gullak Prep</span>
+          </div>
+        </div>
+        
+        <div class="top-bar-right">
+          <a href="index.html" class="footer-btn" style="padding: 5px 10px; font-size: 12px;">
+            <span>🏠 Hub</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 id="module-02-os-concurrency-networking-internals">Module 02: OS, Concurrency &amp; Networking Internals</h1>
+<p>Fintech backends demand absolute precision in multi-threading, concurrency control, and socket network behavior. A single race condition in a wallet ledger can duplicate credits or create unauthorized balances.</p>
+<hr />
+<h2 id="1-operating-systems-process-vs-thread-memory-layout">1. Operating Systems: Process vs. Thread Memory Layout</h2>
+<p>When an API server (e.g., in Go or Python/Django) handles concurrent requests, understanding how memory is shared across execution units is fundamental.</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">+------------------------------------+------------------------------------+</span>
+<span class="c">|            PROCESS A               |             PROCESS B              |</span>
+<span class="c">|  </span><span class="nb">+------------------------------+</span><span class="c">  |  </span><span class="nb">+------------------------------+</span><span class="c">  |</span>
+<span class="c">|  | Text (Code) &amp; Data / BSS     |  |  | Text (Code) &amp; Data / BSS     |  |</span>
+<span class="c">|  | Heap (Shared across Threads) |  |  | Heap (Shared across Threads) |  |</span>
+<span class="c">|  </span><span class="nb">+------------------------------+</span><span class="c">  |  </span><span class="nb">+------------------------------+</span><span class="c">  |</span>
+<span class="c">|  | Thread 1 | Thread 2 | Thread3|  |  | Thread 1 | Thread 2         |  |</span>
+<span class="c">|  | Stack 1  | Stack 2  | Stack 3|  |  | Stack 1   | Stack 2         |  |</span>
+<span class="c">|  </span><span class="nb">+----------+----------+--------+</span><span class="c">  |  </span><span class="nb">+-----------+------------------+</span><span class="c">  |</span>
+<span class="nb">+------------------------------------+------------------------------------+</span>
+</code></pre></div>
+
+<h3 id="key-distinctions">Key Distinctions</h3>
+<ul>
+<li><strong>Process:</strong> The unit of resource isolation. Has its own private virtual memory space (Page Tables mapped by the MMU), open file descriptors, signal handlers, and security tokens. A crash in Process A does not corrupt Process B. Context switching between processes requires invalidating the Translation Lookaside Buffer (TLB), costing hundreds of CPU cycles.</li>
+<li><strong>Thread:</strong> The unit of CPU execution. Multiple threads within the same process share the same Text, Data, Heap, and File Descriptors, but each thread possesses its own <strong>Registers, Program Counter (PC), and private Stack space</strong> (typically 2MB–8MB in Linux C/C++/Java).</li>
+<li><strong>Goroutine (Golang M:N Model):</strong> Unlike OS threads which require 2MB stack and kernel-level context switches, Go routines start with a tiny <strong>2KB segmented/resizable stack</strong> and are scheduled completely in user-space by the Go runtime scheduler (the $M:N$ scheduler: $M$ OS threads, $N$ goroutines, $P$ logical processors). Millions of goroutines can run simultaneously on a modest server without thread exhaustion.</li>
+</ul>
+<hr />
+<h2 id="2-concurrency-primitives-mutex-spinlock-atomic-cas">2. Concurrency Primitives: Mutex, Spinlock &amp; Atomic CAS</h2>
+<h3 id="what-is-a-race-condition">What is a Race Condition?</h3>
+<p>A race condition occurs when two concurrent threads read and write to the same shared memory location without synchronization, and the final state depends on the non-deterministic interleaving of instruction execution.</p>
+<p><strong>The Classic Double-Spend Race Condition in Wallet Balances:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Thread 1 (Withdrawal of ₹500)       # Thread 2 (Withdrawal of ₹500)</span>
+<span class="n">balance</span> <span class="o">=</span> <span class="n">read_balance</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="c1"># 600   balance = read_balance(user_id) # 600</span>
+<span class="k">if</span> <span class="n">balance</span> <span class="o">&gt;=</span> <span class="mi">500</span><span class="p">:</span>                      <span class="k">if</span> <span class="n">balance</span> <span class="o">&gt;=</span> <span class="mi">500</span><span class="p">:</span>
+    <span class="n">new_bal</span> <span class="o">=</span> <span class="n">balance</span> <span class="o">-</span> <span class="mi">500</span> <span class="c1"># 100           new_bal = balance - 500 # 100</span>
+    <span class="n">write_balance</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">new_bal</span><span class="p">)</span>         <span class="n">write_balance</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">new_bal</span><span class="p">)</span>
+<span class="c1"># Result: User withdrew ₹1,000 from an initial balance of ₹600!</span>
+</code></pre></div>
+
+<h3 id="synchronization-primitives-compared">Synchronization Primitives Compared</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Primitive</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;">When to Use</th>
+<th style="text-align: left;">Trade-off / Penalty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Atomic (CAS)</strong></td>
+<td style="text-align: left;">CPU instruction (<code>lock cmpxchg</code> on x86). Compares memory with expected value; if equal, swaps with new value atomically.</td>
+<td style="text-align: left;">Counters, simple flags, lock-free ring buffers.</td>
+<td style="text-align: left;">Extremely fast (single instruction); cannot protect multi-step complex transactions.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Spinlock</strong></td>
+<td style="text-align: left;">Loops in a <code>while (!test_and_set())</code> busy-wait loop without yielding the CPU core.</td>
+<td style="text-align: left;">Ultra-low latency kernel code, lock held for &lt; 100 nanoseconds.</td>
+<td style="text-align: left;">Wastes CPU cycles if lock held long; dangerous in user space under preemption.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Mutex</strong></td>
+<td style="text-align: left;">Puts waiting thread into sleeping/blocked state (via Linux <code>futex</code> syscall). Kernel wakes thread up when released.</td>
+<td style="text-align: left;">Standard multi-threading where lock is held across I/O or multi-statement blocks.</td>
+<td style="text-align: left;">Incurs OS context switch overhead (~1–3 microseconds) when contending.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Read-Write Lock</strong></td>
+<td style="text-align: left;">Multiple concurrent readers can acquire; single writer obtains exclusive access.</td>
+<td style="text-align: left;">Read-heavy data (e.g., Live Gold Price Ticker read 10,000x/sec, updated 1x/sec).</td>
+<td style="text-align: left;">Writer starvation if readers constantly stream in (solved via fair RWLocks).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-high-performance-io-select-vs-poll-vs-epoll">3. High-Performance I/O: Select vs. Poll vs. Epoll</h2>
+<p>Fintech microservices handling thousands of simultaneous WebSockets (e.g., live gold price charts) rely on Linux I/O multiplexing.</p>
+<div class="codehilite"><pre><span></span><code>Select / Poll: O(N) Complexity                  Epoll: O(1) Complexity
+-----------------------------                  ----------------------
+Passes entire array of N fds                   Kernel tracks fds in a Red-Black Tree.
+to kernel on every tick.                       Ready fds pushed into a Ready List.
+Kernel iterates through all N fds              epoll_wait() returns ONLY the ready fds.
+to find which are ready for I/O.               Cost is proportional to active events, not total fds!
+</code></pre></div>
+
+<ul>
+<li><strong>Select:</strong> Limited to a fixed maximum of 1,024 file descriptors (<code>FD_SETSIZE</code>). Must pass the full descriptor set back and forth between user-space and kernel-space every time.</li>
+<li><strong>Poll:</strong> Overcomes the 1,024 fd limit using dynamic arrays (<code>pollfd</code>), but still requires an $O(N)$ linear scan across all descriptors.</li>
+<li><strong>Epoll (<code>epoll_create</code>, <code>epoll_ctl</code>, <code>epoll_wait</code>):</strong> Edge-triggered and Level-triggered event notification. The kernel registers callbacks on socket state changes. When packets arrive on a NIC, the kernel pushes the corresponding socket to an event ready list. <code>epoll_wait()</code> retrieves only active connections in $O(1)$ relative to total connections. Powers <strong>Nginx, Node.js libuv, Go runtime netpoller, and Redis</strong>.</li>
+</ul>
+<hr />
+<h2 id="4-networking-tcp-3-way-handshake-teardown-socket-exhaustion">4. Networking: TCP 3-Way Handshake, Teardown &amp; Socket Exhaustion</h2>
+<h3 id="the-3-way-handshake">The 3-Way Handshake</h3>
+<div class="codehilite"><pre><span></span><code>CLIENT                                SERVER
+  │                SYN (seq=x)           │
+  ├─────────────────────────────────────►│  Server enters SYN_RCVD
+  │                                      │
+  │           SYN-ACK (seq=y, ack=x+1)   │
+  │◄─────────────────────────────────────┤  Client enters ESTABLISHED
+  │                                      │
+  │                ACK (ack=y+1)         │
+  ├─────────────────────────────────────►│  Server enters ESTABLISHED
+</code></pre></div>
+
+<h3 id="the-4-way-teardown-the-dangerous-time_wait-state">The 4-Way Teardown &amp; The Dangerous <code>TIME_WAIT</code> State</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">CLIENT</span><span class="w"> </span><span class="p">(</span><span class="n">Initiator</span><span class="p">)</span><span class="w">                    </span><span class="n">SERVER</span>
+<span class="w">  </span><span class="err">│</span><span class="w">                </span><span class="n">FIN</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="n">u</span><span class="p">)</span><span class="w">           </span><span class="err">│</span>
+<span class="w">  </span><span class="err">├─────────────────────────────────────►│</span><span class="w">  </span><span class="n">Server</span><span class="w"> </span><span class="n">enters</span><span class="w"> </span><span class="n">CLOSE_WAIT</span>
+<span class="w">  </span><span class="err">│</span><span class="w">                </span><span class="n">ACK</span><span class="w"> </span><span class="p">(</span><span class="n">ack</span><span class="o">=</span><span class="n">u</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w">         </span><span class="err">│</span>
+<span class="w">  </span><span class="err">│◄─────────────────────────────────────┤</span>
+<span class="w">  </span><span class="err">│</span><span class="w">                </span><span class="n">FIN</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="n">v</span><span class="p">)</span><span class="w">           </span><span class="err">│</span>
+<span class="w">  </span><span class="err">│◄─────────────────────────────────────┤</span>
+<span class="w">  </span><span class="err">│</span><span class="w">                </span><span class="n">ACK</span><span class="w"> </span><span class="p">(</span><span class="n">ack</span><span class="o">=</span><span class="n">v</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w">         </span><span class="err">│</span>
+<span class="w">  </span><span class="err">├─────────────────────────────────────►│</span><span class="w">  </span><span class="n">Server</span><span class="w"> </span><span class="n">enters</span><span class="w"> </span><span class="n">CLOSED</span>
+<span class="w">  </span><span class="err">│</span><span class="w">                                      </span><span class="err">│</span>
+<span class="w">  </span><span class="err">▼</span>
+<span class="o">[</span><span class="n">TIME_WAIT</span><span class="o">]</span><span class="w"> </span><span class="p">(</span><span class="n">Lingers</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MSL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="n">s</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="why-does-time_wait-exist">Why Does <code>TIME_WAIT</code> Exist?</h3>
+<ol>
+<li><strong>Ensures Final ACK Delivery:</strong> If the client's final ACK packet is dropped by the router, the server retransmits its FIN. If the client had immediately closed the port, it would respond with an RST error instead of completing the graceful teardown.</li>
+<li><strong>Clears Lingering Duplicate Packets:</strong> Prevents delayed packets from an old connection from arriving and corrupting a newly opened connection reusing the same 4-tuple <code>(src_ip, src_port, dst_ip, dst_port)</code>.</li>
+</ol>
+<h3 id="production-incident-port-exhaustion-under-microservice-loads">Production Incident: Port Exhaustion Under Microservice Loads</h3>
+<p>When a backend service calls payment gateways or partner banks (Augmont, Juspay) via short-lived HTTP/1.1 connections without connection pooling:
+* The backend initiates socket closure $\to$ Sockets enter <code>TIME_WAIT</code> for 60 seconds.
+* Linux has ~28,000 ephemeral ports (<code>/proc/sys/net/ipv4/ip_local_port_range</code>).
+* At 1,000 requests/sec, all 28,000 ports are consumed in 28 seconds, throwing <code>EADDRNOTAVAIL</code> (Cannot assign requested address).
+* <strong>The Fix:</strong> Enable HTTP Keep-Alive connection pooling (<code>MaxIdleConnsPerHost</code>), reuse TCP connections, or tune <code>tcp_tw_reuse</code> in Linux sysctl.</p>
+
+        <nav class="module-footer-nav">
+          <a href="01_Online_Test_and_Algorithms.html" class="footer-btn">← 01: Signature DSA & Puzzles</a><a href="03_Database_Internals_and_Transactions.html" class="footer-btn">03: DBMS, ACID & Redis →</a>
+        </nav>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Hub</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-modules">
+      <span class="bottom-nav-icon">📑</span>
+      <span>Modules</span>
+    </button>
+    <a href="07_Quick_Reference_CheatSheet.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>CheatSheet</span>
+    </a>
+    <button class="bottom-nav-item" id="b-nav-theme">
+      <span class="bottom-nav-icon">🌙</span>
+      <span>Theme</span>
+    </button>
+    <button class="bottom-nav-item" id="b-nav-top">
+      <span class="bottom-nav-icon">↑</span>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <script>
+    // Theme Management
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const bNavTheme = document.getElementById('b-nav-theme');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+    if (bNavTheme) {
+      bNavTheme.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+      });
+    }
+
+    // Mobile Drawer Management
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    const bNavModules = document.getElementById('b-nav-modules');
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      sidebarBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      sidebarBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (bNavModules) bNavModules.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+    // Scroll to Top
+    const bNavTop = document.getElementById('b-nav-top');
+    if (bNavTop) {
+      bNavTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Reading Progress Indicator
+    const progressBar = document.getElementById('reading-progress');
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.pageYOffset / totalHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+    });
+
+    // Code Copy Buttons
+    document.querySelectorAll('pre').forEach(block => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = block.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.innerText).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.style.background = '';
+            }, 2000);
+          });
+        }
+      });
+      block.appendChild(btn);
+    });
+  </script>
+</body>
+</html>
